@@ -25,24 +25,24 @@
 require 'csv'
 
     # Specify the path to your CSV file
-    csv_file_path = Rails.root.join('app', 'seeds', 'dance_events.csv')
+    csv_file_path = Rails.root.join('db', 'seeds', 'dance_events.csv')
 
     # Ensure the file exists before attempting to read it
     if File.exist?(csv_file_path)
       CSV.foreach(csv_file_path, headers: true) do |row|
         # Assuming your model is named 'MyModel'
         # Map CSV headers to model attributes
-        EventsModel.find_or_create_by!(
-          column_name_1: row['ID'],
-          column_name_2: row['Name'],
-		  column_name_3: row['Venue'],
-		  column_name_4: row['Date'],
-		  column_name_5: row['Time'],
-		  column_name_6: row['Style'],
-		  column_name_7: row['Location'],
-		  column_name_8: row['Starting Price'],
-		  column_name_9: row['Description'],
-		  column_name_10: row['Tickets']
+        Event.find_or_create_by!(
+          id: row['ID'],
+          name: row['Name'],
+		  venue: row['Venue'],
+		  date: row['Date'],
+		  time: row['Time'],
+		  style: row['Style'],
+		  location: row['Location'],
+		  price: row['Price'],
+		  description: row['Description'],
+		  tickets: row['Tickets']
           # Add more mappings as needed
         )
       end

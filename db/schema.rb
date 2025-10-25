@@ -10,12 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2015_08_09_022253) do
-  create_table "movies", force: :cascade do |t|
-    t.string "title"
-    t.string "rating"
+ActiveRecord::Schema[8.0].define(version: 2025_10_25_161013) do
+  create_table "events", force: :cascade do |t|
+    t.string "name"
+    t.string "venue"
+    t.string "date"
+    t.string "time"
+    t.string "style"
+    t.string "location"
+    t.string "price"
     t.text "description"
-    t.datetime "release_date"
+    t.string "tickets"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
