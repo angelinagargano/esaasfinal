@@ -1,0 +1,41 @@
+<!--  app/views/movies/details.html.erb -->
+<h2>Details about <em><%= @event.name %></em></h2>
+
+<ul id="details">
+  <li>
+    Date:
+    <%= @event.date %>
+  </li>
+  <li>
+    Time:
+    <%= @event.time %>
+  </li>
+  <li>
+    Price:
+    <%= @event.price %>
+  </li>
+  <li>
+    Venue:
+    <%= @event.venue %>
+  </li>
+  <li>
+    Location:
+    <%= @event.location %>
+  </li>
+  <li>
+    Style:
+    <%= @event.style %>
+  </li>
+</ul>
+
+<h3>Description:</h3>
+<p id="description">
+  <%= @event.description %>
+</p>
+
+<div class="mt-4 d-flex gap-3">
+  <% if @event.tickets.present? %>
+    <%= link_to 'Purchase Tickets', @event.tickets, class: 'btn btn-primary', target: '_blank' %>
+  <% end %>
+  <%= link_to 'Back to Home', performances_path, class: 'btn btn-secondary' %>
+</div>
