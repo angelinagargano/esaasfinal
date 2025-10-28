@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   #   resources :products
 
   resources :performances
+  get '/preferences', to: 'preferences#index'
+  post '/preferences', to: 'preferences#update'
   
   # Example resource route with options:
   #   resources :products do

@@ -2,8 +2,7 @@ Feature: Home page
   The home page allows users to view and filter events, set preferences, and access event details.
 
   Background:
-    Given I have opened the app
-    And I am on the Home page
+    Given I am on the Home page
 
   Scenario: Viewing the default home feed with no preferences
     Given I have not set any preferences
