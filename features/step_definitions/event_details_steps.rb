@@ -1,4 +1,6 @@
 Given("the following events exist:") do |table|
+  # Ensure a clean slate so repeated scenario backgrounds don't accumulate events
+  Event.destroy_all
   table.hashes.each do |event|
     Event.create(
       name: event['Name'],

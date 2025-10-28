@@ -1,0 +1,32 @@
+<h1>Set Your Preferences</h1>
+
+<%= form_with url: preferences_path, method: :post, local: true do |f| %>
+  <div>
+    <%= label_tag :budget, 'Budget' %><br>
+    <%# Use a true blank default so 'No Preference' is an explicit choice %>
+    <%= select_tag :budget, options_for_select(@budget_options, @preferences['budget']), include_blank: 'Please select' %>
+  </div>
+
+  <div>
+    <%= label_tag :distance, 'Distance' %><br>
+    <%= select_tag :distance, options_for_select(@distance_options, @preferences['distance']), include_blank: 'Please select' %>
+  </div>
+
+  <div>
+    <%= label_tag :performance_type, 'Performance Type' %><br>
+    <%= select_tag :performance_type, options_for_select(@performance_type_options, @preferences['performance_type']), include_blank: 'Please select' %>
+  </div>
+
+  <div>
+    <%= label_tag :location, 'Location' %><br>
+    <%= select_tag :location, options_for_select(@location_options, @preferences['location']), include_blank: 'Please select' %>
+  </div>
+
+  <div>
+    <%= submit_tag 'Save Preferences' %>
+  </div>
+<% end %>
+
+<%= form_with url: clear_preferences_path, method: :post, local: true do %>
+  <%= submit_tag 'Clear Preferences' %>
+<% end %>

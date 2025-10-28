@@ -52,6 +52,24 @@ Then("I should be taken to the Event Details page") do
   expect(page).to have_current_path(/\/events\/\d+/)
 end
 
+Given('I am on the Event Details page for {string}') do |event_name|
+  # navigate to the event show page for the named event
+  event = Event.find_by(name: event_name)
+  if event
+    visit event_path(event)
+  else
+    raise "No event found with name #{event_name}"
+  end
+end
+
+Then('I should be taken to the Home page') do
+  expect(page).to have_current_path('/')
+end
+
+When('I click on an event card') do
+  find('.event-card', match: :first).click
+end
+
 Then("I should see the event name, date, time, location, price, description, and ticket link") do
   expect(page).to have_css('.event-name')
   expect(page).to have_css('.event-date')

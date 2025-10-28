@@ -1,4 +1,4 @@
-_require 'rails_helper'
+require 'rails_helper'
 
 RSpec.feature "Event Details Page", type: :feature do
   before do

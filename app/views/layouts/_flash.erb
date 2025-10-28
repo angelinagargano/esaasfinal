@@ -2,7 +2,21 @@
   <div class="alert alert-info" role="alert" id="notice">
     <%= flash[:notice] %>
   </div>
-<% elsif flash[:warning] %>
+<% end %>
+
+<% if flash[:error] %>
+  <div class="alert alert-danger flash error" role="alert" id="error">
+    <%= flash[:error] %>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="alert alert-warning flash alert" role="alert" id="alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<% if flash[:warning] %>
   <div class="alert alert-danger" role="alert" id="warning">
     <%= flash[:warning] %>
   </div>
