@@ -17,7 +17,7 @@ class PreferencesController < ApplicationController
     ]
 
     @performance_type_options = [
-      'Hip-Hop',
+      'Hip-hop',
       'Ballet',
       'Swing',
       'Contemporary',

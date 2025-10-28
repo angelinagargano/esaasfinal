@@ -5,7 +5,8 @@
     <%= label_tag :budget, 'Budget' %><br>
     <% @budget_options.each do |option| %>
       <div class="form-check form-check-inline">
-        <%= check_box_tag 'budget[]', option, @preferences['budget']&.include?(option), class: 'form-check-input', id: "budget_#{option.parameterize}" %>
+        <%= check_box_tag 'budget[]', option, @preferences['budget']&.include?(option), 
+                  id: "budget_#{option.parameterize}" %>        
         <%= label_tag "budget_#{option.parameterize}", option, class: 'form-check-label' %>
       </div>
     <% end %>

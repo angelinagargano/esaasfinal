@@ -19,7 +19,7 @@ Feature: Initial preferences
       | Within 10mi  |
       | No Preference |
     And I should see the following options for Performance Type:
-      | Hip-Hop       |
+      | Hip-hop       |
       | Ballet       |
       | Swing          |
       | Contemporary       |
@@ -46,18 +46,18 @@ Feature: Initial preferences
 
   Scenario: Selecting "No Preference" for one category
     Given I am on the Preferences page
-    When I select "$25–$50" for "Budget"
+    When I select "$0–$25" for "Budget"
     And I select "Within 5mi" for "Distance"
     And I select "No Preference" for "Performance Type"
     And I press "Save Preferences"
     Then I should be redirected to the Home page
-    And I should see events that match a "$25–$50" budget and "Within 5mi" distance
+    And I should see events that match a "$0–$25" budget and "Within 5mi" distance
     And Performance Type should not filter events
 
   Scenario: Selecting multiple budgets and performance types
     Given I am on the Preferences page
     When I select multiple Budgets: "$0–$25" and "$25–$50"
-    And I select multiple Performance Types: "Hip-Hop" and "Contemporary"
+    And I select multiple Performance Types: "Hip-hop" and "Contemporary"
     And I select "Within 2mi" for "Distance"
     And I press "Save Preferences"
     Then I should be redirected to the Home page
@@ -74,7 +74,7 @@ Feature: Initial preferences
 
   Scenario: Saving without selecting a performance type
     Given I am on the Preferences page
-    When I select "$25–$50" for "Budget"
+    When I select "$0–$25" for "Budget"
     And I select "Within 5mi" for "Distance"
     And I do not select any options for "Performance Type"
     And I press "Save Preferences"
