@@ -15,9 +15,11 @@ Rails.application.routes.draw do
   #   resources :products
 
   resources :performances
-  get '/preferences', to: 'preferences#index'
-  post '/preferences', to: 'preferences#update'
-  
+  # Preferences - session-backed flow
+  get '/preferences', to: 'preferences#show', as: :preferences
+  post '/preferences', to: 'preferences#create'
+  post '/preferences/clear', to: 'preferences#clear', as: :clear_preferences
+
   # Example resource route with options:
   #   resources :products do
   #     member do
