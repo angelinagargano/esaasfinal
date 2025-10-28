@@ -59,7 +59,7 @@ end
 
 Then('Performance Type should not filter events') do
   # Look for all event cards on the page (supports both .card and .event-card)
-  cards = page.all('#events .card, .event-card')
+  cards = page.all('#events.card, .event-card')
   expect(cards.size).to be >= 1
 
   # Extract performance style text flexibly — tolerates different HTML structures
