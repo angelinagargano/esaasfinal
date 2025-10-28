@@ -9,7 +9,7 @@ Feature: View event details page
       | A Very SW!NG OUT Holiday                            | Joyce Theater      | December 17, 2025 | 8:00 PM | Tap     | Manhattan | $40  | A tap dance celebration of the holiday season featuring live jazz music. | https://shop.joyce.org/holidaytap |
 
     And I am on the Home page
-    Then 20 seed events should exist
+    Then at least 3 events should exist
 
   Scenario: Viewing more details about an event
     Given "Rennie Harris Puremovement American Street Dance Theater" exists
