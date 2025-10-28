@@ -1,5 +1,3 @@
-# app/controllers/preferences_controller.rb (CORRECTED)
-
 class PreferencesController < ApplicationController
   def show
     # options for selects — use the exact strings expected by the feature specs
@@ -19,15 +17,13 @@ class PreferencesController < ApplicationController
     ]
 
     @performance_type_options = [
-      'HipHop',
+      'Hip-Hop',
       'Ballet',
-      'Tap',
-      'Modern',
+      'Swing',
+      'Contemporary',
+      'Dance Theater',
       'No Preference'
     ]
-
-    # keep a location list matching common values used in tests
-    @location_options = ['No Preference', 'Brooklyn', 'Manhattan', 'Queens', 'Bronx', 'Staten Island']
 
     # load existing session values if present
     @preferences = session[:preferences] || {}

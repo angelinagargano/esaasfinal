@@ -1,6 +1,9 @@
 <!-- app/views/performances/index.html.erb -->
 <h2>All Performances</h2>
 
+<%= link_to 'Set Preferences', preferences_path %>
+
+
 <%= form_tag performances_path, method: :get, id: 'filter_form', local: true do %>
   <div class="mb-3">
     <label class="form-label me-2" for="style">Filter by Style:</label>

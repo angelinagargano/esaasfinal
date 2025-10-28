@@ -18,11 +18,6 @@
   </div>
 
   <div>
-    <%= label_tag :location, 'Location' %><br>
-    <%= select_tag :location, options_for_select(@location_options, @preferences['location']), include_blank: 'Please select' %>
-  </div>
-
-  <div>
     <%= submit_tag 'Save Preferences' %>
   </div>
 <% end %>

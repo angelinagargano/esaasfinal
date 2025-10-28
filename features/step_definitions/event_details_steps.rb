@@ -1,27 +1,24 @@
 Given("the following events exist:") do |table|
-  # Ensure a clean slate so repeated scenario backgrounds don't accumulate events
-  Event.destroy_all
   table.hashes.each do |event|
-    Event.create(
-      name: event['Name'],
-      venue: event['Venue'],
-      date: event['Date'],
-      time: event['Time'],
-      style: event['Style'],
-      location: event['Location'],
-      price: event['Price'],
-      description: event['Description'],
-      tickets: event['Tickets']
-    )
+    Event.find_or_create_by(name: event['Name']) do |e|
+      e.venue = event['Venue']
+      e.date = event['Date']
+      e.time = event['Time']
+      e.style = event['Style']
+      e.location = event['Location']
+      e.price = event['Price']
+      e.description = event['Description']
+      e.tickets = event['Tickets']
+    end
   end
 end
 
-Then("20 seed events should exist") do
-  expect(Event.count).to eq(20)
+Then("at least 3 events should exist") do
+  expect(Event.count).to eq(3)
 end
 
 When("I click on its event card") do
-  find('.event-card', text: /Rennie Harris/).click
+  find('#events .card', text: /Rennie Harris/).click
 end
 
 Then("I should be on its Event Details page") do

@@ -19,10 +19,11 @@ Feature: Initial preferences
       | Within 10mi  |
       | No Preference |
     And I should see the following options for Performance Type:
-      | HipHop       |
+      | Hip-Hop       |
       | Ballet       |
-      | Tap          |
-      | Modern       |
+      | Swing          |
+      | Contemporary       |
+      | Dance Theater |
       | No Preference |
 
   Scenario: Setting initial preferences
@@ -56,7 +57,7 @@ Feature: Initial preferences
   Scenario: Selecting multiple budgets and performance types
     Given I am on the Preferences page
     When I select multiple Budgets: "$0–$25" and "$25–$50"
-    And I select multiple Performance Types: "HipHop" and "Tap"
+    And I select multiple Performance Types: "Hip-Hop" and "Contemporary"
     And I select "Within 2mi" for "Distance"
     And I press "Save Preferences"
     Then I should be redirected to the Home page

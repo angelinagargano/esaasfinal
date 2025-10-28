@@ -10,7 +10,7 @@ Feature: Home page
 
   Scenario: Viewing a personalized home feed after setting preferences
     Given I can select my preferences
-    When I complete the mini quiz with my budget, location, and performance type
+    When I complete the mini quiz with my budget and performance type
     And I save my preferences
     Then I should be taken to the Home page
     And I should see events filtered based on my preferences

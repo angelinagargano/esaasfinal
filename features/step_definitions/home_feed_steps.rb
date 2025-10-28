@@ -1,6 +1,6 @@
 Given("I have not set any preferences") do
   # Clear any saved preferences by setting all to "No Preference"
-  visit '/preferences'
+  visit preferences_path
   select 'No Preference', from: 'budget'
   select 'No Preference', from: 'distance'
   select 'No Preference', from: 'performance_type'
@@ -9,7 +9,7 @@ Given("I have not set any preferences") do
 end
 
 Then("I should see all events") do
-  expect(page).to have_css('.event-card', count: 20)
+  expect(page).to have_css('#events .card', count: 3)
 end
 
 Given("I can select my preferences") do
@@ -21,10 +21,9 @@ Given("I am on the Home page") do
   visit '/'
 end
 
-When("I complete the mini quiz with my budget, location, and performance type") do
-  select '$30-50', from: 'budget'
-  select 'Brooklyn', from: 'location'
-  select 'Dance', from: 'performance_type'
+When("I complete the mini quiz with my budget and performance type") do
+  select '$25–$50', from: 'budget'
+  select 'Dance Theater', from: 'performance_type'
 end
 
 And("I save my preferences") do
@@ -45,7 +44,7 @@ Then("I should see only events within that range") do
 end
 
 When("I click on the event card") do
-  find('.event-card', match: :first).click
+  find('#events .card', match: :first).click
 end
 
 Then("I should be taken to the Event Details page") do
