@@ -29,7 +29,7 @@ RSpec.feature "Event Details Page", type: :feature do
   end
 
   scenario "User sees list of events from CSV seed" do
-    visit events_path
+    visit performances_path
 
     expect(page).to have_content("Rennie Harris Puremovement American Street Dance Theater")
     expect(page).to have_content("A Very SW!NG OUT Holiday")
@@ -39,40 +39,44 @@ RSpec.feature "Event Details Page", type: :feature do
   end
 
   scenario "User views details for 'Rennie Harris Puremovement American Street Dance Theater'" do
-    visit events_path
-    click_link "Rennie Harris Puremovement American Street Dance Theater"
+    visit performances_path
+    within(find(".card[data-event-id='#{@event1.id}']")) do
+      click_link "More Details"
+    end
 
-    expect(page).to have_current_path(event_path(@event1))
+    expect(page).to have_current_path(details_performance_path(@event1), ignore_query: true)
     expect(page).to have_content("Rennie Harris Puremovement American Street Dance Theater")
     expect(page).to have_content("The Joyce Theater")
-    expect(page).to have_content("November 11, 2025")
+    expect(page).to have_content("Date: 2025-11-11")
     expect(page).to have_content("7:30 PM")
     expect(page).to have_content("Hip-hop")
     expect(page).to have_content("Chelsea")
-    expect(page).to have_content("$32")
+    expect(page).to have_content("Price: 32")
     expect(page).to have_content("Well-known for painting rich tapestries of political, philosophical, and spiritual ideas")
-    expect(page).to have_link("Get Tickets", href: "https://shop.joyce.org/8129/8130")
+    expect(page).to have_link("Purchase Tickets", href: "https://shop.joyce.org/8129/8130")
   end
 
   scenario "User views details for 'A Very SW!NG OUT Holiday'" do
-    visit events_path
-    click_link "A Very SW!NG OUT Holiday"
+    visit performances_path
+    within(find(".card[data-event-id='#{@event2.id}']")) do
+      click_link "More Details"
+    end
 
-    expect(page).to have_current_path(event_path(@event2))
+    expect(page).to have_current_path(details_performance_path(@event2),ignore_query: true)
     expect(page).to have_content("A Very SW!NG OUT Holiday")
     expect(page).to have_content("The Joyce Theater")
-    expect(page).to have_content("December 17, 2025")
+    expect(page).to have_content("Date: 2025-12-17")
     expect(page).to have_content("8:00 PM")
     expect(page).to have_content("Tap")
     expect(page).to have_content("Manhattan")
-    expect(page).to have_content("$40")
+    expect(page).to have_content("Price: 40")
     expect(page).to have_content("A tap dance celebration of the holiday season featuring live jazz music.")
-    expect(page).to have_link("Get Tickets", href: "https://shop.joyce.org/holidaytap")
+    expect(page).to have_link("Purchase Tickets", href: "https://shop.joyce.org/holidaytap")
   end
 
   scenario "User can navigate back to event list" do
-    visit event_path(@event2)
+    visit details_performance_path(@event1)
     click_link "Back"
-    expect(page).to have_current_path(events_path)
+    expect(page).to have_current_path(performances_path)
   end
 end
