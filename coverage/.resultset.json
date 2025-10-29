@@ -1,14 +1,14 @@
 {
   "RSpec": {
     "coverage": {
-      "/mnt/c/Users/Jlngo/esaasfinal/app/models/event.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/models/event.rb": {
         "lines": [
           1,
           null,
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/performances_controller.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/controllers/performances_controller.rb": {
         "lines": [
           1,
           null,
@@ -96,7 +96,7 @@
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/application_controller.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/controllers/application_controller.rb": {
         "lines": [
           1,
           null,
@@ -105,7 +105,7 @@
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/preferences_controller.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/controllers/preferences_controller.rb": {
         "lines": [
           1,
           1,
@@ -182,7 +182,7 @@
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/helpers/application_helper.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/helpers/application_helper.rb": {
         "lines": [
           0,
           0
@@ -190,7 +190,7 @@
         "branches": {
         }
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/helpers/movies_helper.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/helpers/movies_helper.rb": {
         "lines": [
           0,
           null,
@@ -203,6 +203,6 @@
         }
       }
     },
-    "timestamp": 1761765796
+    "timestamp": 1761770194
   }
 }
