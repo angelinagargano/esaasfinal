@@ -129,8 +129,12 @@ Given("{string} exists") do |event_name|
 end
 
 Then("I should see the following details on its event card:") do |table|
-  event_card = find('.card', text: 'For All Your Life')
-  table.rows_hash.each do |field, value|
+  details = table.rows_hash
+  event_card = all('.card', text: 'For All Your Life').find do |card|
+    card.has_content?(details['Date']) && card.has_content?(details['Location'])
+  end
+
+  details.each_value do |value|
     expect(event_card).to have_content(value)
   end
 end

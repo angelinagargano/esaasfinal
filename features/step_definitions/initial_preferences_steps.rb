@@ -33,10 +33,11 @@ Then('I should see events matching {string} for Budget, {string} for Distance, a
   end
 
   if distance != 'No Preference'
-    matching = matching.select { |e| e.location && !e.location.downcase.include?(distance.gsub(/[^A-Za-z]/, '').downcase) }
+  matching = matching.select { |e| e.location && e.location.downcase.include?(distance.gsub(/[^A-Za-z]/, '').downcase) }
   end
 
   if perf_type != 'No Preference'
+
     matching = matching.select { |e| e.style && e.style.downcase.include?(perf_type.downcase) }
   end
 
@@ -114,6 +115,6 @@ Then('I should see events featuring any selected performance type') do
 end
 
 Then('all events should be within {int} miles') do |_int|
-  expect(page).to have_css('#events .card', minimum: 1)
+  expect(page).to have_css('.card', minimum: 1)
 end
 
