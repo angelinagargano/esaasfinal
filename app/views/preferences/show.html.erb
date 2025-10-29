@@ -12,15 +12,15 @@
     <% end %>
   </div>
 
-  <div>
-    <%= label_tag :distance, 'Distance' %><br>
-    <% @distance_options.each do |option| %>
-      <div class="form-check form-check-inline">
-        <%= check_box_tag 'distance[]', option, @preferences['distance']&.include?(option), class: 'form-check-input', id: "distance_#{option.parameterize}" %>
-        <%= label_tag "distance_#{option.parameterize}", option, class: 'form-check-label' %>
-      </div>
-    <% end %>
-  </div>
+  # <div>
+  #   <%= label_tag :distance, 'Distance' %><br>
+  #   <% @distance_options.each do |option| %>
+  #     <div class="form-check form-check-inline">
+  #       <%= check_box_tag 'distance[]', option, @preferences['distance']&.include?(option), class: 'form-check-input', id: "distance_#{option.parameterize}" %>
+  #       <%= label_tag "distance_#{option.parameterize}", option, class: 'form-check-label' %>
+  #     </div>
+  #   <% end %>
+  # </div>
 
   <div>
     <%= label_tag :performance_type, 'Performance Type' %><br>
