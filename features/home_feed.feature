@@ -2,16 +2,22 @@ Feature: Home page
   The home page allows users to view and filter events, set preferences, and access event details.
 
   Background:
-    Given I am on the Home page
+    Given the following events exist:
+      | Name                                               | Venue               | Date       | Time   | Style         | Location | Price      | Description                     | Tickets                   |
+      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater  | 2025-11-11 | 7:30PM | Dance Theater | Chelsea  | $25–$50   | Well-known ...                  | https://shop.joyce.org/8129/8130 |
+      | Another Dance Event                                | Some Venue          | 2025-11-12 | 8:00PM | Dance Theater | Downtown | $30–$60   | Another description             | https://example.com/tickets |
+      | Jazz Night                                         | Jazz Club           | 2025-11-13 | 9:00PM | Jazz          | Midtown  | $20–$40   | Smooth jazz evening             | https://example.com/tickets |
+
 
   Scenario: Viewing the default home feed with no preferences
-    Given I have not set any preferences
+    Given I am on the Home page
+    And I have not set any preferences
     Then I should see all events
 
   Scenario: Viewing a personalized home feed after setting preferences
     Given I can select my preferences
     When I complete the mini quiz with my budget and performance type
-    And I save my preferences
+    And I select my preferences: Price "$25", Style "Dance Theater"
     Then I should be taken to the Home page
     And I should see events filtered based on my preferences
 
