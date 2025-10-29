@@ -1,14 +1,14 @@
 {
   "RSpec": {
     "coverage": {
-      "/mnt/c/Users/Jlngo/esaasfinal/app/models/event.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/models/event.rb": {
         "lines": [
           1,
           null,
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/performances_controller.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/controllers/performances_controller.rb": {
         "lines": [
           1,
           null,
@@ -32,20 +32,20 @@
           null,
           null,
           null,
-          18,
           null,
-          0,
+          null,
+          null,
           null,
           null,
           null,
           18,
           3,
-          7,
-          11,
-          null,
           4,
+          5,
           null,
-          6,
+          1,
+          null,
+          3,
           null,
           1,
           null,
@@ -82,11 +82,11 @@
           null,
           null,
           1,
-          11,
-          11,
+          5,
+          5,
           0,
           null,
-          11,
+          5,
           null,
           null,
           null,
@@ -96,7 +96,7 @@
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/application_controller.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/controllers/application_controller.rb": {
         "lines": [
           1,
           null,
@@ -105,7 +105,7 @@
           null
         ]
       },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/preferences_controller.rb": {
+      "/Users/angelinagargano/Desktop/SaaS/esaasfinal/app/controllers/preferences_controller.rb": {
         "lines": [
           1,
           1,
@@ -174,120 +174,8 @@
           null,
           null
         ]
-      },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/events_controller.rb": {
-        "lines": [
-          0,
-          null,
-          0,
-          0,
-          null,
-          null,
-          0,
-          null,
-          null,
-          0,
-          null,
-          null,
-          0,
-          0,
-          0,
-          null,
-          null,
-          0,
-          null,
-          0,
-          0,
-          null,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          null,
-          0,
-          null,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          0,
-          null,
-          null,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          null,
-          0,
-          0,
-          0,
-          0
-        ],
-        "branches": {
-        }
-      },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/helpers/application_helper.rb": {
-        "lines": [
-          0,
-          0
-        ],
-        "branches": {
-        }
-      },
-      "/mnt/c/Users/Jlngo/esaasfinal/app/helpers/movies_helper.rb": {
-        "lines": [
-          0,
-          null,
-          0,
-          0,
-          0,
-          0
-        ],
-        "branches": {
-        }
       }
     },
-    "timestamp": 1761771990
+    "timestamp": 1761772937
   }
 }

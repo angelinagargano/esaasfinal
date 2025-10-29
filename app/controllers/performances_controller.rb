@@ -20,10 +20,10 @@ class PerformancesController < ApplicationController
     end
 
     # Filter by location/distance
-    if prefs['location'].present? && !prefs['location'].include?('No Preference')
-      # You might implement actual distance filtering here. For now, simple substring match:
-      @events = @events.where('location LIKE ANY (array[?])', prefs['location'].map { |l| "%#{l}%" })
-    end
+    # if prefs['location'].present? && !prefs['location'].include?('No Preference')
+    #   # You might implement actual distance filtering here. For now, simple substring match:
+    #   @events = @events.where('location LIKE ANY (array[?])', prefs['location'].map { |l| "%#{l}%" })
+    # end
 
     # Filter by budget
     if prefs['budget'].present? && !prefs['budget'].include?('No Preference')
