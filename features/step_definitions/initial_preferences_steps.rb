@@ -18,7 +18,7 @@ When('I do not select any options for {string}') do |field|
   # Do nothing. The field will send a blank/nil value if no option is selected.
 end
 
-Then('I should see events matching {string} for Budget, {string} for Distance, and {string} for Performance Type on the Home feed') do |budget, distance, perf_type|
+Then('I should see events matching {string} for Budget and {string} for Performance Type on the Home feed') do |budget, perf_type|
   matching = Event.all
 
   case budget
@@ -32,9 +32,9 @@ Then('I should see events matching {string} for Budget, {string} for Distance, a
     matching = matching.select { |e| e.price && e.price.to_f > 100 }
   end
 
-  if distance != 'No Preference'
-  matching = matching.select { |e| e.location && e.location.downcase.include?(distance.gsub(/[^A-Za-z]/, '').downcase) }
-  end
+  # if distance != 'No Preference'
+  # matching = matching.select { |e| e.location && e.location.downcase.include?(distance.gsub(/[^A-Za-z]/, '').downcase) }
+  # end
 
   if perf_type != 'No Preference'
 
@@ -80,8 +80,8 @@ Then('Performance Type should not filter events') do
   expect(styles.size).to be >= 1
 end
 
-Then('I should see events that match a {string} budget and {string} distance') do |budget, distance|
-  step %Q{I should see events matching "#{budget}" for Budget, "#{distance}" for Distance, and "No Preference" for Performance Type on the Home feed}
+Then('I should see events that match a {string} budget') do |budget|
+  step %Q{I should see events matching "#{budget}" for Budget and "No Preference" for Performance Type on the Home feed}
 end
 
 Then('I should see events matching any selected budget') do
@@ -114,7 +114,7 @@ Then('I should see events featuring any selected performance type') do
   end
 end
 
-Then('all events should be within {int} miles') do |_int|
-  expect(page).to have_css('.card', minimum: 1)
-end
+# Then('all events should be within {int} miles') do |_int|
+#   expect(page).to have_css('.card', minimum: 1)
+# end
 

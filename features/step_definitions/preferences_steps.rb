@@ -10,11 +10,11 @@ Then("I should see the following options for Budget:") do |table|
   end
 end
 
-Then("I should see the following options for Distance:") do |table|
-  table.raw.flatten.each do |option|
-    expect(page).to have_field("distance_#{option.parameterize}", type: 'checkbox')
-  end
-end
+# Then("I should see the following options for Distance:") do |table|
+#   table.raw.flatten.each do |option|
+#     expect(page).to have_field("distance_#{option.parameterize}", type: 'checkbox')
+#   end
+# end
 
 Then("I should see the following options for Performance Type:") do |table|
   table.raw.flatten.each do |option|
@@ -73,7 +73,7 @@ Then(/I should see an alert(?: saying)? "([^"]+)"/) do |message|
   expect(page).to have_content(message)
 end
 
-When("I do not select any options for Budget, Distance, or Performance Type") do
+When("I do not select any options for Budget or Performance Type") do
   all('input[type=checkbox]').each { |cb| uncheck(cb[:id]) if cb.checked? rescue nil }
 end
 
