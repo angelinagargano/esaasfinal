@@ -7,7 +7,7 @@ RSpec.feature "Home Page", type: :feature do
       venue: "BAM Brooklyn Academy of Music",
       date: "December 3, 2025",
       time: "7:30 PM",
-      style: "Modern",
+      style: "Ballet",
       location: "Brooklyn",
       price: "$35",
       description: "A contemporary dance showcase blending live music and emotional storytelling.",
@@ -21,7 +21,7 @@ RSpec.feature "Home Page", type: :feature do
       venue: "Joyce Theater",
       date: "December 17, 2025",
       time: "8:00 PM",
-      style: "Tap",
+      style: "Avant Garde",
       location: "Manhattan",
       price: "$40",
       description: "A tap dance celebration of the holiday season featuring live jazz music.",
@@ -32,6 +32,7 @@ RSpec.feature "Home Page", type: :feature do
   background do
     visit root_path
   end
+  
 
   scenario "Viewing the default home feed with no preferences" do
     expect(page).to have_content(event1.name)
@@ -41,9 +42,8 @@ RSpec.feature "Home Page", type: :feature do
   scenario "Viewing the personalized feed after setting preferences" do
     visit preferences_path
 
-    select "$25–$50", from: "Budget"
-    select "Brooklyn", from: "Location"
-    select "Modern", from: "Performance Type"
+    check "$25–$50" 
+    check "Ballet" 
     click_button "Save Preferences"
 
     expect(current_path).to eq(root_path)
@@ -52,29 +52,36 @@ RSpec.feature "Home Page", type: :feature do
   end
 
   scenario "Filtering events by date" do
-    visit root_path
+    visit performances_path
 
-    fill_in "Start Date", with: "2025-12-01"
-    fill_in "End Date", with: "2025-12-10"
-    click_button "Apply Filters"
+    select "Date", from: "sort_by"
+    click_button "Refresh"
+    # Grab event titles in order
+    titles = page.all('.card .card-title').map(&:text)
 
-    expect(page).to have_content(event1.name)
-    expect(page).not_to have_content(event2.name)
+    # Filter only your two events
+    event_cards = [event1, event2].map do |event|
+      find(".card[data-event-id='#{event.id}'] .card-title").text
+    end
+
+    # Expect them to appear in ascending date order
+    expect(event_cards).to eq([event1.name, event2.name])
   end
-
   scenario "Viewing an event’s details from the home page" do
     visit root_path
-    click_on event1.name
+    within(find(".card[data-event-id='#{event1.id}']")) do
+      click_link "More Details"
+    end
 
-    expect(current_path).to eq(event_path(event1))
+    expect(current_path).to eq(details_performance_path(event1))
     expect(page).to have_content(event1.description)
-    expect(page).to have_link("Get Tickets", href: event1.tickets)
+    expect(page).to have_link("Purchase Tickets", href: event1.tickets)
   end
 
   scenario "Viewing event information on the home feed" do
     visit root_path
 
-    within(find(".event-card", text: event1.name)) do
+    within(find(".card[data-event-id='#{event1.id}']")) do
       expect(page).to have_content("December 3, 2025")
       expect(page).to have_content("7:30 PM")
       expect(page).to have_content("BAM Brooklyn Academy of Music")

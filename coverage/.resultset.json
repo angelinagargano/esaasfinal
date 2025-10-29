@@ -1,14 +1,14 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/Tennisqueen64/esaasfinal/app/models/event.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/models/event.rb": {
         "lines": [
           1,
           null,
           null
         ]
       },
-      "/Users/Tennisqueen64/esaasfinal/app/controllers/performances_controller.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/performances_controller.rb": {
         "lines": [
           1,
           null,
@@ -18,75 +18,75 @@
           null,
           null,
           1,
-          16,
+          18,
           null,
           null,
-          16,
+          18,
           null,
           null,
-          16,
+          18,
           null,
           null,
-          16,
-          2,
-          null,
-          null,
-          null,
-          16,
-          null,
-          0,
-          null,
-          null,
-          null,
-          16,
-          2,
-          4,
-          8,
-          null,
-          4,
-          null,
-          4,
-          null,
-          0,
-          null,
-          0,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          16,
-          null,
-          null,
-          16,
-          0,
-          0,
-          0,
-          16,
-          0,
-          0,
-          null,
-          null,
-          null,
-          null,
-          1,
-          null,
-          null,
-          1,
-          3,
+          18,
           3,
           null,
           null,
-          1,
           null,
+          18,
           null,
-          1,
-          8,
-          8,
           0,
           null,
-          8,
+          null,
+          null,
+          18,
+          3,
+          7,
+          11,
+          null,
+          4,
+          null,
+          6,
+          null,
+          1,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          18,
+          null,
+          null,
+          18,
+          1,
+          1,
+          1,
+          17,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          4,
+          4,
+          null,
+          null,
+          1,
+          null,
+          null,
+          1,
+          11,
+          11,
+          0,
+          null,
+          11,
           null,
           null,
           null,
@@ -96,7 +96,7 @@
           null
         ]
       },
-      "/Users/Tennisqueen64/esaasfinal/app/controllers/application_controller.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/application_controller.rb": {
         "lines": [
           1,
           null,
@@ -105,7 +105,7 @@
           null
         ]
       },
-      "/Users/Tennisqueen64/esaasfinal/app/controllers/preferences_controller.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/preferences_controller.rb": {
         "lines": [
           1,
           1,
@@ -140,13 +140,19 @@
           null,
           1,
           null,
-          6,
+          7,
           null,
           null,
           null,
           null,
-          6,
-          6,
+          7,
+          7,
+          null,
+          null,
+          7,
+          1,
+          1,
+          null,
           null,
           null,
           6,
@@ -156,14 +162,8 @@
           null,
           null,
           5,
-          1,
-          1,
-          null,
-          null,
-          null,
-          4,
-          4,
-          4,
+          5,
+          5,
           null,
           null,
           null,
@@ -175,7 +175,7 @@
           null
         ]
       },
-      "/Users/Tennisqueen64/esaasfinal/app/controllers/events_controller.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/controllers/events_controller.rb": {
         "lines": [
           0,
           null,
@@ -267,7 +267,7 @@
         "branches": {
         }
       },
-      "/Users/Tennisqueen64/esaasfinal/app/helpers/application_helper.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/helpers/application_helper.rb": {
         "lines": [
           0,
           0
@@ -275,7 +275,7 @@
         "branches": {
         }
       },
-      "/Users/Tennisqueen64/esaasfinal/app/helpers/movies_helper.rb": {
+      "/mnt/c/Users/Jlngo/esaasfinal/app/helpers/movies_helper.rb": {
         "lines": [
           0,
           null,
@@ -288,6 +288,6 @@
         }
       }
     },
-    "timestamp": 1761771321
+    "timestamp": 1761771629
   }
 }
