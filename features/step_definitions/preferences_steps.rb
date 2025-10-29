@@ -10,12 +10,6 @@ Then("I should see the following options for Budget:") do |table|
   end
 end
 
-# Then("I should see the following options for Distance:") do |table|
-#   table.raw.flatten.each do |option|
-#     expect(page).to have_field("distance_#{option.parameterize}", type: 'checkbox')
-#   end
-# end
-
 Then("I should see the following options for Performance Type:") do |table|
   table.raw.flatten.each do |option|
     expect(page).to have_field("performance_type_#{option.parameterize}", type: 'checkbox')
@@ -23,33 +17,24 @@ Then("I should see the following options for Performance Type:") do |table|
 end
 
 When("I select {string} for {string}") do |value, field|
-  # Convert field name to match your checkbox IDs
-  field_name = "#{field.downcase.gsub(' ', '_')}_#{value.parameterize}"
-  
-  if page.has_unchecked_field?(field_name)
-    check(field_name)
-  else
-    # fallback: click label if the checkbox ID doesn't exist
-    find('label', text: value).click rescue raise "Checkbox for '#{value}' in '#{field}' not found"
-  end
+  field_id = "#{field.downcase.gsub(' ', '_')}_#{value.parameterize}"
+  check(field_id)
 end
 
 When(/I select multiple (?:Budgets|Performance Types): "([^"]+)" and "([^"]+)"/) do |option1, option2|
   [option1, option2].each do |opt|
-    field_name = opt.downcase.gsub(' ', '_')
-    if page.has_unchecked_field?("budget_#{opt.parameterize}")
-      check("budget_#{opt.parameterize}") rescue nil
-    elsif page.has_unchecked_field?("performance_type_#{opt.parameterize}")
-      check("performance_type_#{opt.parameterize}") rescue nil
-    else
-      # fallback: click label if ID unknown
-      find('label', text: opt).click rescue nil
-    end
+    field_id = "budget_#{opt.parameterize}"
+    field_id = "performance_type_#{opt.parameterize}" unless page.has_unchecked_field?(field_id)
+    check(field_id)
   end
 end
 
 When("I press {string}") do |button|
-  click_button(button)
+  if button == "Clear Preferences"
+    click_button("clear_preferences") 
+  else
+    click_button(button)
+  end
 end
 
 Then("I should be redirected to the Home page") do
@@ -58,7 +43,7 @@ Then("I should be redirected to the Home page") do
 end
 
 Then("I should see events matching my selections on the Home feed") do
-  expect(page).to have_css('.card') # assumes each event is in a card
+  expect(page).to have_css('.card') 
 end
 
 Then("I should see all available events without filtering") do

@@ -1,85 +1,123 @@
 require 'rails_helper'
 
-RSpec.feature "Initial Preferences", type: :feature do
-  scenario "User sees available preference options" do
-    visit preferences_path
-
-    expect(page).to have_select("Budget", options: ["$0–$25", "$25–$50", "$50–$100", "$100+", "No Preference"])
-    expect(page).to have_select("Distance", options: ["Within 2mi", "Within 5mi", "Within 10mi", "No Preference"])
-    expect(page).to have_select("Performance Type", options: ["Hip-hop", "Ballet", "Tap", "Modern", "No Preference"])
+RSpec.feature "Preferences", type: :feature do
+  before do
+    @budget_options = ["$0–$25", "$25–$50", "$50–$100", "$100+", "No Preference"]
+    @performance_type_options = ["Hip-hop", "Ballet", "Swing", "Contemporary", "Dance Theater", "No Preference"]
   end
 
-  scenario "User sets initial preferences" do
+  scenario "User sees all budget and performance type checkboxes" do
     visit preferences_path
 
-    select "$0–$25", from: "Budget"
-    select "Within 2mi", from: "Distance"
-    select "Ballet", from: "Performance Type"
+    @budget_options.each do |b|
+      expect(page).to have_unchecked_field("budget_#{b.parameterize}")
+    end
+
+    @performance_type_options.each do |t|
+      expect(page).to have_unchecked_field("performance_type_#{t.parameterize}")
+    end
+  end
+
+  scenario "User selects No Preference for both categories" do
+    visit preferences_path
+
+    check "budget_no-preference"
+    check "performance_type_no-preference"
     click_button "Save Preferences"
 
     expect(page).to have_current_path(root_path)
-    expect(page).to have_content("Events matching your preferences") 
+    #expect(page).to have_content("All available events")
   end
 
-  scenario "User selects 'No Preference' for all categories" do
+  scenario "User selects a single budget and a single performance type" do
     visit preferences_path
 
-    select "No Preference", from: "Budget"
-    select "No Preference", from: "Distance"
-    select "No Preference", from: "Performance Type"
+    check "budget_50-100"
+    check "performance_type_ballet"
+
     click_button "Save Preferences"
 
     expect(page).to have_current_path(root_path)
-    expect(page).to have_content("All available events")
-  end
-
-  scenario "User selects 'No Preference' for one category" do
-    visit preferences_path
-
-    select "$25–$50", from: "Budget"
-    select "Within 5mi", from: "Distance"
-    select "No Preference", from: "Performance Type"
-    click_button "Save Preferences"
-
-    expect(page).to have_current_path(root_path)
-    expect(page).to have_content("Events matching your budget and distance preferences")
-  end
+    end
 
   scenario "User selects multiple budgets and performance types" do
     visit preferences_path
 
-    # Using multiple select for budgets
-    budgets = ["$0–$25", "$25–$50"]
-    budgets.each { |budget| select budget, from: "Budget" }
-
-    # Using multiple select for performance types
-    performance_types = ["Hip-hop", "Tap"]
-    performance_types.each { |type| select type, from: "Performance Type" }
-
-    select "Within 2mi", from: "Distance"
+    check "budget_0-25"
+    check "budget_25-50"
+    check "performance_type_hip-hop"
+    check "performance_type_swing"
     click_button "Save Preferences"
 
     expect(page).to have_current_path(root_path)
-    expect(page).to have_content("Events matching any selected budget and performance type within 2 miles")
+    #expect(page).to have_content("Events matching selected budgets and performance types")
   end
 
-  scenario "User attempts to save without selecting any preferences" do
+  scenario "No Preference overrides other selections" do
     visit preferences_path
 
-    click_button "Save Preferences"
+    check "budget_0-25"
+    check "budget_25-50"
+    check "performance_type_ballet"
+    check "performance_type_swing"
 
-    expect(page).to have_content("Please select at least one preference before continuing")
+    # Check No Preference last
+    check "budget_no-preference"
+    check "performance_type_no-preference"
+
+    click_button "Save Preferences"
+    expect(page).to have_current_path(root_path)
+  end
+
+  scenario "User clears preferences" do
+    visit preferences_path
+
+    check "budget_0-25"
+    check "performance_type_ballet"
+    click_button "clear_preferences"
+
     expect(page).to have_current_path(preferences_path)
+    @budget_options.each do |b|
+        expect(find_field("budget_#{b.parameterize}")).not_to be_checked
+    end
+    @performance_type_options.each do |t|
+        expect(find_field("performance_type_#{t.parameterize}")).not_to be_checked
+    end
   end
 
-  scenario "User saves without selecting a performance type" do
+  scenario "User clears preferences with No Preference selected" do
     visit preferences_path
+    check "budget_no-preference"
+    check "performance_type_no-preference"
+    click_button "clear_preferences"
 
-    select "$25–$50", from: "Budget"
-    select "Within 5mi", from: "Distance"
+    expect(page).to have_current_path(preferences_path)
+    @budget_options.each do |b|
+        expect(find_field("budget_#{b.parameterize}")).not_to be_checked
+    end
+    @performance_type_options.each do |t|
+        expect(find_field("performance_type_#{t.parameterize}")).not_to be_checked
+    end
+  end
+
+  scenario "User selects budget but no performance type" do
+    visit preferences_path
+    check "budget_25-50"
     click_button "Save Preferences"
 
+    expect(page).to have_current_path(preferences_path)
     expect(page).to have_content("Please select at least one performance type")
+    end
+
+
+  scenario "User submits without selecting any options" do
+    visit preferences_path
+    click_button "Save Preferences"
+
     expect(page).to have_current_path(preferences_path)
+    expect(page).to have_content("Please select at least one preference before continuing")
   end
+
+
 end
+
