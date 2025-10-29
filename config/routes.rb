@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       get :details
     end
   end
+  resources :events do
+    resources :tickets, only: [:index, :show, :new, :create]
+  end
   
   # Example resource route with options:
   #   resources :products do

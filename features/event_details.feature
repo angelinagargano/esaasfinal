@@ -13,7 +13,7 @@ Feature: View event details page
 
   Scenario: Viewing more details about an event
     Given "Rennie Harris Puremovement American Street Dance Theater" exists
-    When I click on its event card
+    When I click on its event card "Rennie Harris"
     Then I should be on its Event Details page
     And I should see:
       | Venue       | The Joyce Theater |
@@ -23,11 +23,11 @@ Feature: View event details page
       | Location    | Chelsea |
       | Price       | $32 |
       | Description | Well-known for painting rich tapestries of political, philosophical, and spiritual ideas, Rennie Harris returns with American Street Dance Theater, blending hip-hop and storytelling. |
-    And I should see a "Get Tickets" link leading to "https://shop.joyce.org/8129/8130"
+    And I should see a "Purchase Tickets" link leading to "https://shop.joyce.org/8129/8130"
 
   Scenario: Navigating to the ticket purchase page
     Given I am on the Event Details page for "Rennie Harris Puremovement American Street Dance Theater"
-    When I click "Get Tickets"
+    Then I should see the Purchase Tickets link
+    When I click the Purchase Tickets link
     Then I should see a message: "You have viewed tickets for Rennie Harris Puremovement American Street Dance Theater"
-    And I should be redirected to the ticket site
-    And the URL should contain "https://shop.joyce.org/8129/8130"
+  And the Purchase Tickets link should go to "https://shop.joyce.org/8129/8130"

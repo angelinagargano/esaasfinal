@@ -63,6 +63,7 @@ class PerformancesController < ApplicationController
 
   def details
     @event = Event.find(params[:id])
+    flash.now[:notice] = params[:viewed_tickets_message] if params[:viewed_tickets_message].present?
   end
 
   private
