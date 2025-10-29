@@ -116,3 +116,4 @@ end
 Then('all events should be within {int} miles') do |_int|
   expect(page).to have_css('#events .card', minimum: 1)
 end
+
