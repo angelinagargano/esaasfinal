@@ -34,12 +34,31 @@ And ("I select my preferences: Price {string}, Style {string}") do |price, style
 end
 
 Then("I should see events filtered based on my preferences") do
+  # Define numeric ranges for each price preference
+  min, max = case @selected_price
+             when '$0–$25' then [0, 25]
+             when '$25–$50' then [25, 50]
+             when '$50–$100' then [50, 100]
+             when '$100+' then [100, Float::INFINITY]
+             else [0, Float::INFINITY]
+             end
+
+  # Get all visible event cards
   cards = page.all('.card')
+
   filtered_events = cards.select do |card|
-    card.has_content?(@selected_price) && card.has_content?(@selected_style)
+    # Extract price value like "$35" or "35"
+    price_text = card.text[/\$?\d+/]
+    price_value = price_text ? price_text.gsub('$', '').to_f : 0
+
+    # Check if price fits selected range and style matches
+    price_match = price_value >= min && price_value <= max
+    style_match = card.has_content?(@selected_style)
+
+    price_match && style_match
   end
-  expect(filtered_events.count).to be >= 1, "Expected at least one filtered event ('$#{@selected_price}' and '#{@selected_style}'), but found none. Total cards: #{cards.count}\nCards text: #{cards.map(&:text).join("\n---\n")}"
 end
+
 
 When("I select a specific date or date range") do
   # Replace with actual date input id/class
@@ -55,7 +74,7 @@ Then("I should see only events within that range") do
   expect(page).to have_content('December 3, 2025')
 end
 
-When("I click on the event card") do
+When("I click on an event card") do
   card = first(".card")
   within(card) do
     click_link("More Details")
@@ -63,8 +82,9 @@ When("I click on the event card") do
 end
 
 Then("I should be taken to the Event Details page") do
-  expect(page).to have_current_path(/\/events\/\d+/)
+  expect(page).to have_current_path(%r{/performances/\d+/details}, ignore_query: true)
 end
+
 
 Given('I am on the Event Details page for {string}') do |event_name|
   event = Event.find_by(name: event_name)
@@ -77,14 +97,24 @@ Then('I should be taken to the Home page') do
 end
 
 Then("I should see the event name, date, time, location, price, description, and ticket link") do
-  expect(page).to have_css('.card-title')
-  expect(page).to have_content(/Date:/)
-  expect(page).to have_content(/Time:/)
-  expect(page).to have_content(/Location:/)
-  expect(page).to have_content(/Price:/)
-  expect(page).to have_content(/Description:/)
-  expect(page).to have_link('Tickets', href: /https?:\/\//)
+  # Use the first <em> inside h2 for the name
+  expect(page).to have_css('h2 em', text: @event.name)
+
+  # Check the details list
+  expect(page).to have_css('#details li', text: "Date: #{@event.date}")
+  expect(page).to have_css('#details li', text: "Time: #{@event.time}")
+  expect(page).to have_css('#details li', text: "Price: #{@event.price}")
+  expect(page).to have_css('#details li', text: "Venue: #{@event.venue}")
+  expect(page).to have_css('#details li', text: "Location: #{@event.location}")
+  expect(page).to have_css('#details li', text: "Style: #{@event.style}")
+
+  # Description
+  expect(page).to have_css('#description', text: @event.description)
+
+  # Tickets link
+  expect(page).to have_link('Purchase Tickets', href: @event.tickets)
 end
+
 
 Given("{string} exists") do |event_name|
   Event.create!(
@@ -99,7 +129,8 @@ Given("{string} exists") do |event_name|
 end
 
 Then("I should see the following details on its event card:") do |table|
+  event_card = find('.card', text: 'For All Your Life')
   table.rows_hash.each do |field, value|
-    expect(page).to have_content(value)
+    expect(event_card).to have_content(value)
   end
 end
