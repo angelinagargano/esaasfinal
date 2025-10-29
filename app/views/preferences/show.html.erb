@@ -6,27 +6,18 @@
     <% @budget_options.each do |option| %>
       <div class="form-check form-check-inline">
         <%= check_box_tag 'budget[]', option, @preferences['budget']&.include?(option), 
-                  id: "budget_#{option.parameterize}" %>        
+                  id: "budget_#{option.parameterize}", class: "budget-checkbox" %>        
         <%= label_tag "budget_#{option.parameterize}", option, class: 'form-check-label' %>
       </div>
     <% end %>
   </div>
-
-  # <div>
-  #   <%= label_tag :distance, 'Distance' %><br>
-  #   <% @distance_options.each do |option| %>
-  #     <div class="form-check form-check-inline">
-  #       <%= check_box_tag 'distance[]', option, @preferences['distance']&.include?(option), class: 'form-check-input', id: "distance_#{option.parameterize}" %>
-  #       <%= label_tag "distance_#{option.parameterize}", option, class: 'form-check-label' %>
-  #     </div>
-  #   <% end %>
-  # </div>
-
+  <br>
   <div>
     <%= label_tag :performance_type, 'Performance Type' %><br>
     <% @performance_type_options.each do |option| %>
       <div class="form-check form-check-inline">
-        <%= check_box_tag 'performance_type[]', option, @preferences['performance_type']&.include?(option), class: 'form-check-input', id: "performance_type_#{option.parameterize}" %>
+        <%= check_box_tag 'performance_type[]', option, @preferences['performance_type']&.include?(option), 
+                  id: "performance_type_#{option.parameterize}", class: "performance-type-checkbox" %>
         <%= label_tag "performance_type_#{option.parameterize}", option, class: 'form-check-label' %>
       </div>
     <% end %>
@@ -38,5 +29,5 @@
 <% end %>
 
 <%= form_with url: clear_preferences_path, method: :post, local: true do %>
-  <%= submit_tag 'Clear Preferences', class: 'btn btn-secondary mt-2' %>
+  <%= submit_tag 'Clear Preferences', class: 'btn btn-secondary mt-2', id: 'clear_preferences' %>
 <% end %>

@@ -31,39 +31,32 @@ class PreferencesController < ApplicationController
 
   def create
     prefs = {
-      'budget' => params[:budget],
-      'distance' => params[:distance],
-      'performance_type' => params[:performance_type],
-      'location' => params[:location]
+      'budget' => params[:budget] || [],
+      'performance_type' => params[:performance_type] || []
     }
 
-    # Validation: only treat truly blank (nil/empty) selections as missing.
-    # If the user explicitly selects 'No Preference' for fields, that counts as a valid choice.
-    primary_prefs = [prefs['budget'], prefs['distance'], prefs['performance_type']]
+    # Handle "No Preference" logic
+    prefs['budget'] = ['No Preference'] if prefs['budget'].include?('No Preference')
+    prefs['performance_type'] = ['No Preference'] if prefs['performance_type'].include?('No Preference')
 
-    all_blank = primary_prefs.all? { |v| v.blank? }
-
-    if all_blank
-      # Uses flash[:error] to match the BDD step "I should see an error message"
+    # Validation: ensure at least one preference is present
+    if prefs['budget'].blank? && prefs['performance_type'].blank?
       flash[:error] = 'Please select at least one preference before continuing'
       redirect_to preferences_path and return
     end
-    # --------------------------------------------------------------------------------------
 
-    # --- FIX 2: Validation for "Saving without selecting a performance type" ---
-    # Check if performance_type is blank (i.e., not selected) at all.
-    # Note: If 'No Preference' is explicitly selected, this check is skipped.
+    # Additional validation for performance_type
     if prefs['performance_type'].blank?
       flash[:alert] = 'Please select at least one performance type'
       redirect_to preferences_path and return
     end
-    # --------------------------------------------------------------------------------------
 
-    # Valid preferences — save and redirect to home
+    # Save valid preferences
     session[:preferences] = prefs
     flash[:notice] = 'Preferences saved.'
     redirect_to root_path
   end
+
 
   def clear
     session.delete(:preferences)
