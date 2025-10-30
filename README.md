@@ -1,12 +1,9 @@
 # esaasfinal
 
 ## Team Members:
-Angelina Gargano (ag4645)
-
-Jenny Leana Fotso Ngompe (jf3433)
-
-Janie Zhang (jz3569)
-
+Angelina Gargano (ag4645)  
+Jenny Leana Fotso Ngompe (jf3433)  
+Janie Zhang (jz3569)  
 Stanley Omondi (soo2117)
 
 ## Instructions
