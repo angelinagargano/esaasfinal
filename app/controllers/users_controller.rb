@@ -19,6 +19,9 @@ class UsersController < ApplicationController
     else
       # No User model yet: just fake a successful signup if required fields present
       if params[:email].present? && params[:username].present? && params[:password].present?
+        # store credentials in in-memory stub so the login fallback can validate
+        $STUBBED_USERS ||= {}
+        $STUBBED_USERS[params[:username]] = params[:password]
         flash[:notice] = 'Account created. Please log in.'
         redirect_to login_path and return
       else

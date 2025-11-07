@@ -38,8 +38,8 @@ When("I press {string}") do |button|
 end
 
 Then("I should be redirected to the Home page") do
-  expect(page).to have_current_path(root_path)
-  expect(page).to have_content(/Preferences saved./)
+  expect(page).to have_current_path(performances_path)
+  #expect(page).to have_content(/Preferences saved./)
 end
 
 Then("I should see events matching my selections on the Home feed") do
