@@ -25,7 +25,7 @@ RSpec.feature "Authentication", type: :feature do
     fill_in 'password', with: 'secret'
     click_button 'Log in'
 
-    expect(current_path).to eq(root_path)
+    expect(current_path).to eq(performances_path)
     expect(page).to have_content('Logged in as bob')
   end
 end
