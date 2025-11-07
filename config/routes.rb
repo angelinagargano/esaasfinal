@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root to: 'performances#index'
+  # Make the login page the default root for the app
+  root to: 'sessions#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -23,6 +24,13 @@ Rails.application.routes.draw do
       get :details
     end
   end
+  # Basic auth routes for signup/login used by feature specs
+  get '/signup', to: 'users#new', as: :signup
+  post '/signup', to: 'users#create'
+
+  get '/login', to: 'sessions#new', as: :login
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy', as: :logout
   resources :events do
     resources :tickets, only: [:index, :show, :new, :create]
   end
