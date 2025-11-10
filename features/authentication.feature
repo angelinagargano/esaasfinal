@@ -11,7 +11,8 @@ Feature: Authentication
       | Email             | alice@example.com        |
       | Name              | Alice Example            |
       | Username          | alice123                 |
-      | Password          | password123              |
+      | Password          | password123 |
+      | Confirm Password  | password123 |
     And I click "Sign up"
     Then I should be redirected to the Login page
 
@@ -22,7 +23,8 @@ Feature: Authentication
       | Name    | Alice                 |
       | Username| alice123              |
       | Password|                        |
-    And I press "Sign up"
+      | Confirm Password  |               |
+    And I click "Sign up"
     Then I should see an error message
 
   Scenario: Logging in successfully
@@ -39,5 +41,5 @@ Feature: Authentication
     When I fill in the login form with:
       | Username | unknown       |
       | Password | wrong         |
-    And I press "Log in"
+    And I click "Log in"
     Then I should see an error message
