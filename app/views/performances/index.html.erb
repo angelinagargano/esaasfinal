@@ -34,10 +34,12 @@
               <div class="d-flex gap-1">
                 <%= button_to performances_path(event), method: :post, class: "btn btn-like btn-sm", remote: true do %>
                   <i class="fa fa-heart"></i>
+                  <span class="visually-hidden">Like</span>
                 <% end %>
 
                 <%= button_to performances_path(event), method: :post, class: "btn btn-dislike btn-sm", remote: true do %>
                   <i class="fa fa-heart-broken"></i>
+                  <span class="visually-hidden">Dislike</span>
                 <% end %>
               </div>
             </div>
