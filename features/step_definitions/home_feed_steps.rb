@@ -1,9 +1,21 @@
 Given("I have not set any preferences") do
+  # Clear session preferences by using the clear preferences endpoint
+  # This ensures no filtering is applied
   visit preferences_path
-  # Uncheck all checkboxes to simulate "No Preference"
-  all('input[type=checkbox]').each { |cb| uncheck(cb[:id]) rescue nil }
-  click_button 'Save Preferences'
-  visit '/' # Return to home page
+  
+  # Click the Clear Preferences button which posts to clear_preferences_path
+  # This will delete session[:preferences] and redirect to preferences_path
+  if page.has_button?('Clear Preferences', id: 'clear_preferences')
+    click_button('clear_preferences')
+    # After clearing, we're redirected to preferences_path, so navigate to performances
+    visit performances_path
+  else
+    # Fallback: set "No Preference" for required field (performance_type)
+    check('performance_type_no-preference') if page.has_unchecked_field?('performance_type_no-preference')
+    click_button 'Save Preferences'
+    # After saving, we're redirected to root_path, so navigate to performances
+    visit performances_path
+  end
 end
 
 Then("I should see all events") do
@@ -18,7 +30,7 @@ Given("I can select my preferences") do
 end
 
 Given("I am on the Home page") do
-  visit '/'
+  visit performances_path
 end
 
 When("I complete the mini quiz with my budget and performance type") do

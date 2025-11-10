@@ -6,9 +6,15 @@ Given("the following events exist:") do |table|
       e.time = event['Time']
       e.style = event['Style']
       e.location = event['Location']
+      e.borough = event['Borough'] if event['Borough'].present?
       e.price = event['Price']
       e.description = event['Description']
       e.tickets = event['Tickets']
+    end
+
+    # Update borough if it exists in the table but wasn't set initially
+    if event['Borough'].present? && created_event.borough != event['Borough']
+      created_event.update(borough: event['Borough'])
     end
 
     # Store the first event in @event for use in other steps

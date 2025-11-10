@@ -7,6 +7,7 @@ class CreateEvents < ActiveRecord::Migration[8.0]
       t.string :time
       t.string :style
       t.string :location
+      t.string :borough
       t.string :price
       t.text :description
       t.string :tickets

@@ -25,7 +25,7 @@
 require 'csv'
 
     # Specify the path to your CSV file
-    csv_file_path = Rails.root.join('db', 'seeds', 'dance_events.csv')
+    csv_file_path = Rails.root.join('db', 'seeds', 'mod_dance_events.csv')
 
     # Ensure the file exists before attempting to read it
     if File.exist?(csv_file_path)
@@ -40,6 +40,7 @@ require 'csv'
 		  time: row['Time'],
 		  style: row['Style'],
 		  location: row['Location'],
+      borough: row['Borough'],
 		  price: row['Price'],
 		  description: row['Description'],
 		  tickets: row['Tickets']

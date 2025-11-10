@@ -16,6 +16,18 @@ Then("I should see the following options for Performance Type:") do |table|
   end
 end
 
+Then("I should see the following options for Borough:") do |table|
+  table.raw.flatten.each do |option|
+    expect(page).to have_field("borough_#{option.parameterize}", type: 'checkbox')
+  end
+end
+
+Then("I should see the following options for Location:") do |table|
+  table.raw.flatten.each do |option|
+    expect(page).to have_field("location_#{option.parameterize}", type: 'checkbox')
+  end
+end
+
 When("I select {string} for {string}") do |value, field|
   field_id = "#{field.downcase.gsub(' ', '_')}_#{value.parameterize}"
   check(field_id)

@@ -11,19 +11,23 @@ class PerformancesController < ApplicationController
     # Start with all events
     @events = Event.all
 
-    # Apply saved preferences from session (multi-select)
+    # Apply saved preferences from session 
     prefs = session[:preferences] || {}
 
-    # Filter by performance_type (style)
+    # Filter by performance_type 
     if prefs['performance_type'].present? && !prefs['performance_type'].include?('No Preference')
       @events = @events.where(style: prefs['performance_type'])
     end
 
-    # Filter by location/distance
-    # if prefs['location'].present? && !prefs['location'].include?('No Preference')
-    #   # You might implement actual distance filtering here. For now, simple substring match:
-    #   @events = @events.where('location LIKE ANY (array[?])', prefs['location'].map { |l| "%#{l}%" })
-    # end
+    # Filter by borough
+    if prefs['borough'].present? && !prefs['borough'].include?('No Preference')
+      @events = @events.where(borough: prefs['borough'])
+    end
+
+    # Filter by location
+    if prefs['location'].present? && !prefs['location'].include?('No Preference')
+      @events = @events.where(location: prefs['location'])
+    end
 
     # Filter by budget
     if prefs['budget'].present? && !prefs['budget'].include?('No Preference')
@@ -43,10 +47,9 @@ class PerformancesController < ApplicationController
       end
     end
 
-    # Convert back to ActiveRecord::Relation if needed
     @events = Event.where(id: @events.map(&:id)) if @events.is_a?(Array)
 
-    # Apply sorting if requested
+  # Apply sorting if requested
     if params[:sort_by].present?
       @sort_by = params[:sort_by]
       session[:sort_by] = @sort_by
@@ -68,7 +71,6 @@ class PerformancesController < ApplicationController
 
   private
 
-  # helper to parse price values stored as strings like "$35" or numeric
   def numeric_price(price_value)
     return 0 if price_value.nil?
     if price_value.is_a?(Numeric)
@@ -79,6 +81,6 @@ class PerformancesController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :venue, :date, :time, :style, :location, :price, :description, :tickets)
+    params.require(:event).permit(:name, :venue, :date, :time, :style, :location, :borough, :price, :description, :tickets)
   end
 end
