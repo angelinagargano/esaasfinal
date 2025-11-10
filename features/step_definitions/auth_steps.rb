@@ -50,6 +50,10 @@ Then('I should see {string}') do |text|
   expect(page).to have_content(text)
 end
 
+Then("I should not see {string}") do |text|
+  expect(page).not_to have_content(text)
+end
+
 Then('I should be redirected to the Login page') do
   expect(current_path).to eq('/login')
 end
