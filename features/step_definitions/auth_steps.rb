@@ -18,6 +18,7 @@ When("I fill in the sign up form with:") do |table|
   fill_in 'name', with: data['Name']
   fill_in 'username', with: data['Username']
   fill_in 'password', with: data['Password']
+  fill_in 'password_confirmation', with: data['Password']
 end
 
 When("I fill in the login form with:") do |table|
@@ -45,18 +46,12 @@ end
 # end
 
 
-Then("I should see \"Welcome, %{name}\"", :wrapper) do |name|
-  # fallback handled by later step if the exact step isn't used by features
-  expect(page).to have_content("Welcome, #{name}")
+Then('I should see {string}') do |text|
+  expect(page).to have_content(text)
 end
 
-
-Then("I should see \"Logged in as %{username}\"", :wrapper) do |username|
-  expect(page).to have_content("Logged in as #{username}")
-end
-
-Then("I should be redirected to the Login page") do
-    expect(current_path).to eq('/login')
+Then('I should be redirected to the Login page') do
+  expect(current_path).to eq('/login')
 end
 
 Then("I should see an error message") do
