@@ -25,7 +25,7 @@
 require 'csv'
 
     # Specify the path to your CSV file
-    csv_file_path = Rails.root.join('db', 'seeds', 'dance_events - dance_events.csv')
+    csv_file_path = Rails.root.join('db', 'seeds', 'mod_dance_events.csv')
 
     # Ensure the file exists before attempting to read it
     if File.exist?(csv_file_path)
