@@ -18,12 +18,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_120000) do
     t.string "time"
     t.string "style"
     t.string "location"
-    t.string "borough"
     t.string "price"
     t.text "description"
     t.string "tickets"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "borough"
   end
 
   create_table "movies", force: :cascade do |t|

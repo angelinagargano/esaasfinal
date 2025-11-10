@@ -11,6 +11,24 @@ end
 Given("I am on the Login page") do
   visit '/login' rescue visit new_user_session_path if defined?(new_user_session_path)
 end
+Given('I am logged in as {string}') do |username|
+  # 1️⃣ Ensure user exists
+  step %(an existing user with username "#{username}" and password "password123")
+
+  # 2️⃣ Go to login page
+  visit '/login'
+  expect(page).to have_content('Log in')
+
+  # 3️⃣ Fill in login form
+  fill_in 'username', with: username
+  fill_in 'password', with: 'password123'
+
+  # 4️⃣ Submit form
+  click_button 'Log in'
+
+  # 5️⃣ Verify login succeeded (optional, adjust text as needed)
+  expect(page).to have_content("Logged in as #{username}")
+end
 
 When("I fill in the sign up form with:") do |table|
   data = table.rows_hash
