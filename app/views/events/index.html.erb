@@ -1,4 +1,4 @@
-<!-- app/views/performances/index.html.erb -->
+<!-- app/views/events/index.html.erb -->
 <h2 class="mb-4 text-center">Explore Performances</h2>
 
 <div class="text-center mb-3">
@@ -36,7 +36,7 @@
             <p class="card-text"><strong>Price:</strong> <%= event.price %></p>
           </div>
           <div class="card-footer bg-transparent border-top-0 text-center">
-            <%= link_to "More Details", details_events_path(event), class: "btn btn-success w-100" %>
+            <%= link_to "More", details_events_path(event), class: "btn btn-success w-100" %>
           </div>
         </div>
       </div>

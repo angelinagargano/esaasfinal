@@ -13,3 +13,19 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+document.addEventListener("turbo:load", () => {
+  document.querySelectorAll(".btn-like, .btn-dislike").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+      const icon = btn.querySelector("i");
+      if (btn.classList.contains("btn-like")) {
+        icon.classList.toggle("active");
+      } else if (btn.classList.contains("btn-dislike")) {
+        icon.classList.toggle("active");
+      }
+
+      // Send AJAX request manually if needed
+      btn.closest("form").submit();
+    });
+  });
+});

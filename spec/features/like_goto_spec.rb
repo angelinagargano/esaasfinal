@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature "Interacting with events", type: :feature do
   background do
-    @alice = User.create!(name: "Alice", email: "alice@example.com", password: "password")
+    @alice = User.create!(name: "Alice", email: "alice@example.com", username: "Alice123", password: "password")
 
     Event.create!(
       name: "Rennie Harris Puremovement American Street Dance Theater",
@@ -52,13 +52,16 @@ RSpec.feature "Interacting with events", type: :feature do
       tickets: "https://newyorklivearts.my.salesforce-sites.com/ticket/#/instances/a0FVt00000DafLXMAZ"
     )
 
-    login_as(@alice, scope: :user)
+    visit root_path
+    fill_in "Username", with: @alice.username
+    fill_in "Password", with: "password"
+    click_button "Log in"
   end
 
   scenario "Liking an event from the home page" do
-    visit root_path
+    visit performances_path
 
-    within(".event-card", text: "For All Your Life") do
+    within(".card", text: "For All Your Life") do
       click_button "Like"
     end
 
@@ -68,9 +71,9 @@ RSpec.feature "Interacting with events", type: :feature do
   end
 
   scenario "Disliking an event from the home page" do
-    visit root_path
+    visit performances_path
 
-    within(".event-card", text: "For All Your Life") do
+    within(".card", text: "For All Your Life") do
       click_button "Dislike"
     end
 

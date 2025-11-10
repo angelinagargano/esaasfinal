@@ -6,6 +6,8 @@ class PerformancesController < ApplicationController
   end
 
   def index
+    #render plain: "Hello, this is the Performances index page!"
+
     @all_styles = Event.distinct.pluck(:style)
 
     # Start with all events
