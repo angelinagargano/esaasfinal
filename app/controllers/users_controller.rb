@@ -19,9 +19,41 @@ class UsersController < ApplicationController
     end
   end
 
+  # Show user profile
+  def profile
+    @user = current_user
+    @liked_events = @user.liked_events.order(:date)
+    # @going_events = @user.going_events_list.order(:date)  # Commented out - going_events table not created yet
+  end
+
+  # Show edit form
+  def edit
+    @user = current_user
+  end
+
+  # Update user information
+  def update
+    @user = current_user
+    update_params = user_params
+    
+    # If password is blank, don't update it
+    if update_params[:password].blank?
+      update_params.delete(:password)
+      update_params.delete(:password_confirmation)
+    end
+    
+    if @user.update(update_params)
+      flash[:notice] = 'Your information was successfully updated.'
+      redirect_to user_profile_path(@user)
+    else
+      flash.now[:alert] = @user.errors.full_messages.join(', ')
+      render :edit
+    end
+  end
+
   private
 
   def user_params
-    params.permit(:email, :name, :username, :password, :password_confirmation)
+    params.require(:user).permit(:email, :name, :username, :password, :password_confirmation)
   end
 end

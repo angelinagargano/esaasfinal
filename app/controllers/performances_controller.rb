@@ -55,10 +55,23 @@ class PerformancesController < ApplicationController
     if params[:sort_by].present?
       @sort_by = params[:sort_by]
       session[:sort_by] = @sort_by
-      @events = @events.order(@sort_by)
     elsif session[:sort_by].present?
       @sort_by = session[:sort_by]
-      @events = @events.order(@sort_by)
+    end
+    
+    if @sort_by.present?
+      if @sort_by == 'date'
+        # Sort by date chronologically by parsing the date strings
+        @events = @events.to_a.sort_by do |event|
+          begin
+            Date.parse(event.date)
+          rescue
+            Date.new(9999, 12, 31) # Put invalid dates at the end
+          end
+        end
+      else
+        @events = @events.order(@sort_by)
+      end
     end
   end
 
@@ -74,7 +87,7 @@ class PerformancesController < ApplicationController
   def like 
     @event = Event.find(params[:id])
     current_user.liked_events << @event unless current_user.liked_events.include?(@event)
-    redirect_to performances_path, notice: "Event liked!"
+    redirect_back(fallback_location: performances_path, notice: "Event liked!")
   end 
   def unlike
     @event = Event.find(params[:id])

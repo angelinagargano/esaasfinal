@@ -37,6 +37,12 @@ Rails.application.routes.draw do
   get '/login', to: 'sessions#new', as: :login
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy', as: :logout
+  
+  # User profile routes
+  get '/users/:id/profile', to: 'users#profile', as: :user_profile
+  get '/users/:id/edit', to: 'users#edit', as: :edit_user
+  patch '/users/:id', to: 'users#update', as: :user
+  put '/users/:id', to: 'users#update'
   resources :events do
     resources :tickets, only: [:index, :show, :new, :create]
   end
