@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   resources :performances do
     member do
       get :details
+      post 'like'
+      delete 'unlike'
+    end
+    collection do 
+      get 'liked_events'
     end
   end
   # Basic auth routes for signup/login used by feature specs
@@ -34,6 +39,8 @@ Rails.application.routes.draw do
   resources :events do
     resources :tickets, only: [:index, :show, :new, :create]
   end
+
+
   
   # Example resource route with options:
   #   resources :products do

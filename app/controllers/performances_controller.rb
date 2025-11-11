@@ -71,6 +71,19 @@ class PerformancesController < ApplicationController
     flash.now[:notice] = params[:viewed_tickets_message] if params[:viewed_tickets_message].present?
   end
 
+  def like 
+    @event = Event.find(params[:id])
+    current_user.liked_events << @event unless current_user.liked_events.include?(@event)
+    redirect_to performances_path, notice: "Event liked!"
+  end 
+  def unlike
+    @event = Event.find(params[:id])
+    current_user.liked_events.delete(@event)
+    redirect_to performances_path, notice: "Event unliked!"
+  end
+  def liked_events
+    @events = current_user.liked_events
+  end 
   private
 
   def numeric_price(price_value)

@@ -1,0 +1,19 @@
+<h2>My Liked Events</h2>
+
+<% if @events.any? %>
+  <div class="row">
+    <% @events.each do |event| %>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5><%= event.name %></h5>
+            <p><%= event.venue %></p>
+            <%= button_to 'Unlike', unlike_performance_path(event), method: :delete, class: "btn btn-danger" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>You haven’t liked any events yet.</p>
+<% end %>

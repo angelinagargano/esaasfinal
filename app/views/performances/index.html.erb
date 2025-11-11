@@ -32,18 +32,13 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="card-title mb-0"><%= event.name %></h5>
               <div class="d-flex gap-1">
-                <%= button_to performances_path(event), method: :post, class: "btn btn-like btn-sm", remote: true do %>
-                  <i class="fa fa-heart"></i>
-                  <span class="visually-hidden">Like</span>
+                <% if current_user.liked_events.include?(event) %>
+                  <%= button_to 'Unlike', unlike_performance_path(event), method: :delete, class: "btn btn-danger" %>
+                <% else %>
+                  <%= button_to 'Like', like_performance_path(event), method: :post, class: "btn btn-primary" %>
                 <% end %>
-
-                <%= button_to performances_path(event), method: :post, class: "btn btn-dislike btn-sm", remote: true do %>
-                  <i class="fa fa-heart-broken"></i>
-                  <span class="visually-hidden">Dislike</span>
-                <% end %>
-              </div>
+                </div>
             </div>
-
             <!-- Event Details -->
             <p class="card-text"><strong>Date:</strong> <%= event.date %></p>
             <p class="card-text"><strong>Time:</strong> <%= event.time %></p>
