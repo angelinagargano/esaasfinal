@@ -85,6 +85,30 @@ class PerformancesController < ApplicationController
   def liked_events
     @events = current_user.liked_events
   end 
+  def going_and_calendar
+    @event = Event.find(params[:id])
+
+    # Track user as going
+    GoingEvent.find_or_create_by(user: current_user, event: @event)
+
+    # Build Google Calendar URL
+    event_datetime = DateTime.parse("#{@event.date} #{@event.time}")
+    start_time = event_datetime.strftime('%Y%m%dT%H%M%S')
+    end_time   = (event_datetime + 2.hours).strftime('%Y%m%dT%H%M%S')
+
+    google_calendar_url = "https://www.google.com/calendar/render?action=TEMPLATE"\
+      "&text=#{URI.encode_www_form_component(@event.name)}"\
+      "&dates=#{start_time}/#{end_time}"\
+      "&details=#{URI.encode_www_form_component(@event.description || 'Join me for this event!')}"\
+      "&location=#{URI.encode_www_form_component(@event.location)}"
+
+    # Pass URL via flash
+    flash[:notice] = "You're going!"
+    flash[:google_calendar_url] = google_calendar_url
+
+    redirect_to details_performance_path(@event)
+  end
+
   private
 
   def numeric_price(price_value)

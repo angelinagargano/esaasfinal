@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get :details
       post 'like'
       delete 'unlike'
+      post 'going_and_calendar'
     end
     collection do 
       get 'liked_events'
