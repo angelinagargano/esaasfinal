@@ -12,9 +12,9 @@ When("I press {string}") do |button_text|
   click_button(button_text)
 end
 
-When("I click {string}") do |link_text|
-  click_link(link_text)
-end
+# When("I click {string}") do |link_text|
+#   click_link(link_text)
+# end
 
 When("I change Username to {string}") do |new_username|
   fill_in "username", with: new_username
