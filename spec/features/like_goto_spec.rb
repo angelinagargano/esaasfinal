@@ -120,10 +120,10 @@ RSpec.feature "Interacting with events", type: :feature do
   scenario "Marking an event as going to from the details page" do
     event = Event.find_by(name: "For All Your Life")
 
-    visit event_path(event)
-    expect(page).to have_button("Going to")
+    visit details_performance_path(event)
+    expect(page).to have_link("Going to")
 
-    click_button "Going to"
+    click_link "Going to"
     expect(page).to have_content("Added to your Google Calendar")
   end
 end
