@@ -79,7 +79,8 @@ class PerformancesController < ApplicationController
   def unlike
     @event = Event.find(params[:id])
     current_user.liked_events.delete(@event)
-    redirect_to performances_path, notice: "Event unliked!"
+    redirect_back(fallback_location: performances_path, notice: "Event unliked!")
+    #redirect_to performances_path, notice: "Event unliked!"
   end
   def liked_events
     @events = current_user.liked_events

@@ -99,15 +99,21 @@ RSpec.feature "Interacting with events", type: :feature do
     expect(page).to have_content("For All Your Life")
   end
 
-  scenario "Disliking an event from the home page" do
-    visit performances_path(@events.id)
-
-    card = find(".card", text: "For All Your Life")
+  scenario "Unliking an event from the home page" do
+    # First, like the event
+    visit performances_path
+    expect(page).to have_content("For All Your Life")
+    card = first(".card", text: "For All Your Life", wait:10)
     within(card) do
-      click_button "Dislike"
+        click_button "Like"
     end
-
-    visit liked_events_path
+    visit liked_events_performances_path
+    expect(page).to have_content("For All Your Life")
+    # now unlike it 
+    card = first(".card", text: "For All Your Life", wait:10)
+    within(card) do
+        click_button "Unlike"
+    end
     expect(page).not_to have_content("For All Your Life")
   end
 

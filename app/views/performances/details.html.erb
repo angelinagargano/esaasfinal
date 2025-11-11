@@ -1,6 +1,7 @@
 <!--  app/views/movies/details.html.erb -->
 <div class="event-details">
 <h2>Details about <em><%= @event.name %></em></h2>
+<%= button_to 'Going to', unlike_performance_path(event), method: :delete, class: "btn btn-danger" %>
 <% if flash[:notice].present? %>
   <div class="alert alert-info"><%= flash[:notice] %></div>
 <% end %>
