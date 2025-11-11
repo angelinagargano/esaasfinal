@@ -49,7 +49,14 @@ class PerformancesController < ApplicationController
       end
     end
 
-    @events = Event.where(id: @events.map(&:id)) if @events.is_a?(Array)
+    # Convert to ActiveRecord relation if it's an array (from budget filtering)
+    if @events.is_a?(Array)
+      event_ids = @events.map(&:id)
+      @events = event_ids.any? ? Event.where(id: event_ids) : Event.none
+    end
+    
+    # Ensure @events is always set, even if empty
+    @events ||= Event.none
 
   # Apply sorting if requested
     if params[:sort_by].present?

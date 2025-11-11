@@ -25,27 +25,26 @@
 require 'csv'
 
     # Specify the path to your CSV file
-    csv_file_path = Rails.root.join('db', 'seeds', 'mod_dance_events.csv')
+    csv_file_path = Rails.root.join('db', 'seeds', 'dance_events.csv')
 
     # Ensure the file exists before attempting to read it
     if File.exist?(csv_file_path)
       CSV.foreach(csv_file_path, headers: true) do |row|
-        # Assuming your model is named 'MyModel'
-        # Map CSV headers to model attributes
-        Event.find_or_create_by!(
-          id: row['ID'],
+        # Find or create event and update all attributes including borough
+        event = Event.find_or_initialize_by(id: row['ID'])
+        event.assign_attributes(
           name: row['Name'],
-		  venue: row['Venue'],
-		  date: row['Date'],
-		  time: row['Time'],
-		  style: row['Style'],
-		  location: row['Location'],
-      borough: row['Borough'],
-		  price: row['Price'],
-		  description: row['Description'],
-		  tickets: row['Tickets']
-          # Add more mappings as needed
+          venue: row['Venue'],
+          date: row['Date'],
+          time: row['Time'],
+          style: row['Style'],
+          location: row['Location'],
+          borough: row['Borough'],
+          price: row['Price'],
+          description: row['Description'],
+          tickets: row['Tickets']
         )
+        event.save!
       end
       puts "Successfully imported data from #{csv_file_path}"
     else
