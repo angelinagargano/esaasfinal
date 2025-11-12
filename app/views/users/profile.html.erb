@@ -36,28 +36,28 @@
   <% end %>
 </div>
 
-<%# <hr class="my-4"> %>
+<hr class="my-4">
 
-<%# <div class="events-section mt-4"> %>
-  <%# <h2 class="mb-3">Events I'm Going To</h2> %>
-  <%# <% if @going_events.any? %> %>
-    <%# <div class="going-events row"> %>
-      <%# <% @going_events.each do |event| %> %>
-        <%# <div class="col-md-6 mb-3"> %>
-          <%# <div class="event-card card border shadow-sm"> %>
-            <%# <div class="card-body"> %>
-              <%# <h3 class="card-title"><%= event.name %></h3> %>
-              <%# <p class="card-text"><strong>Date:</strong> <%= event.date %></p> %>
-              <%# <p class="card-text"><strong>Time:</strong> <%= event.time %></p> %>
-              <%# <p class="card-text"><strong>Venue:</strong> <%= event.venue %></p> %>
-              <%# <p class="card-text"><strong>Location:</strong> <%= event.location %></p> %>
-              <%# <%= link_to "View Details", details_performance_path(event), class: "btn btn-primary" %> %>
-            <%# </div> %>
-          <%# </div> %>
-        <%# </div> %>
-      <%# <% end %> %>
-    <%# </div> %>
-  <%# <% else %> %>
-    <%# <p>You're not attending any events yet.</p> %>
-  <%# <% end %> %>
-<%# </div> %>
+<div class="events-section mt-4">
+  <h2 class="mb-3">Events I'm Going To</h2>
+  <% if @going_events.any? %>
+    <div class="going-events row">
+      <% @going_events.each do |event| %>
+        <div class="col-md-6 mb-3">
+          <div class="event-card card border shadow-sm">
+            <div class="card-body">
+              <h3 class="card-title"><%= event.name %></h3>
+              <p class="card-text"><strong>Date:</strong> <%= event.date %></p>
+              <p class="card-text"><strong>Time:</strong> <%= event.time %></p>
+              <p class="card-text"><strong>Venue:</strong> <%= event.venue %></p>
+              <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
+              <%= link_to "View Details", details_performance_path(event), class: "btn btn-primary" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-white">You're not attending any events yet.</p>
+  <% end %>
+</div>
