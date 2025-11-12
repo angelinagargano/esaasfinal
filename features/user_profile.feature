@@ -12,6 +12,12 @@ Feature: User Profile
     Given I am on the User Profile page
     Then I should see my username, name, and email
 
+  Scenario: Redirect to login if not logged in
+    Given I am logged out
+    When I visit the User Profile page for user "alice123"
+    Then I should be redirected to the Login page
+    And I should see "Please log in first"
+
   Scenario: Editing user information (username, name, email)
     Given I am on the User Profile page
     When I click "Edit my information" on the User Profile page
@@ -24,6 +30,13 @@ Feature: User Profile
     And I should see "alice777"
     And I should see "Alice Updated"
     And I should see "alice.updated@example.com"
+
+  Scenario: Editing user information with invalid data shows errors
+    Given I am logged in as "alice123"
+    And I am on the User Edit page
+    When I change Email to "" 
+    And I click "Save changes"
+    Then I should see an error message
 
   Scenario: Editing password
     Given I am on the User Profile page
@@ -59,3 +72,10 @@ Feature: User Profile
     And I click "Cancel" on the User Edit page
     Then I should be redirected to the User Profile page
     And I should not see "temporary_username"
+
+  Scenario: Visiting user show redirects to profile
+    Given I am logged in as "alice123"
+    When I visit the show page for user "alice123"
+    Then I should be redirected to my User Profile page
+
+
