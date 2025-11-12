@@ -186,3 +186,31 @@ Given("I do not have any liked events") do
     raise "User does not have a liked_events or liked_performances association."
   end
 end
+
+Given("I am logged out") do
+  page.driver.submit :delete, logout_path, {}
+end
+
+# Visit the User Profile page for a given username (logged-out test)
+When('I visit the User Profile page for user {string}') do |username|
+  user = User.find_or_create_by!(username: username) do |u|
+    u.email = "#{username}@example.com"
+    u.name = username.capitalize
+    u.password = "password123"
+    u.password_confirmation = "password123"
+  end
+  visit user_profile_path(user.id)
+end
+
+
+# Visit the /users/:id show page (to test redirect to profile)
+When('I visit the show page for user {string}') do |username|
+  user = User.find_by(username: username)
+  visit user_profile_path(user.id)  # profile path exists
+end
+
+
+# Verify redirection to the current user's profile page
+Then('I should be redirected to my User Profile page') do
+  expect(current_path).to eq(user_profile_path(@user.id))
+end
