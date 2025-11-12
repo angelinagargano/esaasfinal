@@ -1,8 +1,4 @@
 <!--  app/views/movies/details.html.erb -->
-<!-- adding google calender link -->
-<% event_datetime = DateTime.parse("#{@event.date} #{@event.time}") rescue nil %>
-<% start_time = event_datetime.strftime('%Y%m%dT%H%M%S') %>
-<% end_time = (event_datetime + 2.hours).strftime('%Y%m%dT%H%M%S') %> <!-- Adjust event length if needed -->
 
 <div class="event-details">
 <h2>Details about <em><%= @event.name %></em></h2>

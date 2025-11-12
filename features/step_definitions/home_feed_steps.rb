@@ -101,7 +101,7 @@ end
 Given('I am on the Event Details page for {string}') do |event_name|
   event = Event.find_by(name: event_name)
   raise "No event found with name #{event_name}" unless event
-  visit details_performance_path(event)
+  visit details_performance_path(event,show_calendar_button: true)
 end
 
 Then('I should be taken to the Home page') do
