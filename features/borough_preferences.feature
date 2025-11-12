@@ -93,3 +93,14 @@ Feature: Preferences for Location and Borough
       | Staten Island |
       | No Preference |
 
+  Scenario: Clearing preferences
+    Given I am on the Preferences page
+    When I select "Manhattan" for "Borough"
+    And I select "Hip-hop" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    When I visit the Preferences page
+    And I press "Clear Preferences"
+    Then I should be redirected to the Preferences page
+    And I should see "Preferences cleared."
+

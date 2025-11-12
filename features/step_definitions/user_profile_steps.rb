@@ -86,6 +86,11 @@ When("I change Email to {string}") do |new_email|
   find('input[name="user[email]"]').set(new_email)
 end
 
+When("I leave Password blank") do
+  # Don't fill in password fields - leave them empty
+  # This tests the code path where password is blank and should not be updated
+end
+
 Then("I should be on the User Edit page") do
   expect(page).to have_current_path(edit_user_path(@user))
 end

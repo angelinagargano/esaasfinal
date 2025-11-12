@@ -43,3 +43,15 @@ Feature: Authentication
       | Password | wrong         |
     And I click "Log in" on the Login page
     Then I should see an error message
+
+  Scenario: Logging out successfully
+    Given an existing user with username "alice123" and password "password123"
+    And I am on the Login page
+    When I fill in the login form with:
+      | Username | alice123      |
+      | Password | password123   |
+    And I click "Log in" on the Login page
+    Then I should be redirected to the Home page
+    When I click "Logout" or "Log out"
+    Then I should be redirected to the root page
+    And I should see "Logged out"

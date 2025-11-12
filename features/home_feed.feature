@@ -33,6 +33,12 @@ Feature: Home page
     Then I should see only events between "2025-11-11" and "2025-11-13"
     And I should see 3 events
 
+  Scenario: Filtering events by end date only
+    Given I am on the Home page
+    When I fill in "date_filter_end" with "2025-11-13"
+    And I click "Apply Filter"
+    Then I should see events on or before "2025-11-13"
+
   Scenario: User performs a specific search via the filter form
     Given I am logged in
     And the following events exist:
@@ -68,3 +74,58 @@ Feature: Home page
       | Time      | 7:30 PM          |
       | Location  | Brooklyn         |
       | Price     | $35              |
+
+  Scenario: Viewing empty results when no events match filters
+    Given I am on the Home page
+    When I fill in "date_filter_start" with "2030-01-01"
+    And I click "Apply Filter"
+    Then I should see "No events matching your preferences"
+
+  Scenario: Sorting events by date
+    Given I am on the Home page
+    When I select "Date" from "sort_by"
+    And I click "Apply Filter"
+    Then events should be sorted chronologically by date
+
+  Scenario: Sorting events by other field
+    Given I am on the Home page
+    When I select "Name" from "sort_by"
+    And I click "Apply Filter"
+    Then events should be sorted by name
+
+  Scenario: Sorting persists in session
+    Given I am on the Home page
+    When I select "Date" from "sort_by"
+    And I click "Apply Filter"
+    And I visit the Home page again
+    Then events should be sorted chronologically by date
+
+  Scenario: Budget filter with no matching events results in empty list
+    Given I am on the Preferences page
+    When I select "$100+" for "Budget"
+    And I select "Hip-hop" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    And I should see "No events matching your preferences"
+
+  Scenario: Sorting handles events with invalid dates
+    Given the following events exist:
+      | Name        | Venue      | Date        | Time   | Style | Location | Price | Description | Tickets           |
+      | Valid Event | Test Venue | 2025-11-11  | 7:30PM | Jazz  | Manhattan | $30  | Test desc   | https://test.com  |
+      | Invalid Date Event | Test Venue | invalid-date | 7:30PM | Jazz | Manhattan | $30 | Test desc | https://test.com |
+    And I am on the Home page
+    When I select "Date" from "sort_by"
+    And I click "Apply Filter"
+    Then events should be sorted chronologically by date
+    And events with invalid dates should be placed at the end
+
+  Scenario: Budget filtering with numeric price values
+    Given the following events exist:
+      | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
+      | Numeric Price Event | Test Venue | 2025-11-11 | 7:30PM | Contemporary | Manhattan | 25 | Test desc | https://test.com |
+    And I am on the Preferences page
+    When I select "$0–$25" for "Budget"
+    And I select "Contemporary" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    And I should see "Numeric Price Event"

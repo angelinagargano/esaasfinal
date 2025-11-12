@@ -79,6 +79,25 @@ Then("I should see an error message") do
   expect(page).to have_css('.alert')
 end
 
+When(/I click "Logout" or "Log out"/) do
+  if page.has_link?('Logout')
+    click_link('Logout')
+  elsif page.has_link?('Log out')
+    click_link('Log out')
+  elsif page.has_button?('Logout')
+    click_button('Logout')
+  elsif page.has_button?('Log out')
+    click_button('Log out')
+  else
+    # Fallback: submit DELETE request to logout path
+    page.driver.submit :delete, logout_path, {}
+  end
+end
+
+Then("I should be redirected to the root page") do
+  expect(current_path).to eq(root_path)
+end
+
 Given(/an existing user with username "([^"]+)" and password "([^"]+)"/) do |username, password|
   if defined?(User)
     begin
