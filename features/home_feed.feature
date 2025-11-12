@@ -21,10 +21,17 @@ Feature: Home page
     Then I should be taken to the Home page
     And I should see events filtered based on my preferences
 
-  Scenario: Filtering events by date
+  Scenario: Filtering events by a specific date
     Given I am on the Home page
     When I select the date "2025-11-11"
     Then I should see only events on "2025-11-11"
+    And I should see 1 event
+
+  Scenario: Filtering events by date range
+    Given I am on the Home page
+    When I select the date range from "2025-11-11" to "2025-11-13"
+    Then I should see only events between "2025-11-11" and "2025-11-13"
+    And I should see 3 events
 
   Scenario: Viewing an event’s details
     Given I am on the Home page

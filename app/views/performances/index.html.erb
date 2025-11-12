@@ -6,8 +6,18 @@
 
 <%= form_tag performances_path, method: :get, id: 'filter_form', local: true do %>
   <div class="mb-3">
-    <label class="form-label me-2" for="date_filter">Filter by Date:</label>
-    <%= date_field_tag :date_filter, params[:date_filter], id: "date_filter", class: "form-control d-inline w-auto" %>
+    <label class="form-label me-2">Filter by Date:</label>
+    <div class="d-inline-block">
+      <%= date_field_tag :date_filter_start, params[:date_filter_start], 
+                         id: "date_filter_start", 
+                         class: "form-control d-inline w-auto",
+                         placeholder: "Start date" %>
+      <span class="mx-2">to</span>
+      <%= date_field_tag :date_filter_end, params[:date_filter_end], 
+                         id: "date_filter_end", 
+                         class: "form-control d-inline w-auto",
+                         placeholder: "End date (optional)" %>
+    </div>
   </div>
   
   <div class="mb-3">
