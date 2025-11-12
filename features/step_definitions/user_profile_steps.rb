@@ -38,10 +38,6 @@ Given("I am on the User Edit page") do
   visit edit_user_path(@user)
 end
 
-When("I press {string}") do |button_text|
-  click_button(button_text)
-end
-
 When("I click {string}") do |link_text|
   # Try link first, then button
   if page.has_link?(link_text)

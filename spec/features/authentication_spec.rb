@@ -38,11 +38,11 @@ RSpec.feature "Authentication", type: :feature do
     visit root_path
     click_link 'Sign up'
 
-    fill_in 'email', with: 'alice@example.com'
-    fill_in 'name', with: 'Alice Example'
-    fill_in 'username', with: 'alice123'
-    fill_in 'password', with: 'password123'
-    fill_in 'password_confirmation', with: 'password123'
+    fill_in 'user[email]', with: 'alice@example.com'
+    fill_in 'user[name]', with: 'Alice Example'
+    fill_in 'user[username]', with: 'alice123'
+    fill_in 'user[password]', with: 'password123'
+    fill_in 'user[password_confirmation]', with: 'password123'
 
     click_button 'Sign up'
 
@@ -51,7 +51,7 @@ RSpec.feature "Authentication", type: :feature do
   end
 
   scenario "user can log in with valid credentials" do
-    User.create!(email: 'bob@example.com', name: 'Bob', username: 'bob', password: 'secret')
+    User.create!(email: 'bob@example.com', name: 'Bob', username: 'bob', password: 'secret', password_confirmation: 'secret')
 
     visit login_path
     fill_in 'username', with: 'bob'
@@ -73,7 +73,7 @@ RSpec.feature "Authentication", type: :feature do
   end
 
   scenario "user can log out successfully" do
-    user = User.create!(email: 'carol@example.com', name: 'Carol', username: 'carol', password: 'mypassword')
+    user = User.create!(email: 'carol@example.com', name: 'Carol', username: 'carol', password: 'mypassword', password_confirmation: 'mypassword')
 
     visit login_path
     fill_in 'username', with: 'carol'
