@@ -6,6 +6,21 @@
 
 <%= form_tag performances_path, method: :get, id: 'filter_form', local: true do %>
   <div class="mb-3">
+    <label class="form-label me-2">Filter by Date:</label>
+    <div class="d-inline-block">
+      <%= date_field_tag :date_filter_start, params[:date_filter_start], 
+                         id: "date_filter_start", 
+                         class: "form-control d-inline w-auto",
+                         placeholder: "Start date" %>
+      <span class="mx-2">to</span>
+      <%= date_field_tag :date_filter_end, params[:date_filter_end], 
+                         id: "date_filter_end", 
+                         class: "form-control d-inline w-auto",
+                         placeholder: "End date (optional)" %>
+    </div>
+  </div>
+  
+  <div class="mb-3">
     <label class="form-label me-2" for="sort_by">Sort by:</label>
     <%= select_tag :sort_by,
                    options_for_select([["Date", "date"],
@@ -16,7 +31,7 @@
                    class: "form-select d-inline w-auto" %>
   </div>
 
-  <%= submit_tag 'Refresh', id: 'filter_submit', class: 'btn btn-primary' %>
+  <%= submit_tag 'Apply Filter', id: 'filter_submit', class: 'btn btn-primary' %>
 <% end %>
 
 <!-- Events Grid -->
@@ -33,13 +48,15 @@
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title mb-0"><%= event.name %></h5>
                 <div class="d-flex gap-1">
-                  <% if current_user.liked_events.include?(event) %>
-                    <%= button_to unlike_performance_path(event), method: :delete, class: "btn btn-heart liked", title: "Unlike" do %>
-                      ♥
-                    <% end %>
-                  <% else %>
-                    <%= button_to like_performance_path(event), method: :post, class: "btn btn-heart", title: "Like" do %>
-                      ♡
+                  <% if current_user %>
+                    <% if current_user.liked_events.include?(event) %>
+                      <%= button_to unlike_performance_path(event), method: :delete, class: "btn btn-heart liked", title: "Unlike" do %>
+                        ♥
+                      <% end %>
+                    <% else %>
+                      <%= button_to like_performance_path(event), method: :post, class: "btn btn-heart", title: "Like" do %>
+                        ♡
+                      <% end %>
                     <% end %>
                   <% end %>
                   </div>

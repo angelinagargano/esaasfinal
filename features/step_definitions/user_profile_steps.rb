@@ -38,12 +38,28 @@ Given("I am on the User Edit page") do
   visit edit_user_path(@user)
 end
 
-When("I press {string}") do |button_text|
-  click_button(button_text)
-end
-
 When("I click {string}") do |link_text|
   # Try link first, then button
+  if page.has_link?(link_text)
+    click_link(link_text)
+  elsif page.has_button?(link_text)
+    click_button(link_text)
+  else
+    raise "Could not find link or button with text '#{link_text}'"
+  end
+end
+
+When("I click {string} on the User Profile page") do |link_text|
+  if page.has_link?(link_text)
+    click_link(link_text)
+  elsif page.has_button?(link_text)
+    click_button(link_text)
+  else
+    raise "Could not find link or button with text '#{link_text}'"
+  end
+end
+
+When("I click {string} on the User Edit page") do |link_text|
   if page.has_link?(link_text)
     click_link(link_text)
   elsif page.has_button?(link_text)

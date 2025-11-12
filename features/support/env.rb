@@ -65,6 +65,16 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 #Cucumber::Rails::Database.javascript_strategy = :truncation
 
+# Clean up database before each scenario
+Before do
+  # Clear all data from tables to ensure clean state
+  # Delete child records first to avoid foreign key constraint violations
+  Like.delete_all if defined?(Like) && ActiveRecord::Base.connection.data_source_exists?('likes')
+  GoingEvent.delete_all if defined?(GoingEvent) && ActiveRecord::Base.connection.data_source_exists?('going_events')
+  User.delete_all if defined?(User) && ActiveRecord::Base.connection.data_source_exists?('users')
+  Event.delete_all if defined?(Event) && ActiveRecord::Base.connection.data_source_exists?('events')
+end
+
 #Before do
 #  DatabaseCleaner.start
 #end

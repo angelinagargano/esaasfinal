@@ -72,22 +72,74 @@ Then("I should see events filtered based on my preferences") do
 end
 
 
-When("I select a specific date or date range") do
-  # Replace with actual date input id/class
-  if page.has_field?('date_filter')
-    fill_in 'date_filter', with: 'December 3, 2025'
+When("I select the date {string}") do |date|
+  if page.has_field?('date_filter_start')
+    fill_in 'date_filter_start', with: date
+    # Leave end date empty for single date filtering
     click_button 'Apply Filter'
   else
-    warn "No date filter input found on page."
+    raise "No date filter input found on page. Please add date_filter_start field to the view."
   end
 end
 
-Then("I should see only events within that range") do
-  expect(page).to have_content('December 3, 2025')
+When("I select the date range from {string} to {string}") do |start_date, end_date|
+  if page.has_field?('date_filter_start') && page.has_field?('date_filter_end')
+    fill_in 'date_filter_start', with: start_date
+    fill_in 'date_filter_end', with: end_date
+    click_button 'Apply Filter'
+  else
+    raise "No date range filter inputs found on page. Please add date_filter_start and date_filter_end fields to the view."
+  end
+end
+
+Then("I should see only events on {string}") do |date|
+  # Check that at least one event with this date is visible
+  expect(page).to have_css('.card', minimum: 1)
+  
+  # Check that all visible events have the correct date
+  page.all('.card').each do |card|
+    # Card should contain the date in either format
+    expect(card.text).to match(/#{Regexp.escape(date)}/)
+  end
+end
+
+Then("I should see only events between {string} and {string}") do |start_date, end_date|
+  # Parse the date range
+  start_date_obj = Date.parse(start_date)
+  end_date_obj = Date.parse(end_date)
+  
+  # Check that at least one event is visible
+  expect(page).to have_css('.card', minimum: 1)
+  
+  # Check that all visible events fall within the date range
+  page.all('.card').each do |card|
+    # Extract date from card text (looking for YYYY-MM-DD or other date formats)
+    date_match = card.text.match(/(\d{4}-\d{2}-\d{2})|([A-Za-z]+\s+\d{1,2},\s+\d{4})/)
+    
+    if date_match
+      event_date_str = date_match[0]
+      event_date = Date.parse(event_date_str)
+      
+      expect(event_date).to be >= start_date_obj, 
+        "Event date #{event_date} is before start date #{start_date_obj}"
+      expect(event_date).to be <= end_date_obj,
+        "Event date #{event_date} is after end date #{end_date_obj}"
+    else
+      raise "Could not find date in card text: #{card.text}"
+    end
+  end
+end
+
+Then("I should see {int} event(s)") do |count|
+  expect(page).to have_css('.card', count: count)
 end
 
 When("I click on an event card") do
   card = first(".card")
+  # Extract the event ID from the card's data attribute
+  event_id = card['data-event-id']
+  @event = Event.find(event_id)
+  
   within(card) do
     click_link("More Details")
   end 
@@ -128,25 +180,19 @@ Then("I should see the event name, date, time, location, price, description, and
 end
 
 
-Given("{string} exists") do |event_name|
-  Event.create!(
-    name: event_name,
-    date: Date.parse('December 3, 2025'),
-    time: '7:30 PM',
-    location: 'BAM Brooklyn Academy of Music',
-    price: 35,
-    description: 'A captivating performance',
-    ticket_link: 'https://tickets.bam.org'
-  ) unless Event.exists?(name: event_name)
-end
-
-Then("I should see the following details on its event card:") do |table|
+Then("I should see the following details on the event card for {string}:") do |event_name, table|
   details = table.rows_hash
-  event_card = all('.card', text: 'For All Your Life').find do |card|
-    card.has_content?(details['Date']) && card.has_content?(details['Location'])
+  
+  # Find the card for the specific event
+  event_card = page.all('.card').find do |card|
+    card.has_content?(event_name)
   end
-
-  details.each_value do |value|
-    expect(event_card).to have_content(value)
+  
+  raise "Could not find event card for '#{event_name}'" unless event_card
+  
+  # Verify each detail appears on the card
+  details.each do |field, value|
+    expect(event_card).to have_content(value), 
+      "Expected to find '#{value}' for #{field} in event card for '#{event_name}', but it was not found"
   end
 end

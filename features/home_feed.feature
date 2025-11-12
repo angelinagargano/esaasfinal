@@ -3,10 +3,11 @@ Feature: Home page
 
   Background:
     Given the following events exist:
-      | Name                                               | Venue               | Date       | Time   | Style         | Location | Price      | Description                     | Tickets                   |
-      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater  | 2025-11-11 | 7:30PM | Dance Theater | Chelsea  | $25–$50   | Well-known ...                  | https://shop.joyce.org/8129/8130 |
-      | Another Dance Event                                | Some Venue          | 2025-11-12 | 8:00PM | Dance Theater | Downtown | $30–$60   | Another description             | https://example.com/tickets |
-      | Jazz Night                                         | Jazz Club           | 2025-11-13 | 9:00PM | Jazz          | Midtown  | $20–$40   | Smooth jazz evening             | https://example.com/tickets |
+      | Name                                               | Venue               | Date             | Time   | Style         | Location | Price      | Description                     | Tickets                          |
+      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater  | 2025-11-11       | 7:30PM | Dance Theater | Chelsea  | $25–$50   | Well-known ...                  | https://shop.joyce.org/8129/8130 |
+      | Another Dance Event                                | Some Venue          | 2025-11-12       | 8:00PM | Dance Theater | Downtown | $30–$60   | Another description             | https://example.com/tickets      |
+      | Jazz Night                                         | Jazz Club           | 2025-11-13       | 9:00PM | Jazz          | Midtown  | $20–$40   | Smooth jazz evening             | https://example.com/tickets      |
+      | For All Your Life                                  | BAM Brooklyn Academy of Music | December 3, 2025 | 7:30 PM | Dance Theater | Brooklyn | $35       | A captivating performance       | https://tickets.bam.org          |
 
 
   Scenario: Viewing the default home feed with no preferences
@@ -20,10 +21,17 @@ Feature: Home page
     Then I should be taken to the Home page
     And I should see events filtered based on my preferences
 
-  Scenario: Filtering events by date
+  Scenario: Filtering events by a specific date
     Given I am on the Home page
-    When I select a specific date or date range
-    Then I should see only events within that range
+    When I select the date "2025-11-11"
+    Then I should see only events on "2025-11-11"
+    And I should see 1 event
+
+  Scenario: Filtering events by date range
+    Given I am on the Home page
+    When I select the date range from "2025-11-11" to "2025-11-13"
+    Then I should see only events between "2025-11-11" and "2025-11-13"
+    And I should see 3 events
 
   Scenario: Viewing an event’s details
     Given I am on the Home page
@@ -32,10 +40,10 @@ Feature: Home page
     And I should see the event name, date, time, location, price, description, and ticket link
 
   Scenario: Viewing event information on the home feed
-    Given "For All Your Life" exists
+    Given I am on the Home page
     And I have not set any preferences
-    Then I should see the following details on its event card:
-      | Date      | December 3, 2025                    |
-      | Time      | 7:30 PM                             |
-      | Location  | Brooklyn                            |
-      | Price     | $35                                 |
+    Then I should see the following details on the event card for "For All Your Life":
+      | Date      | December 3, 2025 |
+      | Time      | 7:30 PM          |
+      | Location  | Brooklyn         |
+      | Price     | $35              |
