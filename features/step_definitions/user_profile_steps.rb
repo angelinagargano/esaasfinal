@@ -212,5 +212,8 @@ end
 
 # Verify redirection to the current user's profile page
 Then('I should be redirected to my User Profile page') do
-  expect(current_path).to eq(user_profile_path(@user.id))
+  # Prefer @logged_in_user if it's defined
+  current_user = @logged_in_user || @user
+  expect(current_path).to eq(user_profile_path(current_user.id))
 end
+
