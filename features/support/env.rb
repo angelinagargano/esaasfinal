@@ -4,7 +4,11 @@
 # instead of editing this one. Cucumber will automatically load all features/**/*.rb
 # files.
 
-
+require 'simplecov'
+require_relative '../../spec/simplecov_helper'
+SimpleCov.command_name 'Cucumber'
+SimpleCov.coverage_dir 'coverage/cucumber'
+puts "SimpleCov started for Cucumber"
 require 'cucumber/rails'
 
 # By default, any exception happening in your Rails application will bubble up
@@ -26,6 +30,8 @@ ActionController::Base.allow_rescue = false
 
 require 'database_cleaner'
 require 'database_cleaner/cucumber'
+
+
 
 DatabaseCleaner.strategy = :truncation
 

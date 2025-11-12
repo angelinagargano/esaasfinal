@@ -15,7 +15,9 @@
     </nav>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
       <div class="container-fluid">
-        <a class="navbar-brand" href="<%= root_path %>">MyApp</a>
+        <% unless logged_in? %>
+          <a class="navbar-brand" href="<%= root_path %>">Log In</a>
+        <% end %>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -24,10 +26,10 @@
             <li class="nav-item">
               <%= link_to "Performances", performances_path, class: "nav-link" %>
             </li>
-            <li class="nav-item">
-              <%= link_to "Liked Events", liked_events_performances_path, class: "nav-link" %>
-            </li>
             <% if logged_in? %>
+              <li class="nav-item">
+                <%= link_to "Liked Events", liked_events_performances_path, class: "nav-link" %>
+              </li>
               <li class="nav-item">
                 <%= link_to "My Profile", user_profile_path(current_user), class: "nav-link" %>
               </li>
