@@ -18,6 +18,75 @@ Given("I have not set any preferences") do
   end
 end
 
+Given('I am logged in') do
+  # Create or find a test user and log them in via the UI or by setting session
+  @current_user ||= User.find_by(email: 'cuke@example.com') || User.create!(email: 'cuke@example.com', username: 'cuke', password: 'password', password_confirmation: 'password', name: 'Cuke')
+  # Use Warden test helpers if available, otherwise perform form login
+  if defined?(login_as)
+    login_as(@current_user, scope: :user)
+  else
+  visit login_path
+  # The app's login form uses username and password fields (see sessions#new)
+  fill_in 'Username', with: @current_user.username
+  fill_in 'Password', with: 'password'
+    click_button 'Log in'
+  end
+  # Accept either 'Logout' or 'Sign out' text after login
+  expect(page).to satisfy { |p| p.has_content?('Logout') || p.has_content?('Sign out') }
+end
+
+When('I am on the Performances page') do
+  visit performances_path
+  expect(page).to have_current_path(performances_path)
+end
+
+When('I fill in {string} with {string}') do |field, value|
+  # allow both field name and id
+  fill_in field, with: value
+end
+
+When('I select {string} from {string}') do |value, field|
+  # Capybara's select helper expects option and select box id/label
+  select value, from: field
+end
+
+When('I click {string} #') do |button_text|
+  # Trim comments and attempt to click button or link
+  name = button_text.strip
+  if page.has_button?(name)
+    click_button name
+  elsif page.has_link?(name)
+    click_link name
+  else
+    # Try clicking by id or a submit input
+    begin
+      find(:css, "##{name}").click
+    rescue Capybara::ElementNotFound
+      raise "Could not find a button or link named '#{name}' on the page"
+    end
+  end
+end
+
+Then('I should only see the event with style {string}') do |style|
+  # Ensure at least one card exists and each visible card contains the given style
+  expect(page).to have_css('.card', minimum: 1)
+  page.all('.card').each do |card|
+    expect(card.text).to include(style)
+  end
+end
+
+Then('I should not see the event with style {string}') do |style|
+  page.all('.card').each do |card|
+    expect(card.text).not_to include(style)
+  end
+end
+
+Then('I should not see the event with borough {string}') do |borough|
+  page.all('.card').each do |card|
+    expect(card.text).not_to include(borough)
+  end
+end
+
 Then("I should see all events") do
   # Assuming all events are rendered in divs with class 'card'
   expect(Event.count).to be >= 3
@@ -75,7 +144,8 @@ end
 When("I select the date {string}") do |date|
   if page.has_field?('date_filter_start')
     fill_in 'date_filter_start', with: date
-    # Leave end date empty for single date filtering
+    # When targeting a single date, also set the end to the same value to create a closed range
+    fill_in 'date_filter_end', with: date if page.has_field?('date_filter_end')
     click_button 'Apply Filter'
   else
     raise "No date filter input found on page. Please add date_filter_start field to the view."

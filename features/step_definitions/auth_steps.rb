@@ -15,6 +15,9 @@ end
 Given('I am logged in as {string}') do |username|
   step %(an existing user with username "#{username}" and password "password123")
 
+  # Update @user to reference the logged-in user
+  @user = User.find_by(username: username)
+
   visit '/login'
   expect(page).to have_content('Log in')
 

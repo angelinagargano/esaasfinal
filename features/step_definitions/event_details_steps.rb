@@ -1,6 +1,8 @@
 Given("the following events exist:") do |table|
   table.hashes.each_with_index do |event, index|
-    created_event = Event.find_or_initialize_by(name: event['Name'])
+    fallback_name = "cuke-#{index}-#{event['Style']}-#{event['Date']}"
+    event_name = event['Name'].present? ? event['Name'] : fallback_name
+    created_event = Event.find_or_initialize_by(name: event_name)
     created_event.assign_attributes(
       venue: event['Venue'],
       date: event['Date'],
