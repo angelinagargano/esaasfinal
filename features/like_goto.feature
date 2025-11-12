@@ -20,10 +20,12 @@ Feature: Interacting with events
 
   Scenario: disliking an event from the home page 
     Given I am on the Home page 
-    When I click the "Dislike" button on the "For All Your Life" event card 
+    When I click the "Unlike" button on the "For All Your Life" event card 
     Then "For All Your Life" should not be in my liked events list
 
   Scenario: Marking an event as "going to" from the details page
     Given I am on the Event Details page for "For All Your Life"
-    When I click "Going to" button
-    Then "For All Your Life" should be added to my Google Calendar
+    And I am not marked as going to "For All Your Life"
+    When I click Going to button
+    Then I should be going to event
+    And I should see "📅 Add to Google Calendar" button

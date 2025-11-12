@@ -1,27 +1,35 @@
 <!--  app/views/movies/details.html.erb -->
-<!-- adding google calender link -->
-<% event_datetime = DateTime.parse("#{@event.date} #{@event.time}") rescue nil %>
-<% start_time = event_datetime.strftime('%Y%m%dT%H%M%S') %>
-<% end_time = (event_datetime + 2.hours).strftime('%Y%m%dT%H%M%S') %> <!-- Adjust event length if needed -->
 
 <div class="event-details">
 <h2>Details about <em><%= @event.name %></em></h2>
 <% if current_user && current_user.going_events_list.include?(@event) %>
   <span class="badge bg-success mb-3">You're going!</span>
+
+  <% if params[:show_calendar_button].present? %>
+    <p><strong>Want to add this to your Google Calendar?</strong></p>
+    <%= button_to "📅 Add to Google Calendar", "#", id: "add-to-calendar-btn", class: "btn btn-success" %>
+  <% end %>
 <% else %>
   <%= button_to 'Going to', going_and_calendar_performance_path(@event),
       method: :post, class: 'btn btn-primary mb-3' %>
 <% end %>
 
-<% if flash[:notice] %>
-  <div class="alert alert-success"><%= flash[:notice] %></div>
+<script>
+  document.addEventListener("click", function(e) {
+    if (e.target.id === "add-to-calendar-btn") {
+      e.preventDefault();
 
-  <% if flash[:google_calendar_url] %>
-    <script>
-      window.open("<%= flash[:google_calendar_url] %>", "_blank");
-    </script>
-  <% end %>
-<% end %>
+      const googleUrl =
+        "https://www.google.com/calendar/render?action=TEMPLATE" +
+        "&text=<%= URI.encode_www_form_component(@event.name) %>" +
+        "&dates=<%= DateTime.parse(@event.date + ' ' + @event.time).strftime('%Y%m%dT%H%M%S') %>/<%= (DateTime.parse(@event.date + ' ' + @event.time) + 2.hours).strftime('%Y%m%dT%H%M%S') %>" +
+        "&details=<%= URI.encode_www_form_component(@event.description || 'Join me for this event!') %>" +
+        "&location=<%= URI.encode_www_form_component(@event.location) %>";
+
+      window.open(googleUrl, "_blank");
+    }
+  });
+</script>
 <ul id="details">
   <li>
     Date:

@@ -121,9 +121,10 @@ RSpec.feature "Interacting with events", type: :feature do
     event = Event.find_by(name: "For All Your Life")
 
     visit details_performance_path(event)
-    expect(page).to have_link("Going to")
+    expect(page).to have_button("Going to")
 
-    click_link "Going to"
-    expect(page).to have_content("Added to your Google Calendar")
+    click_button "Going to"
+    expect(page).to have_content("You're going!")
+    expect(page).to have_button("📅 Add to Google Calendar")
   end
 end
