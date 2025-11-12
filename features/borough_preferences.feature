@@ -14,6 +14,7 @@ Feature: Preferences for Location and Borough
       | Greenwich Event         | Greenwich Venue    | 2025-11-16 | 8:00PM | Contemporary | Greenwich Village | Manhattan | $30   | Village show | https://example.com/6  |
       | Lincoln Square Event    | Lincoln Venue      | 2025-11-17 | 8:00PM | Ballet   | Lincoln Square    | Manhattan | $40   | Square show  | https://example.com/7  |
       | Times Square Event      | Times Venue        | 2025-11-18 | 8:00PM | Hip-hop  | Times Square      | Manhattan | $35   | Times show   | https://example.com/8  |
+    And I am logged in as "TestUser"
 
   Scenario: Filter events by borough
     Given I am on the Preferences page

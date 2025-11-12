@@ -33,13 +33,15 @@
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title mb-0"><%= event.name %></h5>
                 <div class="d-flex gap-1">
-                  <% if current_user.liked_events.include?(event) %>
-                    <%= button_to unlike_performance_path(event), method: :delete, class: "btn btn-heart liked", title: "Unlike" do %>
-                      ♥
-                    <% end %>
-                  <% else %>
-                    <%= button_to like_performance_path(event), method: :post, class: "btn btn-heart", title: "Like" do %>
-                      ♡
+                  <% if current_user %>
+                    <% if current_user.liked_events.include?(event) %>
+                      <%= button_to unlike_performance_path(event), method: :delete, class: "btn btn-heart liked", title: "Unlike" do %>
+                        ♥
+                      <% end %>
+                    <% else %>
+                      <%= button_to like_performance_path(event), method: :post, class: "btn btn-heart", title: "Like" do %>
+                        ♡
+                      <% end %>
                     <% end %>
                   <% end %>
                   </div>

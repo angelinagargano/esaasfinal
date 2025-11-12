@@ -88,6 +88,10 @@ end
 
 When("I click on an event card") do
   card = first(".card")
+  # Extract the event ID from the card's data attribute
+  event_id = card['data-event-id']
+  @event = Event.find(event_id)
+  
   within(card) do
     click_link("More Details")
   end 
