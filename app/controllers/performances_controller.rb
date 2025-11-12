@@ -1,9 +1,9 @@
 class PerformancesController < ApplicationController
 
-  def show
-    id = params[:id]
-    @event = Event.find(id)
-  end
+  # def show
+  #   id = params[:id]
+  #   @event = Event.find(id)
+  # end
 
   def index
     #render plain: "Hello, this is the Performances index page!"

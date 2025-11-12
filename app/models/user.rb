@@ -10,9 +10,6 @@ class User < ApplicationRecord
   validates :name, presence: true
   validates :username, presence: true, uniqueness: true
 
-  #validates :password, presence: true, on: :create
-  #validates :password, length: { minimum: 6 }, if: -> { password.present? }
-
   validates :password, presence: true, on: :create
   validates :password, length: { minimum: 6 }, allow_blank: true
   validates :password_confirmation, presence: true, if: -> { password.present? }
