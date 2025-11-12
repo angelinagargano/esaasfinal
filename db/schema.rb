@@ -18,12 +18,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_120002) do
     t.string "time"
     t.string "style"
     t.string "location"
+    t.string "borough"
     t.string "price"
     t.text "description"
     t.string "tickets"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "borough"
   end
 
   create_table "going_events", force: :cascade do |t|
@@ -42,15 +42,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_120002) do
     t.datetime "updated_at", null: false
     t.index ["event_id"], name: "index_likes_on_event_id"
     t.index ["user_id"], name: "index_likes_on_user_id"
-  end
-
-  create_table "movies", force: :cascade do |t|
-    t.string "title"
-    t.string "rating"
-    t.text "description"
-    t.datetime "release_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

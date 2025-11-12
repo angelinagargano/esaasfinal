@@ -27,9 +27,9 @@ class UsersController < ApplicationController
       flash[:alert] = "Please log in first"
       redirect_to login_path and return
     end
-    
+
     @liked_events = @user.liked_events.order(:date) || []
-    # @going_events = @user.going_events_list.order(:date)  # Commented out - going_events table not created yet
+    @going_events = @user.going_events_list.order(:date) 
   end
 
   # Show edit form
