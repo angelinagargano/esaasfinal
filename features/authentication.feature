@@ -13,7 +13,7 @@ Feature: Authentication
       | Username          | alice123                 |
       | Password          | password123 |
       | Confirm Password  | password123 |
-    And I click "Sign up"
+    And I click "Sign up" on the Signup page
     Then I should be redirected to the Login page
 
   Scenario: Signing up with missing fields shows errors
@@ -24,7 +24,7 @@ Feature: Authentication
       | Username| alice123              |
       | Password|                        |
       | Confirm Password  |               |
-    And I click "Sign up"
+    And I click "Sign up" on the Signup page
     Then I should see an error message
 
   Scenario: Logging in successfully

@@ -22,6 +22,12 @@ class UsersController < ApplicationController
   # Show user profile
   def profile
     @user = current_user
+
+    unless @user
+      flash[:alert] = "Please log in first"
+      redirect_to login_path and return
+    end
+    
     @liked_events = @user.liked_events.order(:date) || []
     # @going_events = @user.going_events_list.order(:date)  # Commented out - going_events table not created yet
   end
