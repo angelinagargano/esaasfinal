@@ -1,21 +1,18 @@
 Given("the following events exist:") do |table|
   table.hashes.each_with_index do |event, index|
-    created_event = Event.find_or_create_by(name: event['Name']) do |e|
-      e.venue = event['Venue']
-      e.date = event['Date']
-      e.time = event['Time']
-      e.style = event['Style']
-      e.location = event['Location']
-      e.borough = event['Borough'] if event['Borough'].present?
-      e.price = event['Price']
-      e.description = event['Description']
-      e.tickets = event['Tickets']
-    end
-
-    # Update borough if it exists in the table but wasn't set initially
-    if event['Borough'].present? && created_event.borough != event['Borough']
-      created_event.update(borough: event['Borough'])
-    end
+    created_event = Event.find_or_initialize_by(name: event['Name'])
+    created_event.assign_attributes(
+      venue: event['Venue'],
+      date: event['Date'],
+      time: event['Time'],
+      style: event['Style'],
+      location: event['Location'],
+      borough: event['Borough'],
+      price: event['Price'],
+      description: event['Description'],
+      tickets: event['Tickets']
+    )
+    created_event.save!
 
     # Store the first event in @event for use in other steps
     @event = created_event if index == 0

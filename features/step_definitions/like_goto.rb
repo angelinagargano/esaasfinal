@@ -12,6 +12,7 @@ Then('{string} should not be in my liked events list') do |event_name|
   visit liked_events_path
   expect(page).not_to have_content(event_name)
 end
+
 #When('I click the {string} button') do |button_text|
 #  click_button(button_text)
 #end

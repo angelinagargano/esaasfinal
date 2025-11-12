@@ -102,9 +102,11 @@ class PerformancesController < ApplicationController
     redirect_back(fallback_location: performances_path, notice: "Event unliked!")
     #redirect_to performances_path, notice: "Event unliked!"
   end
+  
   def liked_events
-    @events = current_user.liked_events
+    @events = current_user.liked_events || []
   end 
+
   def going_and_calendar
     @event = Event.find(params[:id])
 

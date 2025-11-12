@@ -24,6 +24,19 @@ require 'cucumber/rails'
 #
 ActionController::Base.allow_rescue = false
 
+require 'database_cleaner'
+require 'database_cleaner/cucumber'
+
+DatabaseCleaner.strategy = :truncation
+
+Before do
+  DatabaseCleaner.start
+end
+
+After do |scenario|
+  DatabaseCleaner.clean
+end
+
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 #begin

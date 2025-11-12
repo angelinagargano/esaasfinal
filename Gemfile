@@ -32,6 +32,8 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'cucumber-rails', "~> 4.0", require: false
 
+  gem 'database_cleaner'
+
   # Use sqlite3 as the database for Active Record
   gem 'sqlite3', '~> 2.1'
 
