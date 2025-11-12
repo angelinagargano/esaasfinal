@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   # Show user profile
   def profile
     @user = current_user
-    @liked_events = @user.liked_events.order(:date)
+    @liked_events = @user.liked_events.order(:date) || []
     # @going_events = @user.going_events_list.order(:date)  # Commented out - going_events table not created yet
   end
 
@@ -43,12 +43,23 @@ class UsersController < ApplicationController
     end
     
     if @user.update(update_params)
+      #flash[:notice] = 'Your information was successfully updated.'
+      #redirect_to "/users/#{@user.id}/profile"
       flash[:notice] = 'Your information was successfully updated.'
-      redirect_to user_profile_path(@user)
+      redirect_to user_profile_path(@user.id)
+
+      # Explicit path - this should definitely work
+      #redirect_to "/users/#{@user.id}/profile" and return
     else
       flash.now[:alert] = @user.errors.full_messages.join(', ')
       render :edit
+      #flash.now[:alert] = @user.errors.full_messages.join(', ')
+      #render :edit
     end
+  end
+
+  def show
+    redirect_to user_profile_path(params[:id])
   end
 
   private

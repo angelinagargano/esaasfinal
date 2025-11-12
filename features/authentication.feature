@@ -6,7 +6,7 @@ Feature: Authentication
 
   Scenario: Signing up successfully (flow: root -> signup -> login)
     Given I am on the Login page
-    When I click "Sign up"
+    When I click "Sign up" on the Login page
     And I fill in the sign up form with:
       | Email             | alice@example.com        |
       | Name              | Alice Example            |
@@ -33,7 +33,7 @@ Feature: Authentication
     When I fill in the login form with:
       | Username | alice123      |
       | Password | password123   |
-    And I click "Log in"
+    And I click "Log in" on the Login page
     Then I should be redirected to the Home page
 
   Scenario: Invalid login shows an error
@@ -41,5 +41,5 @@ Feature: Authentication
     When I fill in the login form with:
       | Username | unknown       |
       | Password | wrong         |
-    And I click "Log in"
+    And I click "Log in" on the Login page
     Then I should see an error message
