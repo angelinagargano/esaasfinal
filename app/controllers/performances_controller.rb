@@ -49,6 +49,18 @@ class PerformancesController < ApplicationController
       end
     end
 
+    # Filter by date if provided
+    if params[:date_filter].present?
+      filter_date = Date.parse(params[:date_filter])
+      @events = @events.select do |e|
+        begin
+          Date.parse(e.date) == filter_date
+        rescue
+          false
+        end
+      end
+    end
+
     # Convert to ActiveRecord relation if it's an array (from budget filtering)
     if @events.is_a?(Array)
       event_ids = @events.map(&:id)

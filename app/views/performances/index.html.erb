@@ -6,6 +6,11 @@
 
 <%= form_tag performances_path, method: :get, id: 'filter_form', local: true do %>
   <div class="mb-3">
+    <label class="form-label me-2" for="date_filter">Filter by Date:</label>
+    <%= date_field_tag :date_filter, params[:date_filter], id: "date_filter", class: "form-control d-inline w-auto" %>
+  </div>
+  
+  <div class="mb-3">
     <label class="form-label me-2" for="sort_by">Sort by:</label>
     <%= select_tag :sort_by,
                    options_for_select([["Date", "date"],
@@ -16,7 +21,7 @@
                    class: "form-select d-inline w-auto" %>
   </div>
 
-  <%= submit_tag 'Refresh', id: 'filter_submit', class: 'btn btn-primary' %>
+  <%= submit_tag 'Apply Filter', id: 'filter_submit', class: 'btn btn-primary' %>
 <% end %>
 
 <!-- Events Grid -->
