@@ -8,7 +8,8 @@ RSpec.feature "Interacting with events", type: :feature do
       name: "Alice",
       email: "alice@example.com",
       username: "Alice123",
-      password: "password"
+      password: "password",
+      password_confirmation: "password"
     )
 
     # Create events
