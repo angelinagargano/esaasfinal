@@ -49,6 +49,26 @@ When("I click {string}") do |link_text|
   end
 end
 
+When("I click {string} on the User Profile page") do |link_text|
+  if page.has_link?(link_text)
+    click_link(link_text)
+  elsif page.has_button?(link_text)
+    click_button(link_text)
+  else
+    raise "Could not find link or button with text '#{link_text}'"
+  end
+end
+
+When("I click {string} on the User Edit page") do |link_text|
+  if page.has_link?(link_text)
+    click_link(link_text)
+  elsif page.has_button?(link_text)
+    click_button(link_text)
+  else
+    raise "Could not find link or button with text '#{link_text}'"
+  end
+end
+
 When("I change Username to {string}") do |new_username|
   find('input[name="user[username]"]').set(new_username)
 end

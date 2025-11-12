@@ -13,10 +13,14 @@ Given("the following events exist:") do |table|
       tickets: event['Tickets']
     )
     created_event.save!
-
-    # Store the first event in @event for use in other steps
+    # Store the first event 
     @event = created_event if index == 0
   end
+end
+
+Given("{string} exists") do |event_name|
+  @event = Event.find_by(name: event_name)
+  expect(@event).not_to be_nil, "Event '#{event_name}' not found"
 end
 
 Then("at least 3 events should exist") do
