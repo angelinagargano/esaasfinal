@@ -25,7 +25,7 @@ RSpec.feature "Preferences", type: :feature do
     check "performance_type_no-preference"
     click_button "Save Preferences"
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(performances_path)
     #expect(page).to have_content("All available events")
   end
 
@@ -37,7 +37,7 @@ RSpec.feature "Preferences", type: :feature do
 
     click_button "Save Preferences"
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(performances_path)
     end
 
   scenario "User selects multiple budgets and performance types" do
@@ -49,7 +49,7 @@ RSpec.feature "Preferences", type: :feature do
     check "performance_type_swing"
     click_button "Save Preferences"
 
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(performances_path)
     #expect(page).to have_content("Events matching selected budgets and performance types")
   end
 
@@ -66,7 +66,7 @@ RSpec.feature "Preferences", type: :feature do
     check "performance_type_no-preference"
 
     click_button "Save Preferences"
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(performances_path)
   end
 
   scenario "User clears preferences" do
