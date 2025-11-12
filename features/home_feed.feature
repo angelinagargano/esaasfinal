@@ -93,6 +93,15 @@ Feature: Home page
     And I click "Apply Filter"
     Then events should be sorted by name
 
+  Scenario: Sorting events by name after filtering
+    Given I am on the Home page
+    When I fill in "date_filter_start" with "2025-11-11"
+    And I fill in "date_filter_end" with "2025-11-13"
+    And I click "Apply Filter"
+    And I select "Name" from "sort_by"
+    And I click "Apply Filter"
+    Then events should be sorted by name
+
   Scenario: Sorting persists in session
     Given I am on the Home page
     When I select "Date" from "sort_by"

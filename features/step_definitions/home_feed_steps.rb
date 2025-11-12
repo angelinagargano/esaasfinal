@@ -334,3 +334,11 @@ Then("events with invalid dates should be placed at the end") do
   # If there are events with invalid dates, they should appear at the end
   # This is a soft check - we just verify the page loads without errors
 end
+
+When("I visit the new performance page") do
+  visit new_performance_path
+end
+
+Then("I should be on the new performance page") do
+  expect(page).to have_current_path(new_performance_path)
+end

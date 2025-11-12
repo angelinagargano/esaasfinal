@@ -164,8 +164,4 @@ class PerformancesController < ApplicationController
       price_value.to_s.gsub(/[^0-9\.]/, '').to_f
     end
   end
-
-  def event_params
-    params.require(:event).permit(:name, :venue, :date, :time, :style, :location, :borough, :price, :description, :tickets)
-  end
 end
