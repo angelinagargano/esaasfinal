@@ -11,42 +11,38 @@ end
 Given("I am on the Login page") do
   visit '/login' rescue visit new_user_session_path if defined?(new_user_session_path)
 end
+
 Given('I am logged in as {string}') do |username|
-  # 1️⃣ Ensure user exists
   step %(an existing user with username "#{username}" and password "password123")
 
-  # 2️⃣ Go to login page
   visit '/login'
   expect(page).to have_content('Log in')
 
-  # 3️⃣ Fill in login form
-  fill_in 'username', with: username
-  fill_in 'password', with: 'password123'
+  find('input[name="username"]').set(username)
+  find('input[name="password"]').set('password123')
 
-  # 4️⃣ Submit form
   click_button 'Log in'
 
-  # 5️⃣ Verify login succeeded (optional, adjust text as needed)
   expect(page).to have_content("Logged in as #{username}")
 end
 
 When("I fill in the sign up form with:") do |table|
   data = table.rows_hash
-  fill_in 'email', with: data['Email']
-  fill_in 'name', with: data['Name']
-  fill_in 'username', with: data['Username']
-  fill_in 'password', with: data['Password']
-  fill_in 'password_confirmation', with: data['Password']
+  find('input[name="user[email]"]').set(data['Email'])
+  find('input[name="user[name]"]').set(data['Name'])
+  find('input[name="user[username]"]').set(data['Username'])
+  find('input[name="user[password]"]').set(data['Password'])
+  find('input[name="user[password_confirmation]"]').set(data['Confirm Password'])
 end
 
 When("I fill in the login form with:") do |table|
   data = table.rows_hash
-  fill_in 'username', with: data['Username']
-  fill_in 'password', with: data['Password']
+  find('input[name="username"]').set(data['Username'])
+  find('input[name="password"]').set(data['Password'])
 end
 
-When(/I click "([^"]+)"/) do |link_text|
-  # try link first, then button
+
+When(/I click "([^"]+)" on the (\w+) page/) do |link_text, page_name|
   if page.has_link?(link_text)
     click_link(link_text)
   else
@@ -81,18 +77,21 @@ Then("I should see an error message") do
 end
 
 Given(/an existing user with username "([^"]+)" and password "([^"]+)"/) do |username, password|
-  # Try to create a real User record when possible (model + table present).
   if defined?(User)
     begin
       if ActiveRecord::Base.connection.data_source_exists?('users')
-        User.create!(email: "#{username}@example.com", name: username.capitalize, username: username, password: password) unless User.exists?(username: username)
+        User.create!(
+          email: "#{username}@example.com", 
+          name: username.capitalize, 
+          username: username, 
+          password: password,
+          password_confirmation: password
+        ) unless User.exists?(username: username)
       else
-        # No users table: store in an in-memory stub for the session fallback
         $STUBBED_USERS ||= {}
         $STUBBED_USERS[username] = password
       end
     rescue => _e
-      # If anything goes wrong (e.g. no DB), fall back to in-memory stub
       $STUBBED_USERS ||= {}
       $STUBBED_USERS[username] = password
     end
