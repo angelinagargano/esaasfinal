@@ -35,3 +35,13 @@ end
 Then('I should see {string} button') do |button_text|
   expect(page).to have_button(button_text)
 end
+
+When('I visit the liked events page') do
+  visit liked_events_performances_path
+end
+
+Then('I should see an empty liked events list') do
+  has_message = page.has_content?(/no.*liked|haven't.*liked|empty/i)
+  has_no_cards = !page.has_css?('.card', minimum: 1)
+  expect(has_message || has_no_cards).to be true
+end

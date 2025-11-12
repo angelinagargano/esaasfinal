@@ -19,6 +19,16 @@ RSpec.describe PerformancesController, type: :controller do
       expect(assigns(:events).pluck(:location)).to eq(['Barclays Center'])
     end
 
+    it 'filters by borough_filter parameter' do
+      get :index, params: { borough_filter: 'Manhattan' }
+      expect(assigns(:events).pluck(:borough)).to eq(['Manhattan'])
+    end
+
+    it 'filters by style_filter parameter' do
+      get :index, params: { style_filter: 'Ballet' }
+      expect(assigns(:events).pluck(:style)).to eq(['Ballet'])
+    end
+
     it 'filters by budget $0–$25' do
       session[:preferences] = { 'budget' => ['$0–$25'] }
       get :index
@@ -46,6 +56,15 @@ RSpec.describe PerformancesController, type: :controller do
       get :index
       expect(assigns(:events).pluck(:price)).to include('$120')
       expect(assigns(:events).pluck(:price)).not_to include('$20', '$60')
+    end
+
+    it 'returns Event.none when budget filter matches no events' do
+      session[:preferences] = { 'budget' => ['$100+'] }
+      # Delete all events with price > 100
+      Event.where("CAST(REPLACE(REPLACE(price, '$', ''), ',', '') AS FLOAT) > 100").delete_all
+      get :index
+      expect(assigns(:events)).to be_empty
+      expect(assigns(:events).to_a).to eq([])
     end
 
     it 'filters by date range' do
@@ -107,9 +126,53 @@ RSpec.describe PerformancesController, type: :controller do
     end
   end
 
+  describe 'GET #new' do
+    it 'renders the new template' do
+      get :new
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe '#numeric_price' do
     it 'returns numeric inputs unchanged' do
       expect(controller.send(:numeric_price, 55)).to eq(55)
+    end
+
+    it 'returns 0 for nil input' do
+      expect(controller.send(:numeric_price, nil)).to eq(0)
+    end
+
+    it 'converts string price to float' do
+      expect(controller.send(:numeric_price, '$99.50')).to eq(99.5)
+    end
+  end
+
+  describe 'GET #details' do
+    let(:user) { User.create!(email: 'test@example.com', name: 'Test', username: 'testuser', password: 'password123', password_confirmation: 'password123') }
+    let(:event) { Event.create!(style: 'Ballet', borough: 'Manhattan', location: 'Lincoln Center', price: '$20', date: '2025-12-01') }
+
+    before { allow(controller).to receive(:current_user).and_return(user) }
+
+    it 'renders details template' do
+      get :details, params: { id: event.id }
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:event)).to eq(event)
+    end
+
+    it 'sets flash notice when viewed_tickets_message is present' do
+      get :details, params: { id: event.id, viewed_tickets_message: 'Tickets viewed' }
+      expect(flash.now[:notice]).to eq('Tickets viewed')
+    end
+  end
+
+  describe 'GET #liked_events' do
+    let(:user) { User.create!(email: 'test@example.com', name: 'Test', username: 'testuser', password: 'password123', password_confirmation: 'password123') }
+
+    before { allow(controller).to receive(:current_user).and_return(user) }
+
+    it 'returns empty array when user has no liked events' do
+      get :liked_events
+      expect(assigns(:events)).to eq([])
     end
   end
 

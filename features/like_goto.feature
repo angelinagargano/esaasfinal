@@ -29,3 +29,9 @@ Feature: Interacting with events
     When I click Going to button
     Then I should be going to event
     And I should see "📅 Add to Google Calendar" button
+
+  Scenario: Viewing liked events page when user has no liked events
+    Given I am logged in as "Alice"
+    And I do not have any liked events
+    When I visit the liked events page
+    Then I should see an empty liked events list

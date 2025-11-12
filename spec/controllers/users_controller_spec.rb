@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
+  describe "GET #new" do
+    it "renders the new template" do
+      get :new
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
   describe "POST #create" do
     it "renders new with errors if user not saved" do
       post :create, params: { user: { email: "", name: "", username: "", password: "", password_confirmation: "" } }
