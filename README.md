@@ -80,6 +80,9 @@ Visit `http://localhost:3000` to access the application.
 ## Testing
 
 ### RSpec Tests
+
+Rspec line coverage: 100.0% (191 / 191)
+
 Located in `spec/features/`:
 - `authentication_spec.rb` - User signup and login
 - `event_details_spec.rb` - Event detail pages and ticket links
@@ -89,6 +92,9 @@ Located in `spec/features/`:
 - `user_profile_spec.rb` - User profile and account management
 
 ### Cucumber Tests
+
+Cucumber line coverage: 94.76% (181 / 191)
+
 
 #### Feature Files
 Located in `features/`:
@@ -156,6 +162,7 @@ Located in `features/step_definitions/`:
 - Social features and friend connections
 - Personalized recommendation algorithm based on user preferences and history
 - Web scraping for additional event data sources
+- Minor UI edits to make the experience more seamless (liking events, signing up, saving events)
 
 ## Technology Stack
 
@@ -165,7 +172,3 @@ Located in `features/step_definitions/`:
 - PostgreSQL (production - Heroku)
 - RSpec for unit/integration testing
 - Cucumber for BDD acceptance testing
-
-## Git Commit Hash
-
-995e53a4ee5c365b9de7ebf2d385218453c07f66
