@@ -12,19 +12,6 @@ Given("I am on the Login page") do
   visit '/login' rescue visit new_user_session_path if defined?(new_user_session_path)
 end
 
-# Given('I am logged in as {string}') do |username|
-#   step %(an existing user with username "#{username}" and password "password123")
-
-#   visit '/login'
-#   expect(page).to have_content('Log in')
-
-#   find('input[name="username"]').set(username)
-#   find('input[name="password"]').set('password123')
-
-#   click_button 'Log in'
-
-#   expect(page).to have_content("Logged in as #{username}")
-# end
 Given("I am logged in as {string}") do |username|
   @logged_in_user = User.find_or_create_by!(username: username) do |u|
     u.email = "#{username}@example.com"
@@ -89,6 +76,25 @@ end
 
 Then("I should see an error message") do
   expect(page).to have_css('.alert')
+end
+
+When(/I click "Logout" or "Log out"/) do
+  if page.has_link?('Logout')
+    click_link('Logout')
+  elsif page.has_link?('Log out')
+    click_link('Log out')
+  elsif page.has_button?('Logout')
+    click_button('Logout')
+  elsif page.has_button?('Log out')
+    click_button('Log out')
+  else
+    # Fallback: submit DELETE request to logout path
+    page.driver.submit :delete, logout_path, {}
+  end
+end
+
+Then("I should be redirected to the root page") do
+  expect(current_path).to eq(root_path)
 end
 
 Given(/an existing user with username "([^"]+)" and password "([^"]+)"/) do |username, password|

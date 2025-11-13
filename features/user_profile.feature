@@ -47,6 +47,18 @@ Feature: User Profile
     Then I should be redirected to the User Profile page
     And I should see "Your information was successfully updated"
 
+  Scenario: Editing user information without changing password
+    Given I am on the User Profile page
+    When I click "Edit my information" on the User Profile page
+    Then I should be on the User Edit page
+    When I change Username to "alice999"
+    And I change Email to "alice999@example.com"
+    And I leave Password blank
+    And I click "Save changes" on the User Edit page
+    Then I should be redirected to the User Profile page
+    And I should see "alice999"
+    And I should see "alice999@example.com"
+
   Scenario: Viewing liked events when user has no liked events
     Given I do not have any liked events
     And I am on the User Profile page

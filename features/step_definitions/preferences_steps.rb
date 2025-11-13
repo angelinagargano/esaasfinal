@@ -77,3 +77,11 @@ end
 Then('I should remain on the Preferences page') do
   expect(current_path).to eq('/preferences')
 end
+
+When("I visit the Preferences page") do
+  visit '/preferences'
+end
+
+Then('I should be redirected to the Preferences page') do
+  expect(current_path).to eq('/preferences')
+end

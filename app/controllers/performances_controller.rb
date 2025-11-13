@@ -8,7 +8,9 @@ class PerformancesController < ApplicationController
   def index
     #render plain: "Hello, this is the Performances index page!"
 
-    @all_styles = Event.distinct.pluck(:style)
+    styles = Event.distinct.pluck(:style)
+    @all_styles = styles.compact.sort
+    @boroughs = Event.distinct.pluck(:borough).compact.reject(&:blank?).sort
 
     # Start with all events
     @events = Event.all
@@ -24,6 +26,16 @@ class PerformancesController < ApplicationController
     # Filter by borough
     if prefs['borough'].present? && !prefs['borough'].include?('No Preference')
       @events = @events.where(borough: prefs['borough'])
+    end
+
+    # Filter by borough from the filter form
+    if params[:borough_filter].present?
+      @events = @events.where(borough: params[:borough_filter])
+    end
+
+    # Filter by style from the filter form
+    if params[:style_filter].present?
+      @events = @events.where(style: params[:style_filter])
     end
 
     # Filter by location
@@ -144,6 +156,10 @@ class PerformancesController < ApplicationController
 
   private
 
+  def event_params
+    params.require(:event).permit(:name, :venue, :date, :time, :style, :location, :borough, :price, :description, :tickets)
+  end
+
   def numeric_price(price_value)
     return 0 if price_value.nil?
     if price_value.is_a?(Numeric)
@@ -151,9 +167,5 @@ class PerformancesController < ApplicationController
     else
       price_value.to_s.gsub(/[^0-9\.]/, '').to_f
     end
-  end
-
-  def event_params
-    params.require(:event).permit(:name, :venue, :date, :time, :style, :location, :borough, :price, :description, :tickets)
   end
 end
