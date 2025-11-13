@@ -156,9 +156,6 @@ Located in `features/step_definitions/`:
 - Social features and friend connections
 - Personalized recommendation algorithm based on user preferences and history
 - Web scraping for additional event data sources
-- Email notifications for upcoming events
-- Event reviews and ratings
-- Mobile-responsive design improvements
 
 ## Technology Stack
 
@@ -171,4 +168,4 @@ Located in `features/step_definitions/`:
 
 ## Git Commit Hash
 
-95dc18868d1b6f4a4d474395e775fb9cdb3d7414
+995e53a4ee5c365b9de7ebf2d385218453c07f66
