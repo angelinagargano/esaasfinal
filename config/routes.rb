@@ -43,6 +43,9 @@ Rails.application.routes.draw do
   get '/users/:id/edit', to: 'users#edit', as: :edit_user
   patch '/users/:id', to: 'users#update', as: :user
   put '/users/:id', to: 'users#update'
+
+  get '/search/find_friends', to: 'search#find_friends', as: :find_friends_search
+
   resources :events do
     resources :tickets, only: [:index, :show, :new, :create]
   end
