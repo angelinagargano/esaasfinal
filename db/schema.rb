@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_14_120002) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_26_213758) do
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.string "venue"
@@ -18,12 +18,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_120002) do
     t.string "time"
     t.string "style"
     t.string "location"
-    t.string "borough"
     t.string "price"
     t.text "description"
     t.string "tickets"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "borough"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "friend_id"
+    t.boolean "status", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["user_id"], name: "index_friendships_on_user_id"
   end
 
   create_table "going_events", force: :cascade do |t|
@@ -44,6 +54,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_120002) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "movies", force: :cascade do |t|
+    t.string "title"
+    t.string "rating"
+    t.text "description"
+    t.datetime "release_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "name", null: false
@@ -55,6 +74,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_120002) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "friendships", "users"
+  add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "going_events", "events"
   add_foreign_key "going_events", "users"
   add_foreign_key "likes", "events"
