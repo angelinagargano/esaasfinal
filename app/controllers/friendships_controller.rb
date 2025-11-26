@@ -1,17 +1,19 @@
-class FriendshipController < ApplicationController
+class FriendshipsController < ApplicationController
     def create 
-        @friend = User.find(params[:id])
+        friend_id = params[:friend_id] || params[:id]
+        @friend = User.find(friend_id)
         # preventing duplicate friend request or befriending oneself
         if @friend == current_user || Friendship.exists?(user: current_user, friend: @friend) || Friendship.exists?(user: @friend, friend: current_user)
             flash[:alert] = "Unable to send friend request."
-        end
-        @friendship = Friendship.new(user: current_user, friend: @friend, status: false)
-        if @friendship.save
-            flash[:notice] = "Friend request sent."
         else
-            flash[:alert] = "Unable to send friend request."
+            @friendship = Friendship.new(user: current_user, friend: @friend, status: false)
+            if @friendship.save
+                flash[:notice] = "Friend request sent."
+            else
+                flash[:alert] = "Unable to send friend request."
+            end
         end
-        #redirect_back(fallback_location: find_friends_search_path)
+        redirect_back(fallback_location: find_friends_search_path)
     end
     #accepting friend request
     def accept 

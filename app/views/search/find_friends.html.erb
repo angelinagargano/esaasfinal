@@ -5,14 +5,19 @@
   <%= submit_tag "Search" %>
 <% end %>
 
-<% if @users.present? %>
-  <h2>Search Results:</h2>
-  <ul>
+<% if params[:username].present? %>
+  <% if @users.any? %>
+    <h2>Search Results:</h2>
     <% @users.each do |user| %>
-      <li><%= user.username %></li>
-      <%# You can add a "Add Friend" button or link here %>
+      <div class="card mt-3" style="background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+        <h5 class="card-title"><%= user.username %></h5>
+        <p class="card-text">Email: <%= user.email %></p>
+        <%= link_to "Add Friend", add_friend_path(user), method: :post, class: "btn btn-primary" %>
+      </div>
     <% end %>
-  </ul>
-<% elsif params[:username].present? %>
-  <p>No users found with that username.</p>
+  <% else %>
+    <p>No users found with that username.</p>
+  <% end %>
+<% else %>
+  <p>Enter a username to search for friends.</p>
 <% end %>
