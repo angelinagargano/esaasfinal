@@ -45,6 +45,11 @@ Rails.application.routes.draw do
   put '/users/:id', to: 'users#update'
 
   get '/search/find_friends', to: 'search#find_friends', as: :find_friends_search
+  get '/friendships', to: 'friendships#index', as: :friendships
+  post '/friendships/:friend_id/add', to: 'friendships#create', as: :add_friend
+  post '/friendships/:friend_id/accept', to: 'friendships#accept', as: :accept_friend
+  delete '/friendships/:friend_id/reject', to: 'friendships#reject', as: :reject_friend
+  delete '/friendships/:friend_id/unfriend', to: 'friendships#unfriend', as: :unfriend
 
   resources :events do
     resources :tickets, only: [:index, :show, :new, :create]
