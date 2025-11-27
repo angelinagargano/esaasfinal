@@ -8,13 +8,6 @@ class PreferencesController < ApplicationController
       'No Preference'
     ]
 
-    @distance_options = [
-      'Within 2mi',
-      'Within 5mi',
-      'Within 10mi',
-      'No Preference'
-    ]
-
     @performance_type_options = [
       'Hip-hop',
       'Ballet',
@@ -32,9 +25,8 @@ class PreferencesController < ApplicationController
       'No Preference'
     ]
 
-    
     @location_options = Event.distinct.pluck(:location).compact.sort
-    @location_options << 'No Preference' unless @location_options.include?('No Preference')
+    @location_options << 'No Preference' if @location_options.exclude?('No Preference')
 
     @preferences = session[:preferences] || {}
   end

@@ -1,12 +1,6 @@
 class PerformancesController < ApplicationController
 
-  # def show
-  #   id = params[:id]
-  #   @event = Event.find(id)
-  # end
-
   def index
-    #render plain: "Hello, this is the Performances index page!"
 
     styles = Event.distinct.pluck(:style)
     @all_styles = styles.compact.sort
@@ -92,9 +86,6 @@ class PerformancesController < ApplicationController
       event_ids = @events.map(&:id)
       @events = event_ids.any? ? Event.where(id: event_ids) : Event.none
     end
-    
-    # Ensure @events is always set, even if empty
-    @events ||= Event.none
 
   # Apply sorting if requested
     if params[:sort_by].present?
@@ -138,7 +129,6 @@ class PerformancesController < ApplicationController
     @event = Event.find(params[:id])
     current_user.liked_events.delete(@event)
     redirect_back(fallback_location: performances_path, notice: "Event unliked!")
-    #redirect_to performances_path, notice: "Event unliked!"
   end
   
   def liked_events
