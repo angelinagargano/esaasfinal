@@ -19,23 +19,6 @@
                          placeholder: "End date (optional)" %>
     </div>
   </div>
-  
-  <div class="row mb-3 g-3">
-    <div class="col-auto">
-      <label class="form-label me-2" for="borough_filter">Borough:</label>
-      <%= select_tag :borough_filter,
-                     options_for_select([["All Boroughs", ""]] + @boroughs.map { |borough| [borough, borough] }, params[:borough_filter]),
-                     id: "borough_filter",
-                     class: "form-select" %>
-    </div>
-    <div class="col-auto">
-      <label class="form-label me-2" for="style_filter">Style:</label>
-      <%= select_tag :style_filter,
-                     options_for_select([["All Styles", ""]] + @all_styles.map { |style| [style, style] }, params[:style_filter]),
-                     id: "style_filter",
-                     class: "form-select" %>
-    </div>
-  </div>
 
   <div class="mb-3">
     <label class="form-label me-2" for="sort_by">Sort by:</label>
@@ -56,7 +39,7 @@
   <% if @events.any? %>
     <div class="row">
       <% @events.each do |event| %>
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4" id="event-<%= event.id %>">
           <div class="card shadow-sm h-100" data-event-id="<%= event.id %>">
             
             <!-- Card Body -->
@@ -67,11 +50,11 @@
                 <div class="d-flex gap-1">
                   <% if current_user %>
                     <% if current_user.liked_events.include?(event) %>
-                      <%= button_to unlike_performance_path(event), method: :delete, class: "btn btn-heart liked", title: "Unlike" do %>
+                      <%= button_to unlike_performance_path(event), method: :delete, remote: true, class: "btn btn-heart liked", title: "Unlike", id: "like-btn-#{event.id}" do %>
                         ♥
                       <% end %>
                     <% else %>
-                      <%= button_to like_performance_path(event), method: :post, class: "btn btn-heart", title: "Like" do %>
+                      <%= button_to like_performance_path(event), method: :post, remote: true, class: "btn btn-heart", title: "Like", id: "like-btn-#{event.id}" do %>
                         ♡
                       <% end %>
                     <% end %>
@@ -82,8 +65,6 @@
               <p class="card-text"><strong>Date:</strong> <%= event.date %></p>
               <p class="card-text"><strong>Time:</strong> <%= event.time %></p>
               <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
-              <p class="card-text"><strong>Borough:</strong> <%= event.borough %></p>
-              <p class="card-text"><strong>Venue:</strong> <%= event.venue %></p>
               <p class="card-text"><strong>Price:</strong> <%= event.price %></p>
             </div>
 
@@ -104,4 +85,35 @@
   <% end %>
 </div>
 
+<script>
+  const startDateInput = document.getElementById('date_filter_start');
+  const endDateInput = document.getElementById('date_filter_end');
+
+  // When start date changes, update the minimum allowed end date
+  startDateInput.addEventListener('change', function() {
+    if (this.value) {
+      endDateInput.min = this.value;
+      
+      // If end date is already set and is before the new start date, clear it
+      if (endDateInput.value && endDateInput.value < this.value) {
+        endDateInput.value = '';
+      }
+    }
+  });
+
+  // When end date changes, update the maximum allowed start date
+  endDateInput.addEventListener('change', function() {
+    if (this.value) {
+      startDateInput.max = this.value;
+    }
+  });
+
+  // Set initial constraints if dates are already filled
+  if (startDateInput.value) {
+    endDateInput.min = startDateInput.value;
+  }
+  if (endDateInput.value) {
+    startDateInput.max = endDateInput.value;
+  }
+</script>
 
