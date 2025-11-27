@@ -1,0 +1,23 @@
+<h1>Find Friends</h1>
+
+<%= form_tag find_friends_search_path, method: :get do %>
+  <%= text_field_tag :username, params[:username], placeholder: "Enter username" %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<% if params[:username].present? %>
+  <% if @users.any? %>
+    <h2>Search Results:</h2>
+    <% @users.each do |user| %>
+      <div class="card mt-3" style="background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+        <h5 class="card-title"><%= user.username %></h5>
+        <p class="card-text">Email: <%= user.email %></p>
+        <%= link_to "Add Friend", add_friend_path(user), method: :post, class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No users found with that username.</p>
+  <% end %>
+<% else %>
+  <p>Enter a username to search for friends.</p>
+<% end %>

@@ -1,7 +1,6 @@
 class PerformancesController < ApplicationController
 
   def index
-
     styles = Event.distinct.pluck(:style)
     @all_styles = styles.compact.sort
     @boroughs = Event.distinct.pluck(:borough).compact.reject(&:blank?).sort
@@ -20,16 +19,6 @@ class PerformancesController < ApplicationController
     # Filter by borough
     if prefs['borough'].present? && !prefs['borough'].include?('No Preference')
       @events = @events.where(borough: prefs['borough'])
-    end
-
-    # Filter by borough from the filter form
-    if params[:borough_filter].present?
-      @events = @events.where(borough: params[:borough_filter])
-    end
-
-    # Filter by style from the filter form
-    if params[:style_filter].present?
-      @events = @events.where(style: params[:style_filter])
     end
 
     # Filter by location
@@ -118,17 +107,38 @@ class PerformancesController < ApplicationController
   def details
     @event = Event.find(params[:id])
     flash.now[:notice] = params[:viewed_tickets_message] if params[:viewed_tickets_message].present?
+    
+    # Load friends attending this event
+    if logged_in?
+      # Get all accepted friends (outgoing and incoming)
+      accepted_outgoing = current_user.friendships.where(status: true).includes(:friend).map(&:friend)
+      accepted_incoming = current_user.inverse_friendships.where(status: true).includes(:user).map(&:user)
+      friends = (accepted_outgoing + accepted_incoming).uniq
+      
+      # Get friends who are going to this event
+      @friends_going = friends.select { |friend| friend.going_events_list.include?(@event) }
+    else
+      @friends_going = []
+    end
   end
 
   def like 
     @event = Event.find(params[:id])
     current_user.liked_events << @event unless current_user.liked_events.include?(@event)
-    redirect_back(fallback_location: performances_path, notice: "Event liked!")
+    
+    respond_to do |format|
+      format.html { redirect_to request.referer.to_s.split('#').first + "#event-#{@event.id}", notice: "Event liked!" }
+      format.js
+    end
   end 
+  
   def unlike
     @event = Event.find(params[:id])
     current_user.liked_events.delete(@event)
-    redirect_back(fallback_location: performances_path, notice: "Event unliked!")
+    respond_to do |format|
+      format.html { redirect_to request.referer.to_s.split('#').first + "#event-#{@event.id}", notice: "Event unliked!" }
+      format.js
+    end
   end
   
   def liked_events

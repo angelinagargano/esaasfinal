@@ -28,7 +28,19 @@ class PreferencesController < ApplicationController
     @location_options = Event.distinct.pluck(:location).compact.sort
     @location_options << 'No Preference' if @location_options.exclude?('No Preference')
 
-    @preferences = session[:preferences] || {}
+    # Initialize preferences with "No Preference" defaults for first-time users
+    if session[:preferences].nil?
+      @preferences = {
+        'budget' => ['No Preference'],
+        'performance_type' => ['No Preference'],
+        'borough' => ['No Preference'],
+        'location' => ['No Preference']
+      }
+    else
+      @preferences = session[:preferences]
+    end
+    
+    #@preferences = session[:preferences] || {}
   end
 
   def create

@@ -2,16 +2,29 @@
 
 <div class="event-details">
 <h2>Details about <em><%= @event.name %></em></h2>
-<% if current_user && current_user.going_events_list.include?(@event) %>
-  <span class="badge bg-success mb-3">You're going!</span>
+<%if logged_in? %>
+  
+  <% if current_user && current_user.going_events_list.include?(@event) %>
+    <span class="badge bg-success mb-3">You're going!</span>
 
-  <% if params[:show_calendar_button].present? %>
-    <p><strong>Want to add this to your Google Calendar?</strong></p>
-    <%= button_to "📅 Add to Google Calendar", "#", id: "add-to-calendar-btn", class: "btn btn-success" %>
+    <% if params[:show_calendar_button].present? %>
+      <p><strong>Want to add this to your Google Calendar?</strong></p>
+      <%= button_to "📅 Add to Google Calendar", "#", id: "add-to-calendar-btn", class: "btn btn-success" %>
+    <% end %>
+  <% else %>
+    <%= button_to 'Going to', going_and_calendar_performance_path(@event),
+        method: :post, class: 'btn btn-primary mb-3' %>
   <% end %>
-<% else %>
-  <%= button_to 'Going to', going_and_calendar_performance_path(@event),
-      method: :post, class: 'btn btn-primary mb-3' %>
+<% end %>
+
+<% if logged_in? && @friends_going.any? %>
+  <h3>Friends Attending:</h3>
+  <p class="description">
+    <%# Render friends similar to the Description section style: inline links separated by commas %>
+    <% @friends_going.each_with_index do |friend, idx| %>
+      <span class="badge bg-info"><%= friend.username %></span>
+    <% end %>
+  </p>
 <% end %>
 
 <script>

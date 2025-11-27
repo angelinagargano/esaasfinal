@@ -1,0 +1,19 @@
+var button = document.getElementById('like-btn-<%= @event.id %>');
+var form = button.closest('form');
+form.action = '<%= unlike_performance_path(@event) %>';
+
+// Update or create the _method input for DELETE
+var methodInput = form.querySelector('input[name="_method"]');
+if (methodInput) {
+  methodInput.value = 'delete';
+} else {
+  var hiddenInput = document.createElement('input');
+  hiddenInput.type = 'hidden';
+  hiddenInput.name = '_method';
+  hiddenInput.value = 'delete';
+  form.appendChild(hiddenInput);
+}
+
+button.innerHTML = '♥';
+button.classList.add('liked');
+button.title = 'Unlike';
