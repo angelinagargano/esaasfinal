@@ -127,6 +127,19 @@ class PerformancesController < ApplicationController
   def details
     @event = Event.find(params[:id])
     flash.now[:notice] = params[:viewed_tickets_message] if params[:viewed_tickets_message].present?
+    
+    # Load friends attending this event
+    if logged_in?
+      # Get all accepted friends (outgoing and incoming)
+      accepted_outgoing = current_user.friendships.where(status: true).includes(:friend).map(&:friend)
+      accepted_incoming = current_user.inverse_friendships.where(status: true).includes(:user).map(&:user)
+      friends = (accepted_outgoing + accepted_incoming).uniq
+      
+      # Get friends who are going to this event
+      @friends_going = friends.select { |friend| friend.going_events_list.include?(@event) }
+    else
+      @friends_going = []
+    end
   end
 
   def like 
