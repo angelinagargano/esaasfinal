@@ -1,13 +1,6 @@
 class PerformancesController < ApplicationController
 
-  # def show
-  #   id = params[:id]
-  #   @event = Event.find(id)
-  # end
-
   def index
-    #render plain: "Hello, this is the Performances index page!"
-
     styles = Event.distinct.pluck(:style)
     @all_styles = styles.compact.sort
     @boroughs = Event.distinct.pluck(:borough).compact.reject(&:blank?).sort
@@ -26,16 +19,6 @@ class PerformancesController < ApplicationController
     # Filter by borough
     if prefs['borough'].present? && !prefs['borough'].include?('No Preference')
       @events = @events.where(borough: prefs['borough'])
-    end
-
-    # Filter by borough from the filter form
-    if params[:borough_filter].present?
-      @events = @events.where(borough: params[:borough_filter])
-    end
-
-    # Filter by style from the filter form
-    if params[:style_filter].present?
-      @events = @events.where(style: params[:style_filter])
     end
 
     # Filter by location
@@ -145,13 +128,20 @@ class PerformancesController < ApplicationController
   def like 
     @event = Event.find(params[:id])
     current_user.liked_events << @event unless current_user.liked_events.include?(@event)
-    redirect_back(fallback_location: performances_path, notice: "Event liked!")
+    
+    respond_to do |format|
+      format.html { redirect_to request.referer.to_s.split('#').first + "#event-#{@event.id}", notice: "Event liked!" }
+      format.js
+    end
   end 
+  
   def unlike
     @event = Event.find(params[:id])
     current_user.liked_events.delete(@event)
-    redirect_back(fallback_location: performances_path, notice: "Event unliked!")
-    #redirect_to performances_path, notice: "Event unliked!"
+    respond_to do |format|
+      format.html { redirect_to request.referer.to_s.split('#').first + "#event-#{@event.id}", notice: "Event unliked!" }
+      format.js
+    end
   end
   
   def liked_events

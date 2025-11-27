@@ -8,13 +8,13 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      # After successful signup, redirect to the login page so the user can log in
-      flash[:notice] = 'Account created. Please log in.'
-      redirect_to login_path and return
+      # After successful signup, log the user in and redirect to preferences
+      session[:user_id] = @user.id
+      flash[:notice] = 'Account created successfully! Please set your preferences.'
+      redirect_to preferences_path and return
     else
       # Signup failed: show errors and render form again
       puts "User not saved! Errors: #{@user.errors.full_messages.inspect}"
-      flash.now[:alert] = @user.errors.full_messages.join(', ')
       render :new and return
     end
   end
