@@ -46,8 +46,8 @@ RSpec.feature "User Profile", type: :feature do
   before do
     # Log in the user before each test
     visit login_path
-    fill_in "Username", with: user.username
-    fill_in "Password", with: "password123"
+    fill_in "username_or_email", with: user.username
+    fill_in "password", with: "password123"
     click_button "Log in"
   end
 

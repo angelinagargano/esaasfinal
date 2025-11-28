@@ -15,6 +15,7 @@ class UsersController < ApplicationController
     else
       # Signup failed: show errors and render form again
       puts "User not saved! Errors: #{@user.errors.full_messages.inspect}"
+      flash[:alert] = @user.errors.full_messages.join(', ')
       render :new and return
     end
   end

@@ -2,10 +2,10 @@ class User < ApplicationRecord
   has_secure_password validations: false
 
   has_many :friendships, dependent: :destroy
-  has_many :friends, through: :friendships, source: :friend
-  #recieved requests (someon sends the reques to this user)
-  has_many :inverse_friendships, class_name: 'Friendship', foreign_key: 'friend_id'
-  has_many :inverse_friends, through: :inverse_friendships, source: :user
+  has_many :friends, -> { where(friendships: { status: true }) }, through: :friendships, source: :friend
+  #received requests (someone sends the request to this user)
+  has_many :inverse_friendships, class_name: 'Friendship', foreign_key: 'friend_id', dependent: :destroy
+  has_many :inverse_friends, -> { where(friendships: { status: true }) }, through: :inverse_friendships, source: :user
 
   has_many :likes, dependent: :destroy
   has_many :liked_events, through: :likes, source: :event

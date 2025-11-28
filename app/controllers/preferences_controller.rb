@@ -30,10 +30,10 @@ class PreferencesController < ApplicationController
 
     if session[:preferences].nil?
       @preferences = {
-        'budget' => ['No Preference'],
-        'performance_type' => ['No Preference'],
-        'borough' => ['No Preference'],
-        'location' => ['No Preference']
+        'budget' => [],
+        'performance_type' => [],
+        'borough' => [],
+        'location' => []
       }
     else
       @preferences = session[:preferences]

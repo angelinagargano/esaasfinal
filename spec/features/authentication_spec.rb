@@ -14,15 +14,15 @@ RSpec.feature "Authentication", type: :feature do
 
     click_button 'Sign up'
 
-    expect(current_path).to eq('/login')
-    expect(page).to have_content('Account created. Please log in.')
+    expect(current_path).to eq('/preferences')
+    expect(page).to have_content('Account created successfully! Please set your preferences.')
   end
 
   scenario "user can log in with valid credentials" do
     User.create!(email: 'bob@example.com', name: 'Bob', username: 'bob', password: 'secret', password_confirmation: 'secret')
 
     visit login_path
-    fill_in 'username', with: 'bob'
+    fill_in 'username_or_email', with: 'bob'
     fill_in 'password', with: 'secret'
     click_button 'Log in'
 
@@ -32,7 +32,7 @@ RSpec.feature "Authentication", type: :feature do
 
   scenario "login fails with invalid credentials" do
     visit login_path
-    fill_in 'username', with: 'nonexistent'
+    fill_in 'username_or_email', with: 'nonexistent'
     fill_in 'password', with: 'wrongpassword'
     click_button 'Log in'
 
@@ -44,7 +44,7 @@ RSpec.feature "Authentication", type: :feature do
     user = User.create!(email: 'carol@example.com', name: 'Carol', username: 'carol', password: 'mypassword', password_confirmation: 'mypassword')
 
     visit login_path
-    fill_in 'username', with: 'carol'
+    fill_in 'username_or_email', with: 'carol'
     fill_in 'password', with: 'mypassword'
     click_button 'Log in'
 
