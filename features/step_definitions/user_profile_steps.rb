@@ -30,10 +30,6 @@ Given("the user has logged in and created an account") do
   end
 end
 
-Given("I am on the User Profile page") do
-  visit user_profile_path(@user)
-end
-
 Given("I am on the User Edit page") do
   visit edit_user_path(@user)
 end
