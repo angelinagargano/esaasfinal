@@ -372,3 +372,7 @@ end
 Then("I should be on the new performance page") do
   expect(page).to have_current_path(new_performance_path)
 end
+
+Then("I should be on the Home page") do
+  expect(page).to have_current_path(performances_path, ignore_query: true)
+end
