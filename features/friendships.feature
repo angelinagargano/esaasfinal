@@ -108,3 +108,11 @@ Feature: Friendships
     And I am on the Find Friends page
     When I search for username "bob"
     Then I should see "bob456" in the search results
+
+  Scenario: Searching returns multiple users shows plural message
+    Given I am on the Find Friends page
+    And an existing user with username "bob123" and password "password123"
+    And an existing user with username "bob789" and password "password123"
+    When I search for username "bob"
+    Then I should see "Found" in the search results
+    And I should see "users" in the search results

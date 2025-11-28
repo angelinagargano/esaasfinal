@@ -61,6 +61,15 @@ Feature: Initial preferences
     And I should see events matching any selected budget
     And I should see events featuring any selected performance type
 
+  Scenario: Selecting "No Preference" with other options removes "No Preference"
+    Given I am on the Preferences page
+    When I select "$0–$25" for "Budget"
+    And I select "No Preference" for "Budget"
+    And I select "Ballet" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    And I should see events matching "$0–$25" for Budget and "Ballet" for Performance Type on the Home feed
+
   Scenario: Attempting to save without selecting any preferences
     Given I am on the Preferences page
     When I do not select any options for Budget or Performance Type

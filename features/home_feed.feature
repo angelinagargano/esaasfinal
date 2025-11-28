@@ -109,6 +109,12 @@ Feature: Home page
     And I visit the Home page again
     Then events should be sorted chronologically by date
 
+  Scenario: Sorting uses session when parameter missing
+    Given I am on the Home page
+    When I visit the performances page with sort_by "name" in the URL
+    And I visit the Home page again
+    Then events should be sorted by name
+
   Scenario: Budget filter with no matching events results in empty list
     Given I am on the Preferences page
     When I select "$100+" for "Budget"
