@@ -164,15 +164,16 @@ Given("I have liked the event {string}") do |event_name|
   event = Event.find_by(name: event_name)
   raise "Event '#{event_name}' not found" unless event
   
-  # Get the current user
-  if instance_variable_defined?(:@logged_in_user) && @logged_in_user
-    @user ||= @logged_in_user
+  # Like the event through the UI to ensure the page state is correct
+  within(find('.card', text: event_name)) do
+    btn = find('button.btn-heart')
+    if btn[:title] == "Like"
+      btn.click
+      # Wait for AJAX to complete - button should change to "Unlike"
+      expect(page).to have_css("button.btn-heart[title='Unlike']", wait: 5)
+    end
+    # If button already shows "Unlike", event is already liked
   end
-  @user ||= User.find_by(username: "testuser")
-  
-  raise "User not found. Make sure the user is logged in or created first." unless @user
-  
-  @user.liked_events << event unless @user.liked_events.include?(event)
 end
 
 Then("I should see {string} in my liked events") do |event_name|
