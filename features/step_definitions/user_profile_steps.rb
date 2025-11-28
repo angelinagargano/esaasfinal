@@ -164,6 +164,11 @@ Given("I have liked the event {string}") do |event_name|
   event = Event.find_by(name: event_name)
   raise "Event '#{event_name}' not found" unless event
   
+  # Navigate to home page if not already on a page with event cards
+  unless page.has_css?('.card', text: event_name, wait: 0)
+    visit performances_path
+  end
+  
   # Like the event through the UI to ensure the page state is correct
   within(find('.card', text: event_name)) do
     btn = find('button.btn-heart')
