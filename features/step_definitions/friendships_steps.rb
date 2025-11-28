@@ -216,3 +216,26 @@ Given("I am on the Find Friends page") do
       end
     end
   end
+
+  Given("I stub Friendship to fail on save") do
+    allow_any_instance_of(Friendship).to receive(:save).and_return(false)
+  end
+
+  Given("I stub Friendship to fail on update") do
+    allow_any_instance_of(Friendship).to receive(:update).and_return(false)
+  end
+
+  Given("I am logged out") do
+    if page.driver.respond_to?(:submit)
+      begin
+        page.driver.submit :delete, logout_path, {}
+      rescue
+        # If logout_path doesn't exist or fails, just clear session
+        page.driver.clear_cookies
+      end
+    else
+      page.driver.clear_cookies
+    end
+    # Ensure we're not on a page that requires login
+    visit root_path
+  end

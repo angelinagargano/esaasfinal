@@ -88,3 +88,23 @@ Feature: Friendships
     And I am on the User Profile page
     When I try to unfriend "bob456"
     Then I should see "Unable to unfriend"
+
+  Scenario: Friendship save fails shows error
+    Given I am on the Find Friends page
+    And I search for username "bob456"
+    And I stub Friendship to fail on save
+    When I click "Add Friend" for user "bob456"
+    Then I should see "Unable to send friend request"
+
+  Scenario: Friendship update fails shows error
+    Given "bob456" has sent a friend request to "alice123"
+    And I am on the User Profile page
+    And I stub Friendship to fail on update
+    When I click "Accept" for friend request from "bob456"
+    Then I should see "Unable to accept friend request"
+
+  Scenario: Searching for friends without being logged in
+    Given I am logged out
+    And I am on the Find Friends page
+    When I search for username "bob"
+    Then I should see "bob456" in the search results

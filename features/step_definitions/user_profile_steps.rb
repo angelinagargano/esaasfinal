@@ -215,10 +215,6 @@ Given("I do not have any liked events") do
   end
 end
 
-Given("I am logged out") do
-  page.driver.submit :delete, logout_path, {}
-end
-
 # Visit the User Profile page for a given username (logged-out test)
 When('I visit the User Profile page for user {string}') do |username|
   user = User.find_or_create_by!(username: username) do |u|

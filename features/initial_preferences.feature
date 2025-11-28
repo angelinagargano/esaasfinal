@@ -75,3 +75,36 @@ Feature: Initial preferences
     And I press "Save Preferences"
     Then I should see an alert saying "Please select at least one performance type"
     And I should remain on the Preferences page
+
+  Scenario: Filtering by $25–$50 budget range
+    Given the following events exist:
+      | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
+      | Mid Range Event | Test Venue | 2025-11-11 | 7:30PM | Hip-hop | Manhattan | $35 | Test desc | https://test.com |
+    And I am on the Preferences page
+    When I select "$25–$50" for "Budget"
+    And I select "Hip-hop" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    And I should see events matching "$25–$50" for Budget and "Hip-hop" for Performance Type on the Home feed
+
+  Scenario: Filtering by $50–$100 budget range
+    Given the following events exist:
+      | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
+      | High Range Event | Test Venue | 2025-11-11 | 7:30PM | Contemporary | Manhattan | $75 | Test desc | https://test.com |
+    And I am on the Preferences page
+    When I select "$50–$100" for "Budget"
+    And I select "Contemporary" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    And I should see events matching "$50–$100" for Budget and "Contemporary" for Performance Type on the Home feed
+
+  Scenario: Filtering by $100+ budget range
+    Given the following events exist:
+      | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
+      | Premium Event | Test Venue | 2025-11-11 | 7:30PM | Ballet | Manhattan | $150 | Test desc | https://test.com |
+    And I am on the Preferences page
+    When I select "$100+" for "Budget"
+    And I select "Ballet" for "Performance Type"
+    And I press "Save Preferences"
+    Then I should be redirected to the Home page
+    And I should see events matching "$100+" for Budget and "Ballet" for Performance Type on the Home feed
