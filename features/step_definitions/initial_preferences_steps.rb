@@ -1,4 +1,4 @@
-# features/step_definitions/initial_preferences_steps.rb (FULLY FIXED)
+# features/step_definitions/initial_preferences_steps.rb 
 
 Given('I have opened the app for the first time') do
   clear_cookies if respond_to?(:clear_cookies)
@@ -12,7 +12,10 @@ Then('I should be taken to the Preferences page') do
 end
 
 When('I do not select any options for {string}') do |field|
-  # Intentionally left blank for steps that simulate no selection
+  field_prefix = field.downcase.gsub(' ', '_')
+  all("input[id^='#{field_prefix}_']").each do |checkbox|
+    uncheck(checkbox[:id]) if checkbox.checked?
+  end
 end
 
 Then('I should see events matching {string} for Budget and {string} for Performance Type on the Home feed') do |budget, perf_type|

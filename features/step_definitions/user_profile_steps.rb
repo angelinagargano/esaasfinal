@@ -17,8 +17,8 @@ Given("the user has logged in and created an account") do
   # Log in the user
   visit login_path
 
-  fill_in "Username", with: @user.username
-  fill_in "Password", with: "password123"
+  find('input[name="username_or_email"]').set(@user.username)
+  find('input[name="password"]').set("password123")
   click_button "Log in"
   
   # Verify we're logged in - wait for redirect or check for logged in content

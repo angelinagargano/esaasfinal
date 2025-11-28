@@ -4,7 +4,7 @@ Feature: Authentication
   Background:
     Given I have opened the app
 
-  Scenario: Signing up successfully (flow: root -> signup -> login)
+  Scenario: Signing up successfully (flow: root -> signup -> preferences)
     Given I am on the Login page
     When I click "Sign up" on the Login page
     And I fill in the sign up form with:
@@ -14,7 +14,7 @@ Feature: Authentication
       | Password          | password123 |
       | Confirm Password  | password123 |
     And I click "Sign up" on the Signup page
-    Then I should be redirected to the Login page
+    Then I should be redirected to the Preferences page
 
   Scenario: Signing up with missing fields shows errors
     Given I am on the Sign up page

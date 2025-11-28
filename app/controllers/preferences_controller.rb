@@ -28,7 +28,6 @@ class PreferencesController < ApplicationController
     @location_options = Event.distinct.pluck(:location).compact.sort
     @location_options << 'No Preference' if @location_options.exclude?('No Preference')
 
-    # Initialize preferences with "No Preference" defaults for first-time users
     if session[:preferences].nil?
       @preferences = {
         'budget' => ['No Preference'],
@@ -39,31 +38,36 @@ class PreferencesController < ApplicationController
     else
       @preferences = session[:preferences]
     end
-    
-    #@preferences = session[:preferences] || {}
   end
 
   def create
     prefs = {
-      'budget' => params[:budget] || [],
-      'performance_type' => params[:performance_type] || [],
-      'borough' => params[:borough] || [],
-      'location' => params[:location] || []
+      'budget' => Array(params[:budget]).compact,
+      'performance_type' => Array(params[:performance_type]).compact,
+      'borough' => Array(params[:borough]).compact,
+      'location' => Array(params[:location]).compact
     }
 
-    prefs['budget'] = ['No Preference'] if prefs['budget'].include?('No Preference')
-    prefs['performance_type'] = ['No Preference'] if prefs['performance_type'].include?('No Preference')
-    prefs['borough'] = ['No Preference'] if prefs['borough'].include?('No Preference')
-    prefs['location'] = ['No Preference'] if prefs['location'].include?('No Preference')
-
-    if prefs['budget'].blank? && prefs['performance_type'].blank? && prefs['borough'].blank? && prefs['location'].blank?
-      flash[:error] = 'Please select at least one preference before continuing'
+    if prefs['budget'].blank? && prefs['performance_type'].blank?
+      flash[:alert] = 'Please select at least one preference before continuing'
       redirect_to preferences_path and return
     end
 
     if prefs['performance_type'].blank?
       flash[:alert] = 'Please select at least one performance type'
       redirect_to preferences_path and return
+    end
+
+    ['budget', 'performance_type', 'borough', 'location'].each do |key|
+      if prefs[key].include?('No Preference')
+        if prefs[key].length > 1
+          prefs[key] = prefs[key] - ['No Preference']
+        else
+          prefs[key] = ['No Preference']
+        end
+      elsif prefs[key].blank?
+        prefs[key] = ['No Preference']
+      end
     end
 
     session[:preferences] = prefs

@@ -26,9 +26,9 @@ Given('I am logged in') do
     login_as(@current_user, scope: :user)
   else
   visit login_path
-  # The app's login form uses username and password fields (see sessions#new)
-  fill_in 'Username', with: @current_user.username
-  fill_in 'Password', with: 'password'
+  # The app's login form uses username_or_email and password fields (see sessions#new)
+  find('input[name="username_or_email"]').set(@current_user.username)
+  find('input[name="password"]').set('password')
     click_button 'Log in'
   end
   # Accept either 'Logout' or 'Sign out' text after login

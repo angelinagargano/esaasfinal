@@ -19,10 +19,14 @@ Given("I am logged in as {string}") do |username|
     u.password = "password123"
     u.password_confirmation = "password123"
   end
+  
+  unless @logged_in_user.authenticate("password123")
+    @logged_in_user.update!(password: "password123", password_confirmation: "password123")
+  end
 
   visit login_path
-  fill_in "Username", with: @logged_in_user.username
-  fill_in "Password", with: "password123"
+  find('input[name="username_or_email"]').set(@logged_in_user.username)
+  find('input[name="password"]').set("password123")
   click_button "Log in"
 
   expect(page).to have_content("Logged in as")
@@ -39,7 +43,8 @@ end
 
 When("I fill in the login form with:") do |table|
   data = table.rows_hash
-  find('input[name="username"]').set(data['Username'])
+  username_or_email = data['Username or Email'] || data['Username'] || data['Email']
+  find('input[name="username_or_email"]').set(username_or_email)
   find('input[name="password"]').set(data['Password'])
 end
 

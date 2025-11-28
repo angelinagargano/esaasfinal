@@ -21,6 +21,24 @@
   </div>
 
   <div class="mb-3">
+    <label class="form-label me-2" for="borough_filter">Filter by Borough:</label>
+    <%= select_tag :borough_filter,
+                   options_for_select([["All Boroughs", ""]] + @boroughs.map { |b| [b, b] },
+                                      params[:borough_filter]),
+                   id: "borough_filter",
+                   class: "form-select d-inline w-auto" %>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label me-2" for="style_filter">Filter by Style:</label>
+    <%= select_tag :style_filter,
+                   options_for_select([["All Styles", ""]] + @all_styles.map { |s| [s, s] },
+                                      params[:style_filter]),
+                   id: "style_filter",
+                   class: "form-select d-inline w-auto" %>
+  </div>
+
+  <div class="mb-3">
     <label class="form-label me-2" for="sort_by">Sort by:</label>
     <%= select_tag :sort_by,
                    options_for_select([["Date", "date"],
