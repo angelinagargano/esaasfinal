@@ -166,16 +166,8 @@ class PerformancesController < ApplicationController
 
   private
 
-  def event_params
-    params.require(:event).permit(:name, :venue, :date, :time, :style, :location, :borough, :price, :description, :tickets)
-  end
-
   def numeric_price(price_value)
     return 0 if price_value.nil?
-    if price_value.is_a?(Numeric)
-      price_value
-    else
-      price_value.to_s.gsub(/[^0-9\.]/, '').to_f
-    end
+    price_value.to_s.gsub(/[^0-9\.]/, '').to_f
   end
 end

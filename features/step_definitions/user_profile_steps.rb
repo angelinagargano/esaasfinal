@@ -236,7 +236,7 @@ end
 # Visit the /users/:id show page (to test redirect to profile)
 When('I visit the show page for user {string}') do |username|
   user = User.find_by(username: username)
-  visit user_profile_path(user.id)  # profile path exists
+  visit "/users/#{user.id}"  # Visit the show action, not profile
 end
 
 

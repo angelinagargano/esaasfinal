@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   get '/users/:id/edit', to: 'users#edit', as: :edit_user
   patch '/users/:id', to: 'users#update', as: :user
   put '/users/:id', to: 'users#update'
+  get '/users/:id', to: 'users#show'
 
   get '/search/find_friends', to: 'search#find_friends', as: :find_friends_search
   get '/friendships', to: 'friendships#index', as: :friendships

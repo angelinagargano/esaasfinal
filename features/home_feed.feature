@@ -128,13 +128,14 @@ Feature: Home page
     Then events should be sorted chronologically by date
     And events with invalid dates should be placed at the end
 
-  Scenario: Budget filtering with numeric price values
+  Scenario: Date filtering handles events with unparseable dates
     Given the following events exist:
-      | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
-      | Numeric Price Event | Test Venue | 2025-11-11 | 7:30PM | Contemporary | Manhattan | 25 | Test desc | https://test.com |
-    And I am on the Preferences page
-    When I select "$0–$25" for "Budget"
-    And I select "Contemporary" for "Performance Type"
-    And I press "Save Preferences"
-    Then I should be redirected to the Home page
-    And I should see "Numeric Price Event"
+      | Name              | Venue      | Date         | Time   | Style | Location  | Price | Description | Tickets          |
+      | Valid Event       | Test Venue | 2025-11-11   | 7:30PM | Jazz  | Manhattan | $30   | Test desc   | https://test.com |
+      | Bad Date Event    | Test Venue | not-a-date   | 7:30PM | Jazz  | Manhattan | $30   | Test desc   | https://test.com |
+    And I am on the Home page
+    When I fill in "date_filter_start" with "2025-11-01"
+    And I fill in "date_filter_end" with "2025-11-30"
+    And I click "Apply Filter"
+    Then I should see "Valid Event"
+    And I should not see "Bad Date Event"

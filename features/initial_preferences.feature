@@ -108,3 +108,10 @@ Feature: Initial preferences
     And I press "Save Preferences"
     Then I should be redirected to the Home page
     And I should see events matching "$100+" for Budget and "Ballet" for Performance Type on the Home feed
+
+  Scenario: Submitting preferences with empty borough defaults to No Preference
+    Given I am on the Preferences page
+    When I select "$0–$25" for "Budget"
+    And I select "Ballet" for "Performance Type"
+    And I submit preferences with empty borough
+    Then I should be redirected to the Home page
