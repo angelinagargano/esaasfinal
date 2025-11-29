@@ -334,16 +334,16 @@ When("I visit the performances page with event parameters") do
   # Make a request with event params and call event_params method for coverage
   # This ensures the private method is executed during Cucumber tests
   event_params_hash = {
-    name: 'Test Event',
-    venue: 'Test Venue',
+    name: 'Rennie Harris Puremovement American Street Dance Theater',
+    venue: 'The Joyce Theater',
     date: '2025-12-01',
     time: '7:30PM',
-    style: 'Test',
-    location: 'Test Location',
+    style: 'Hip-hop',
+    location: 'Manhattan',
     borough: 'Manhattan',
-    price: '$50',
-    description: 'Test description',
-    tickets: 'https://test.com'
+    price: '$32',
+    description: 'Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles',
+    tickets: 'https://shop.joyce.org/8129/8130'
   }
   
   # Visit the page with event params

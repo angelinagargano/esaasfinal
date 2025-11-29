@@ -56,7 +56,10 @@ class PerformancesController < ApplicationController
 
     # Filter by date range or specific date
     if params[:date_filter_start].present? || params[:date_filter_end].present?
-      @events = @events.select do |e|
+      # Convert to array if it's still a relation
+      events_array = @events.is_a?(Array) ? @events : @events.to_a
+      
+      @events = events_array.select do |e|
         begin
           event_date = Date.parse(e.date)
           
@@ -80,7 +83,7 @@ class PerformancesController < ApplicationController
       end
     end
 
-    # Convert to ActiveRecord relation if it's an array (from budget filtering)
+    # Convert to ActiveRecord relation if it's an array (from budget or date filtering)
     if @events.is_a?(Array)
       event_ids = @events.map(&:id)
       @events = event_ids.any? ? Event.where(id: event_ids) : Event.none
