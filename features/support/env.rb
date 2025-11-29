@@ -88,3 +88,16 @@ end
 #After do
 #  DatabaseCleaner.clean
 #end
+
+# Include RSpec mocks for stubbing in step definitions
+require 'rspec/mocks'
+
+World(RSpec::Mocks::ExampleMethods)
+
+Before do
+  RSpec::Mocks.setup
+end
+
+After do
+  RSpec::Mocks.teardown
+end

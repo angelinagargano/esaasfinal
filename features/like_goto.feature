@@ -19,7 +19,8 @@ Feature: Interacting with events
     Then "For All Your Life" should appear in my liked events list
 
   Scenario: disliking an event from the home page 
-    Given I am on the Home page 
+    Given I am on the Home page
+    And I have liked the event "For All Your Life"
     When I click the "Unlike" button on the "For All Your Life" event card 
     Then "For All Your Life" should not be in my liked events list
 

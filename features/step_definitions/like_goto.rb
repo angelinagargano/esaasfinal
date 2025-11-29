@@ -5,12 +5,28 @@ Given("I am not marked as going to {string}") do |event_name|
   user.save!
 end
 When('I click the {string} button on the {string} event card') do |button_text, event_name|
+  event = Event.find_by(name: event_name)
   within(find('.card', text: event_name)) do
     btn = find('button.btn-heart')
     if button_text == "Like"
       btn.click if btn[:title] == "Like"
+      # Wait for AJAX to complete - button should change to "Unlike"
+      expect(page).to have_css("button.btn-heart[title='Unlike']", wait: 5)
     elsif button_text == "Unlike"
       btn.click if btn[:title] == "Unlike"
+      # Wait for AJAX to complete - button should change to "Like"
+      expect(page).to have_css("button.btn-heart[title='Like']", wait: 5)
+      # Wait for database to reflect the change - check Like model directly
+      user = @logged_in_user || User.find_by(username: "Alice")
+      require 'timeout'
+      Timeout.timeout(5) do
+        loop do
+          user.reload
+          # Check the Like model directly instead of the association to avoid caching issues
+          break unless Like.exists?(user: user, event: event)
+          sleep(0.1)
+        end
+      end
     end
   end
 end

@@ -85,3 +85,11 @@ end
 Then('I should be redirected to the Preferences page') do
   expect(current_path).to eq('/preferences')
 end
+
+When("I submit preferences with empty borough") do
+  # Uncheck all borough options to ensure params[:borough] is empty/blank
+  page.all('input[name="borough[]"]').each do |checkbox|
+    uncheck(checkbox[:id]) if checkbox.checked?
+  end
+  click_button 'Save Preferences'
+end

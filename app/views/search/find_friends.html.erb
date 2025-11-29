@@ -5,19 +5,21 @@
   <%= submit_tag "Search" %>
 <% end %>
 
-<% if params[:username].present? %>
+<% if search_performed?(params[:username]) %>
   <% if @users.any? %>
-    <h2>Search Results:</h2>
+    <h2>Search Results</h2>
+    <p><%= search_result_count(@users, params[:username]) %></p>
     <% @users.each do |user| %>
       <div class="card mt-3" style="background-color: white; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
-        <h5 class="card-title"><%= user.username %></h5>
+        <h5 class="card-title"><%= highlight_search_term(format_user_display_name(user), params[:username]) %></h5>
         <p class="card-text">Email: <%= user.email %></p>
+        <p class="card-text">Name: <%= user.name %></p>
         <%= link_to "Add Friend", add_friend_path(user), method: :post, class: "btn btn-primary" %>
       </div>
     <% end %>
   <% else %>
-    <p>No users found with that username.</p>
+    <p><%= search_result_count(@users, params[:username]) %></p>
   <% end %>
 <% else %>
-  <p>Enter a username to search for friends.</p>
+  <p><%= search_prompt_message %></p>
 <% end %>

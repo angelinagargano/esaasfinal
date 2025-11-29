@@ -75,8 +75,8 @@ RSpec.feature "Interacting with events", type: :feature do
 
     # Log in
     visit root_path
-    fill_in "Username", with: @alice.username
-    fill_in "Password", with: "password"
+    fill_in "username_or_email", with: @alice.username
+    fill_in "password", with: "password"
     click_button "Log in"
   end
   scenario "Viewing the list of events" do

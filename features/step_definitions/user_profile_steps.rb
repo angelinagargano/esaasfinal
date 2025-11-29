@@ -17,8 +17,8 @@ Given("the user has logged in and created an account") do
   # Log in the user
   visit login_path
 
-  fill_in "Username", with: @user.username
-  fill_in "Password", with: "password123"
+  find('input[name="username_or_email"]').set(@user.username)
+  find('input[name="password"]').set("password123")
   click_button "Log in"
   
   # Verify we're logged in - wait for redirect or check for logged in content
@@ -28,10 +28,6 @@ Given("the user has logged in and created an account") do
     # If that fails, check if we're on performances page (which is the home after login)
     expect(page).to have_current_path(performances_path) rescue nil
   end
-end
-
-Given("I am on the User Profile page") do
-  visit user_profile_path(@user)
 end
 
 Given("I am on the User Edit page") do
@@ -168,15 +164,21 @@ Given("I have liked the event {string}") do |event_name|
   event = Event.find_by(name: event_name)
   raise "Event '#{event_name}' not found" unless event
   
-  # Get the current user
-  if instance_variable_defined?(:@logged_in_user) && @logged_in_user
-    @user ||= @logged_in_user
+  # Navigate to home page if not already on a page with event cards
+  unless page.has_css?('.card', text: event_name, wait: 0)
+    visit performances_path
   end
-  @user ||= User.find_by(username: "testuser")
   
-  raise "User not found. Make sure the user is logged in or created first." unless @user
-  
-  @user.liked_events << event unless @user.liked_events.include?(event)
+  # Like the event through the UI to ensure the page state is correct
+  within(find('.card', text: event_name)) do
+    btn = find('button.btn-heart')
+    if btn[:title] == "Like"
+      btn.click
+      # Wait for AJAX to complete - button should change to "Unlike"
+      expect(page).to have_css("button.btn-heart[title='Unlike']", wait: 5)
+    end
+    # If button already shows "Unlike", event is already liked
+  end
 end
 
 Then("I should see {string} in my liked events") do |event_name|
@@ -219,10 +221,6 @@ Given("I do not have any liked events") do
   end
 end
 
-Given("I am logged out") do
-  page.driver.submit :delete, logout_path, {}
-end
-
 # Visit the User Profile page for a given username (logged-out test)
 When('I visit the User Profile page for user {string}') do |username|
   user = User.find_or_create_by!(username: username) do |u|
@@ -238,7 +236,7 @@ end
 # Visit the /users/:id show page (to test redirect to profile)
 When('I visit the show page for user {string}') do |username|
   user = User.find_by(username: username)
-  visit user_profile_path(user.id)  # profile path exists
+  visit "/users/#{user.id}"  # Visit the show action, not profile
 end
 
 
