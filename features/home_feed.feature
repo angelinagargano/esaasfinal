@@ -4,9 +4,10 @@ Feature: Home page
   Background:
     Given the following events exist:
       | Name                                               | Venue               | Date             | Time   | Style         | Location | Price      | Description                     | Tickets                          |
-      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater  | 2025-11-11       | 7:30PM | Dance Theater | Chelsea  | $25–$50   | Well-known ...                  | https://shop.joyce.org/8129/8130 |
-      | Another Dance Event                                | Some Venue          | 2025-11-12       | 8:00PM | Dance Theater | Downtown | $30–$60   | Another description             | https://example.com/tickets      |
-      | Jazz Night                                         | Jazz Club           | 2025-11-13       | 9:00PM | Jazz          | Midtown  | $20–$40   | Smooth jazz evening             | https://example.com/tickets      |
+      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater  | 2025-11-11       | 7:30PM | Hip-hop       | Chelsea  | $32       | Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles | https://shop.joyce.org/8129/8130 |
+      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater  | 2025-11-12       | 7:30PM | Hip-hop       | Chelsea  | $32       | Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles | https://shop.joyce.org/8129/8131 |
+      | Wim Vandekeybus: Infamous Offspring                | NYU Skirball Center | 2025-11-13       | 7:30PM | Dance Theater | Greenwich Village | $52   | Myth collides with dazzling stagecraft in Wim Vandekeybus' Infamous Offspring, an explosive new dance-theater epic from Ultima Vez | https://tickets.nyu.edu/2026ultimavez/17233 |
+      | A Very SW!NG OUT Holiday                          | The Joyce Theater   | 2025-12-09       | 7:30PM | Swing         | Chelsea  | $32   | Oh what fun it is to swing! This winter, director and choreographer Caleb Teicher and their all-star team of collaborators invite you to revel in the joy of social dance and festive cheer | https://shop.joyce.org/8163/8164 |
       | For All Your Life                                  | BAM Brooklyn Academy of Music | December 3, 2025 | 7:30 PM | Dance Theater | Brooklyn | $35       | A captivating performance       | https://tickets.bam.org          |
 
 
@@ -126,8 +127,8 @@ Feature: Home page
   Scenario: Sorting handles events with invalid dates
     Given the following events exist:
       | Name        | Venue      | Date        | Time   | Style | Location | Price | Description | Tickets           |
-      | Jazz Night | Jazz Club | 2025-11-11  | 7:30PM | Jazz  | Manhattan | $30  | Smooth jazz evening featuring local musicians   | https://example.com/jazznight  |
-      | Invalid Date Event | Jazz Club | invalid-date | 7:30PM | Jazz | Manhattan | $30 | Smooth jazz evening featuring local musicians | https://example.com/jazznight |
+      | Rennie Harris Puremovement American Street Dance Theater | The Joyce Theater | 2025-11-11  | 7:30PM | Hip-hop  | Manhattan | $32  | Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles   | https://shop.joyce.org/8129/8130  |
+      | Invalid Date Event | The Joyce Theater | invalid-date | 7:30PM | Hip-hop | Manhattan | $32 | Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles | https://shop.joyce.org/8129/8130 |
     And I am on the Home page
     When I select "Date" from "sort_by"
     And I click "Apply Filter"
@@ -137,11 +138,11 @@ Feature: Home page
   Scenario: Date filtering handles events with unparseable dates
     Given the following events exist:
       | Name              | Venue      | Date         | Time   | Style | Location  | Price | Description | Tickets          |
-      | Jazz Night       | Jazz Club | 2025-11-11   | 7:30PM | Jazz  | Manhattan | $30   | Smooth jazz evening featuring local musicians   | https://example.com/jazznight |
-      | Bad Date Event    | Jazz Club | not-a-date   | 7:30PM | Jazz  | Manhattan | $30   | Smooth jazz evening featuring local musicians | https://example.com/jazznight |
+      | Rennie Harris Puremovement American Street Dance Theater       | The Joyce Theater | 2025-11-11   | 7:30PM | Hip-hop  | Manhattan | $32   | Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles   | https://shop.joyce.org/8129/8130 |
+      | Bad Date Event    | The Joyce Theater | not-a-date   | 7:30PM | Hip-hop  | Manhattan | $32   | Well-known for painting rich tapestries of political, social, and economic history through movement, Rennie Harris weaves a vibrant blend of street and tap dance styles | https://shop.joyce.org/8129/8130 |
     And I am on the Home page
     When I fill in "date_filter_start" with "2025-11-01"
     And I fill in "date_filter_end" with "2025-11-30"
     And I click "Apply Filter"
-    Then I should see "Jazz Night"
+    Then I should see "Rennie Harris Puremovement American Street Dance Theater"
     And I should not see "Bad Date Event"
