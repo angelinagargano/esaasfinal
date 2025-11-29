@@ -126,8 +126,8 @@ Feature: Home page
   Scenario: Sorting handles events with invalid dates
     Given the following events exist:
       | Name        | Venue      | Date        | Time   | Style | Location | Price | Description | Tickets           |
-      | Valid Event | Test Venue | 2025-11-11  | 7:30PM | Jazz  | Manhattan | $30  | Test desc   | https://test.com  |
-      | Invalid Date Event | Test Venue | invalid-date | 7:30PM | Jazz | Manhattan | $30 | Test desc | https://test.com |
+      | Jazz Night | Jazz Club | 2025-11-11  | 7:30PM | Jazz  | Manhattan | $30  | Smooth jazz evening featuring local musicians   | https://example.com/jazznight  |
+      | Invalid Date Event | Jazz Club | invalid-date | 7:30PM | Jazz | Manhattan | $30 | Smooth jazz evening featuring local musicians | https://example.com/jazznight |
     And I am on the Home page
     When I select "Date" from "sort_by"
     And I click "Apply Filter"
@@ -137,11 +137,11 @@ Feature: Home page
   Scenario: Date filtering handles events with unparseable dates
     Given the following events exist:
       | Name              | Venue      | Date         | Time   | Style | Location  | Price | Description | Tickets          |
-      | Valid Event       | Test Venue | 2025-11-11   | 7:30PM | Jazz  | Manhattan | $30   | Test desc   | https://test.com |
-      | Bad Date Event    | Test Venue | not-a-date   | 7:30PM | Jazz  | Manhattan | $30   | Test desc   | https://test.com |
+      | Jazz Night       | Jazz Club | 2025-11-11   | 7:30PM | Jazz  | Manhattan | $30   | Smooth jazz evening featuring local musicians   | https://example.com/jazznight |
+      | Bad Date Event    | Jazz Club | not-a-date   | 7:30PM | Jazz  | Manhattan | $30   | Smooth jazz evening featuring local musicians | https://example.com/jazznight |
     And I am on the Home page
     When I fill in "date_filter_start" with "2025-11-01"
     And I fill in "date_filter_end" with "2025-11-30"
     And I click "Apply Filter"
-    Then I should see "Valid Event"
+    Then I should see "Jazz Night"
     And I should not see "Bad Date Event"

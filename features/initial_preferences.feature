@@ -88,7 +88,7 @@ Feature: Initial preferences
   Scenario: Filtering by $25–$50 budget range
     Given the following events exist:
       | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
-      | Mid Range Event | Test Venue | 2025-11-11 | 7:30PM | Hip-hop | Manhattan | $35 | Test desc | https://test.com |
+      | Mid Range Event | The Joyce Theater | 2025-11-11 | 7:30PM | Hip-hop | Manhattan | $35 | A contemporary hip-hop performance blending street dance and storytelling | https://shop.joyce.org/8129/8130 |
     And I am on the Preferences page
     When I select "$25–$50" for "Budget"
     And I select "Hip-hop" for "Performance Type"
@@ -99,7 +99,7 @@ Feature: Initial preferences
   Scenario: Filtering by $50–$100 budget range
     Given the following events exist:
       | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
-      | High Range Event | Test Venue | 2025-11-11 | 7:30PM | Contemporary | Manhattan | $75 | Test desc | https://test.com |
+      | High Range Event | New York Live Arts | 2025-11-11 | 7:30PM | Contemporary | Manhattan | $75 | An innovative contemporary dance performance exploring modern movement | https://newyorklivearts.my.salesforce-sites.com/ticket |
     And I am on the Preferences page
     When I select "$50–$100" for "Budget"
     And I select "Contemporary" for "Performance Type"
@@ -110,7 +110,7 @@ Feature: Initial preferences
   Scenario: Filtering by $100+ budget range
     Given the following events exist:
       | Name      | Venue      | Date       | Time   | Style | Location | Price | Description | Tickets          |
-      | Premium Event | Test Venue | 2025-11-11 | 7:30PM | Ballet | Manhattan | $150 | Test desc | https://test.com |
+      | Premium Event | Lincoln Center | 2025-11-11 | 7:30PM | Ballet | Manhattan | $150 | A world-class ballet performance featuring renowned dancers | https://www.lincolncenter.org/lincoln-center-at-home/show/premium-ballet |
     And I am on the Preferences page
     When I select "$100+" for "Budget"
     And I select "Ballet" for "Performance Type"

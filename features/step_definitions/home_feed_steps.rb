@@ -334,16 +334,16 @@ When("I visit the performances page with event parameters") do
   # Make a request with event params and call event_params method for coverage
   # This ensures the private method is executed during Cucumber tests
   event_params_hash = {
-    name: 'Test Event',
-    venue: 'Test Venue',
+    name: 'Jazz Night',
+    venue: 'Jazz Club',
     date: '2025-12-01',
     time: '7:30PM',
-    style: 'Test',
-    location: 'Test Location',
+    style: 'Jazz',
+    location: 'Manhattan',
     borough: 'Manhattan',
     price: '$50',
-    description: 'Test description',
-    tickets: 'https://test.com'
+    description: 'Smooth jazz evening featuring local musicians',
+    tickets: 'https://example.com/jazznight'
   }
   
   # Visit the page with event params
