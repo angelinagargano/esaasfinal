@@ -123,6 +123,33 @@ RSpec.describe PerformancesController, type: :controller do
         get :index, params: { sort_by: 'date' }
         expect(assigns(:events).last).to eq(event_with_invalid_date)
       end
+
+      it 'handles invalid date when filtering by end date only' do
+        # Create a valid event that would match the filter
+        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-01')
+        get :index, params: { date_filter_end: '2025-12-05' }
+        # The invalid date event should be excluded due to rescue returning false
+        expect(assigns(:events)).not_to include(event_with_invalid_date)
+        expect(assigns(:events)).to include(valid_event)
+      end
+
+      it 'handles invalid date when filtering by start date only' do
+        # Create a valid event that would match the filter
+        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-05')
+        get :index, params: { date_filter_start: '2025-12-01' }
+        # The invalid date event should be excluded due to rescue returning false
+        expect(assigns(:events)).not_to include(event_with_invalid_date)
+        expect(assigns(:events)).to include(valid_event)
+      end
+
+      it 'handles invalid date in date range filter' do
+        # Create a valid event that would match the filter
+        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-03')
+        get :index, params: { date_filter_start: '2025-12-01', date_filter_end: '2025-12-05' }
+        # The invalid date event should be excluded due to rescue returning false
+        expect(assigns(:events)).not_to include(event_with_invalid_date)
+        expect(assigns(:events)).to include(valid_event)
+      end
     end
   end
 
@@ -194,6 +221,59 @@ RSpec.describe PerformancesController, type: :controller do
       permitted = controller.send(:event_params)
       expect(permitted.to_h).to eq(allowed.transform_keys(&:to_s))
       expect(permitted.keys).not_to include('secret')
+    end
+  end
+
+  describe 'POST #share_to_message' do
+    let(:user1) do
+      User.create!(
+        email: 'user1@example.com',
+        name: 'User One',
+        username: 'user1',
+        password: 'password123',
+        password_confirmation: 'password123'
+      )
+    end
+
+    let(:user2) do
+      User.create!(
+        email: 'user2@example.com',
+        name: 'User Two',
+        username: 'user2',
+        password: 'password123',
+        password_confirmation: 'password123'
+      )
+    end
+
+    let(:event) { Event.create!(name: "Test Event", date: "2024-01-01", time: "19:00", venue: "Test Venue", location: "Test Location") }
+
+    before do
+      session[:user_id] = user1.id
+      Friendship.create!(user: user1, friend: user2, status: true)
+    end
+
+    it 'shares event to message' do
+      expect {
+        post :share_to_message, params: { id: event.id, friend_id: user2.id, message: "Check this out!" }
+      }.to change(Message, :count).by(1)
+    end
+
+    it 'creates message event' do
+      expect {
+        post :share_to_message, params: { id: event.id, friend_id: user2.id }
+      }.to change(MessageEvent, :count).by(1)
+    end
+
+    it 'prevents sharing with non-friends' do
+      user3 = User.create!(email: 'user3@example.com', name: 'User Three', username: 'user3', password: 'password123', password_confirmation: 'password123')
+      post :share_to_message, params: { id: event.id, friend_id: user3.id }
+      expect(flash[:alert]).to eq("You can only share events with friends.")
+    end
+
+    it 'handles missing friend_id' do
+      post :share_to_message, params: { id: event.id }
+      expect(flash[:alert]).to eq("Please select a friend to share with.")
+      expect(response).to redirect_to(details_performance_path(event))
     end
   end
 end

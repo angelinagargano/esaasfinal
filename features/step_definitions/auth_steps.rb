@@ -48,12 +48,29 @@ When("I fill in the login form with:") do |table|
   find('input[name="password"]').set(data['Password'])
 end
 
+When("I fill in {string} with {string}") do |field, value|
+  if field == "Content"
+    fill_in 'message[content]', with: value rescue fill_in 'content', with: value
+  else
+    fill_in field, with: value
+  end
+end
 
 When(/I click "([^"]+)" on the (\w+) page/) do |link_text, page_name|
   if page.has_link?(link_text)
     click_link(link_text)
   else
     click_button(link_text)
+  end
+end
+
+When("I click {string}") do |link_text|
+  if page.has_link?(link_text)
+    click_link(link_text)
+  elsif page.has_button?(link_text)
+    click_button(link_text)
+  else
+    raise "Could not find link or button with text '#{link_text}'"
   end
 end
 
@@ -83,7 +100,7 @@ Then("I should see an error message") do
   expect(page).to have_css('.alert')
 end
 
-When(/I click "Logout" or "Log out"/) do
+When(/^I click "Logout" or "Log out"$/) do
   if page.has_link?('Logout')
     click_link('Logout')
   elsif page.has_link?('Log out')

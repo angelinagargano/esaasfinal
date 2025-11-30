@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       post 'like'
       delete 'unlike'
       post 'going_and_calendar'
+      post 'share_to_message'
     end
     collection do 
       get 'liked_events'
@@ -51,6 +52,22 @@ Rails.application.routes.draw do
   post '/friendships/:friend_id/accept', to: 'friendships#accept', as: :accept_friend
   delete '/friendships/:friend_id/reject', to: 'friendships#reject', as: :reject_friend
   delete '/friendships/:friend_id/unfriend', to: 'friendships#unfriend', as: :unfriend
+
+  # Messaging routes
+  resources :conversations, only: [:index, :show, :create, :destroy] do
+    resources :messages, only: [:create]
+  end
+
+  # Groups routes
+  resources :groups do
+    resource :group_conversation, only: [:show], controller: 'group_conversations' do
+      resources :group_messages, only: [:create], controller: 'group_messages'
+    end
+    member do
+      post :add_member
+      delete :remove_member
+    end
+  end
 
   resources :events do
     resources :tickets, only: [:index, :show, :new, :create]

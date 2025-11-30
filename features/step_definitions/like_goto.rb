@@ -61,3 +61,13 @@ Then('I should see an empty liked events list') do
   has_no_cards = !page.has_css?('.card', minimum: 1)
   expect(has_message || has_no_cards).to be true
 end
+
+Then("I should see {string} in my liked events list") do |event_name|
+  expect(page).to have_content(event_name)
+  # Verify it's in the liked events section if there's a section
+  if page.has_css?('.liked-events, [data-liked-events]')
+    within('.liked-events, [data-liked-events]') do
+      expect(page).to have_content(event_name)
+    end
+  end
+end

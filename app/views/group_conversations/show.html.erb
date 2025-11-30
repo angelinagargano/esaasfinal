@@ -1,0 +1,64 @@
+<div class="group-conversation" data-group-conversation="<%= @group_conversation.id %>">
+  <div class="group-conversation-header mb-3">
+    <h2><%= @group_conversation.name %></h2>
+    <%= link_to "Back to Group", group_path(@group_conversation.group), class: "btn btn-sm btn-secondary" %>
+  </div>
+
+  <div class="messages-container group-messages" data-group-messages style="max-height: 500px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;">
+  <% @messages.each do |message| %>
+    <div class="message mb-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <strong><%= message.sender.username %></strong>
+            <small class="text-muted"><%= message.created_at.strftime("%I:%M %p on %b %d") %></small>
+          </div>
+          
+          <% if message.content.present? %>
+            <p class="mb-2"><%= message.content %></p>
+          <% end %>
+          
+            <% if message.has_events? %>
+              <div class="shared-events mt-2">
+                <% message.events.each do |event| %>
+                  <div class="card mt-2 bg-light group-message-event event-attachment" data-event="<%= event.id %>">
+                    <div class="card-body">
+                      <h6 class="card-title"><%= event.name %></h6>
+                      <p class="card-text small">
+                        <%= event.date %> at <%= event.time %><br>
+                        <%= event.venue %>, <%= event.location %>
+                      </p>
+                      <%= link_to "View Event", details_performance_path(event), 
+                          class: "btn btn-sm btn-primary" %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= form_with model: [@group_conversation, @new_message], url: group_group_messages_path(@group_conversation.group), local: true do |f| %>
+  <div class="mb-2">
+    <%= f.text_area :content, class: "form-control", rows: 3, placeholder: "Type your message..." %>
+  </div>
+  
+  <div class="mb-2">
+    <label class="form-label">Share Events (optional)</label>
+    <select name="event_ids[]" multiple class="form-select" size="5">
+      <% current_user.liked_events.limit(20).each do |event| %>
+        <option value="<%= event.id %>">
+          <%= event.name %> - <%= event.date %>
+        </option>
+      <% end %>
+    </select>
+    <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple events</small>
+  </div>
+  
+    <%= f.submit "Send Message", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
