@@ -8,19 +8,7 @@ Then("I should see my conversations") do
   expect(page).to have_css('.conversations-list, .conversation, [data-conversation]')
 end
 
-When("I click {string} for friend {string}") do |button_text, username|
-  within('.friends-section, .friends-list, [data-friends]') do
-    within("div.card, div.friend-card, [data-friend='#{username}']") do
-      if page.has_link?(button_text)
-        click_link(button_text)
-      elsif page.has_button?(button_text)
-        click_button(button_text)
-      else
-        raise "Could not find #{button_text} for #{username}"
-      end
-    end
-  end
-end
+# Removed duplicate step definition - using the one from friendships_steps.rb instead
 
 Then("I should be on the conversation page with {string}") do |username|
   friend = User.find_by(username: username)
@@ -89,11 +77,29 @@ end
 When("I send a message {string} with event {string}") do |message_text, event_name|
   event = Event.find_by(name: event_name)
   @conversation ||= Conversation.last
+  current_user = @logged_in_user || User.find_by(username: "alice123")
+  
+  # Ensure the event is liked by the current user so it appears in the dropdown
+  unless current_user.liked_events.include?(event)
+    Like.find_or_create_by!(user: current_user, event: event)
+  end
+  
+  # Reload the page to ensure the dropdown is updated with the liked event
+  visit conversation_path(@conversation)
+  
   fill_in 'message[content]', with: message_text rescue fill_in 'content', with: message_text
   
   # If there's an event selector, select it
   if page.has_field?('event_ids[]')
-    select event_name, from: 'event_ids[]'
+    # The dropdown shows "Event Name - Date", so try to match by partial text or select by value
+    event_text = "#{event.name} - #{event.date}"
+    begin
+      # Try selecting by value first (more reliable)
+      find("select[name='event_ids[]'] option[value='#{event.id}']").select_option
+    rescue
+      # If exact match fails, try selecting by visible text
+      select event_text, from: 'event_ids[]'
+    end
   else
     # Submit with event_ids parameter
     page.driver.submit :post, conversation_messages_path(@conversation), {
@@ -119,7 +125,8 @@ When("I delete the conversation with {string}") do |username|
     user2: [current_user, friend].max_by(&:id)
   )
   
-  within('.conversations-list, .conversation, [data-conversation]') do
+  # Scope to the specific conversation using data attribute to avoid ambiguity
+  within("[data-conversation='#{conversation.id}']") do
     if page.has_button?("Delete") || page.has_link?("Delete")
       click_button("Delete") rescue click_link("Delete")
     else

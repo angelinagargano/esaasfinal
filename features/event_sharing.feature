@@ -11,10 +11,9 @@ Feature: Sharing Events
 
   Scenario: Sharing an event to a friend
     Given I am on the Event Details page for "Test Event"
-    When I click "Share Event"
-    And I select "bob456" as the friend
+    When I select "bob456" as the friend
     And I fill in "Message" with "Check this out!"
-    And I click "Share"
+    And I click "Share via Message"
     Then I should see "Event shared in message!"
     And I should be on the conversation page with "bob456"
     And I should see "Test Event" in the conversation

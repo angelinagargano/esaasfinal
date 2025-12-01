@@ -8,7 +8,9 @@ class GroupConversationsController < ApplicationController
       redirect_to groups_path and return
     end
     
-    @group_conversation = @group.group_conversation || GroupConversation.create!(group: @group)
+    # The group should already have a conversation via after_create callback
+    # But we'll handle the case where it might not exist
+    @group_conversation = @group.group_conversation || GroupConversation.create!(group: @group, name: @group.name)
     @messages = @group_conversation.group_messages.includes(:sender, :events).order(created_at: :asc)
     @new_message = GroupMessage.new
   end

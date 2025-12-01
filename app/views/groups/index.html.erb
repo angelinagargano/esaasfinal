@@ -14,7 +14,7 @@
               <p class="card-text"><%= group.description %></p>
               <p class="text-muted">Members: <%= group.members.count + 1 %></p>
               <%= link_to "View Group", group_path(group), class: "btn btn-sm btn-primary" %>
-              <%= link_to "Messages", group_conversation_path(group), class: "btn btn-sm btn-info" %>
+              <%= link_to "Messages", group_group_conversation_path(group), class: "btn btn-sm btn-info" %>
             </div>
           </div>
         <% end %>
@@ -34,7 +34,7 @@
               <p class="text-muted">Created by: <%= group.creator.username %></p>
               <p class="text-muted">Members: <%= group.members.count + 1 %></p>
               <%= link_to "View Group", group_path(group), class: "btn btn-sm btn-primary" %>
-              <%= link_to "Messages", group_conversation_path(group), class: "btn btn-sm btn-info" %>
+              <%= link_to "Messages", group_group_conversation_path(group), class: "btn btn-sm btn-info" %>
             </div>
           </div>
         <% end %>

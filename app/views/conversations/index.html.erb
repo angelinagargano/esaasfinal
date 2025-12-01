@@ -9,8 +9,8 @@
 <div class="row">
   <div class="col-md-4">
     <h3>Conversations</h3>
+    <div class="conversations-list">
     <% if @conversations.any? %>
-      <div class="conversations-list">
         <div class="list-group">
           <% @conversations.each do |conversation| %>
             <% other_user = conversation.other_user(current_user) %>
@@ -32,11 +32,11 @@
               <% end %>
             </div>
           <% end %>
-        </div>
       </div>
     <% else %>
       <p class="text-muted">No conversations yet. Start messaging your friends!</p>
     <% end %>
+    </div>
   </div>
   
   <div class="col-md-8">

@@ -41,7 +41,12 @@ Then("I should see the group description") do
 end
 
 When("I change {string} to {string}") do |field, value|
-  fill_in field, with: value
+  if field == "Description"
+    # Try multiple ways to find the Description field (for group forms)
+    fill_in 'group[description]', with: value rescue fill_in 'Description', with: value rescue find('textarea[name="group[description]"]').set(value)
+  else
+    fill_in field, with: value
+  end
 end
 
 Then("I should be on the Groups page") do

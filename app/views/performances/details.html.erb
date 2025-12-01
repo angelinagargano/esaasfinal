@@ -61,7 +61,7 @@
       <% user_groups = current_user.groups.includes(:members) %>
       <% if user_groups.any? %>
         <% user_groups.each do |group| %>
-          <%= form_with url: group_group_messages_path(group), method: :post, local: true do |f| %>
+          <%= form_with url: group_group_conversation_group_messages_path(group), method: :post, local: true do |f| %>
             <%= hidden_field_tag "group_message[content]", "Check out this event!" %>
             <%= hidden_field_tag "event_ids[]", @event.id %>
             <%= f.submit "Share with #{group.name}", class: "btn btn-sm btn-secondary mb-2" %>

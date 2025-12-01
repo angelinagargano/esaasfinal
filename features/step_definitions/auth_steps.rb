@@ -50,7 +50,15 @@ end
 
 When("I fill in {string} with {string}") do |field, value|
   if field == "Content"
-    fill_in 'message[content]', with: value rescue fill_in 'content', with: value
+    fill_in 'group_message[content]', with: value rescue fill_in 'message[content]', with: value rescue fill_in 'content', with: value
+  elsif field == "Message"
+    fill_in 'message', with: value rescue fill_in 'message[content]', with: value
+  elsif field == "Name"
+    # Try multiple ways to find the Name field (for group forms)
+    fill_in 'group[name]', with: value rescue fill_in 'Name', with: value rescue find('input[name="group[name]"]').set(value)
+  elsif field == "Description"
+    # Try multiple ways to find the Description field (for group forms)
+    fill_in 'group[description]', with: value rescue fill_in 'Description', with: value rescue find('textarea[name="group[description]"]').set(value)
   else
     fill_in field, with: value
   end

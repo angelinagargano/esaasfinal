@@ -41,7 +41,7 @@
   <% end %>
 </div>
 
-<%= form_with model: [@group_conversation, @new_message], url: group_group_messages_path(@group_conversation.group), local: true do |f| %>
+<%= form_with model: [@group_conversation, @new_message], url: group_group_conversation_group_messages_path(@group_conversation.group), local: true do |f| %>
   <div class="mb-2">
     <%= f.text_area :content, class: "form-control", rows: 3, placeholder: "Type your message..." %>
   </div>
@@ -61,4 +61,3 @@
     <%= f.submit "Send Message", class: "btn btn-primary" %>
   <% end %>
 </div>
-

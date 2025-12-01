@@ -57,6 +57,6 @@ When("I share the event to {string}") do |username|
     fill_in 'message', with: "Check this out!" rescue fill_in 'message[content]', with: "Check this out!"
   end
   
-  click_button "Share" rescue click_button "Share Event"
+  click_button "Share" rescue click_button "Share via Message" rescue click_button "Share Event"
 end
 
