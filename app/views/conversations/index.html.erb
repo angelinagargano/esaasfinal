@@ -1,0 +1,52 @@
+<h1>Messages</h1>
+
+<% if @unread_count > 0 %>
+  <div class="alert alert-info">
+    You have <%= @unread_count %> unread message(s).
+  </div>
+<% end %>
+
+<div class="row">
+  <div class="col-md-4">
+    <h3>Conversations</h3>
+    <div class="conversations-list">
+    <% if @conversations.any? %>
+        <div class="list-group">
+          <% @conversations.each do |conversation| %>
+            <% other_user = conversation.other_user(current_user) %>
+            <% unread = conversation.unread_count_for(current_user) %>
+            <div class="conversation" data-conversation="<%= conversation.id %>">
+              <%= link_to conversation_path(conversation), class: "list-group-item list-group-item-action #{'active' if params[:id].to_i == conversation.id}" do %>
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1"><%= other_user.username %></h5>
+                  <% if unread > 0 %>
+                    <span class="badge bg-primary rounded-pill"><%= unread %></span>
+                  <% end %>
+                </div>
+                <p class="mb-1 text-muted small">
+                  <%= conversation.messages.last&.content&.truncate(50) || "No messages yet" %>
+                </p>
+                <small class="text-muted">
+                  <%= conversation.last_message_at ? time_ago_in_words(conversation.last_message_at) + " ago" : "Never" %>
+                </small>
+              <% end %>
+            </div>
+          <% end %>
+      </div>
+    <% else %>
+      <p class="text-muted">No conversations yet. Start messaging your friends!</p>
+    <% end %>
+    </div>
+  </div>
+  
+  <div class="col-md-8">
+    <% if params[:id].present? %>
+      <%# Conversation will be shown via show action %>
+    <% else %>
+      <div class="text-center text-muted mt-5">
+        <p>Select a conversation to view messages</p>
+      </div>
+    <% end %>
+  </div>
+</div>
+

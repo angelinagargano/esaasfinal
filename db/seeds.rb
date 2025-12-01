@@ -29,7 +29,8 @@ require 'csv'
 
     # Ensure the file exists before attempting to read it
     if File.exist?(csv_file_path)
-      CSV.foreach(csv_file_path, headers: true, encoding: "Windows-1252:UTF-8").with_index do |row, index|
+      CSV.foreach(csv_file_path, headers: true, encoding: "UTF-8:UTF-8", invalid: :replace, undef: :replace, replace: "") do |row|
+      #CSV.foreach(csv_file_path, headers: true, encoding: "Windows-1252:UTF-8").with_index do |row, index|
         begin
           event = Event.find_or_initialize_by(id: row['ID'])
           event.assign_attributes(

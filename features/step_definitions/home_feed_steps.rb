@@ -40,11 +40,6 @@ When('I am on the Performances page') do
   expect(page).to have_current_path(performances_path)
 end
 
-When('I fill in {string} with {string}') do |field, value|
-  # allow both field name and id
-  fill_in field, with: value
-end
-
 When('I select {string} from {string}') do |value, field|
   # Capybara's select helper expects option and select box id/label
   select value, from: field

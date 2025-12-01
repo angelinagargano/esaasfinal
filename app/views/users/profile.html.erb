@@ -10,6 +10,15 @@
   <%= link_to "Edit my information", edit_user_path(@user), class: "btn btn-primary mt-3" %>
 </div>
 
+<div class="mt-4 mb-4">
+  <%= link_to "Messages", conversations_path, class: "btn btn-info" %>
+  <% unread = current_user.unread_messages_count %>
+  <% if unread > 0 %>
+    <span class="badge bg-danger"><%= unread %></span>
+  <% end %>
+  <%= link_to "My Groups", groups_path, class: "btn btn-info" %>
+</div>
+
 <hr style="border-color: rgba(255, 255, 255, 0.2);">
 
 <div class="events-section mt-4">
@@ -26,6 +35,10 @@
                 <p class="card-text text-muted mb-0"><%= friend.email %></p>
               </div>
               <div>
+                <%= form_with url: conversations_path, method: :post, local: true, style: "display: inline;" do |f| %>
+                  <%= hidden_field_tag :friend_id, friend.id %>
+                  <%= f.submit "Message", class: "btn btn-sm btn-primary" %>
+                <% end %>
                 <%= link_to "Unfriend", unfriend_path(friend), method: :delete, class: "btn btn-sm btn-danger" %>
               </div>
             </div>
