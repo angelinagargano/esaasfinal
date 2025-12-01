@@ -58,13 +58,10 @@ class PreferencesController < ApplicationController
       redirect_to preferences_path and return
     end
 
+    # If "No Preference" is selected, keep only "No Preference" and remove all other selections
     ['budget', 'performance_type', 'borough', 'location'].each do |key|
       if prefs[key].include?('No Preference')
-        if prefs[key].length > 1
-          prefs[key] = prefs[key] - ['No Preference']
-        else
-          prefs[key] = ['No Preference']
-        end
+        prefs[key] = ['No Preference']
       elsif prefs[key].blank?
         prefs[key] = ['No Preference']
       end

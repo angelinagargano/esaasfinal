@@ -10,12 +10,12 @@ class UsersController < ApplicationController
     if @user.save
       # After successful signup, log the user in and redirect to preferences
       session[:user_id] = @user.id
+      session.delete(:preferences)  # Clear any existing preferences for new user
       flash[:notice] = 'Account created successfully! Please set your preferences.'
       redirect_to preferences_path and return
     else
       # Signup failed: show errors and render form again
       puts "User not saved! Errors: #{@user.errors.full_messages.inspect}"
-      flash[:alert] = @user.errors.full_messages.join(', ')
       render :new and return
     end
   end
@@ -61,7 +61,6 @@ class UsersController < ApplicationController
       flash[:notice] = 'Your information was successfully updated.'
       redirect_to user_profile_path(@user.id)
     else
-      flash.now[:alert] = @user.errors.full_messages.join(', ')
       render :edit
     end
   end
