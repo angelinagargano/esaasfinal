@@ -68,10 +68,10 @@ class PerformancesController < ApplicationController
             start_date = Date.parse(params[:date_filter_start])
             end_date = Date.parse(params[:date_filter_end])
             event_date >= start_date && event_date <= end_date
-          # If only start date is provided, filter for exact date
+          # If only start date is provided, filter for events from that date onwards
           elsif params[:date_filter_start].present?
             start_date = Date.parse(params[:date_filter_start])
-            event_date == start_date
+            event_date >= start_date
           # If only end date is provided, filter for events up to that date
           elsif params[:date_filter_end].present?
             end_date = Date.parse(params[:date_filter_end])

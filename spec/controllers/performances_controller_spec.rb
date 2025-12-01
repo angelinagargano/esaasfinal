@@ -75,7 +75,8 @@ RSpec.describe PerformancesController, type: :controller do
 
     it 'filters by single date' do
       get :index, params: { date_filter_start: '2025-12-05' }
-      expect(assigns(:events).pluck(:date)).to eq(['2025-12-05'])
+      expect(assigns(:events).pluck(:date)).to include('2025-12-05', '2025-12-10')
+      expect(assigns(:events).pluck(:date)).not_to include('2025-12-01', '2025-12-03')
     end
 
     it 'filters by end date only' do

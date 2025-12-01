@@ -26,6 +26,48 @@ RSpec.describe ConversationsController, type: :controller do
     Friendship.create!(user: user1, friend: user2, status: true)
   end
 
+  context 'when user is not logged in' do
+    before do
+      session[:user_id] = nil
+    end
+
+    describe 'GET #index' do
+      it 'redirects to login page' do
+        get :index
+        expect(flash[:alert]).to eq("Please log in first")
+        expect(response).to redirect_to(login_path)
+      end
+    end
+
+    describe 'GET #show' do
+      let(:conversation) { Conversation.create!(user1: user1, user2: user2) }
+      
+      it 'redirects to login page' do
+        get :show, params: { id: conversation.id }
+        expect(flash[:alert]).to eq("Please log in first")
+        expect(response).to redirect_to(login_path)
+      end
+    end
+
+    describe 'POST #create' do
+      it 'redirects to login page' do
+        post :create, params: { friend_id: user2.id }
+        expect(flash[:alert]).to eq("Please log in first")
+        expect(response).to redirect_to(login_path)
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      let(:conversation) { Conversation.create!(user1: user1, user2: user2) }
+      
+      it 'redirects to login page' do
+        delete :destroy, params: { id: conversation.id }
+        expect(flash[:alert]).to eq("Please log in first")
+        expect(response).to redirect_to(login_path)
+      end
+    end
+  end
+
   describe 'GET #index' do
     it 'returns success' do
       get :index
