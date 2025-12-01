@@ -20,6 +20,7 @@ class SessionsController < ApplicationController
   # Handle logout
   def destroy
     session.delete(:user_id)
-    redirect_to root_path, notice: 'Logged out'
+    flash[:notice] = 'Logged out'
+    redirect_to root_path
   end
 end
