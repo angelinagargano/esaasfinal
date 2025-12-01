@@ -24,3 +24,8 @@ Feature: Sharing Events
     When I try to share the event to "charlie789"
     Then I should see "You can only share events with friends"
 
+  Scenario: Cannot share event without selecting a friend
+    Given I am on the Event Details page for "Test Event"
+    When I try to share the event without selecting a friend
+    Then I should see "Please select a friend to share with"
+

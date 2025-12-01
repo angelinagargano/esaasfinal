@@ -36,3 +36,21 @@ Feature: Group Messages
     When I try to visit the group conversation page for "Dance Enthusiasts"
     Then I should see "You must be a member of this group to view messages"
 
+  Scenario: Non-member cannot send group message
+    Given an existing user with username "charlie789" and password "password123"
+    And I am logged in as "charlie789"
+    When I try to send a message to the group conversation for "Dance Enthusiasts"
+    Then I should see "You must be a member of this group to send messages"
+    And I should be redirected to the Groups page
+
+  Scenario: Sending empty group message without events fails
+    Given I am on the group conversation page for "Dance Enthusiasts"
+    When I try to send an empty group message
+    Then I should see an error message about the group message
+
+  Scenario: Group message recipients include all members and creator
+    Given "alice123" has sent a group message "Hello everyone!" in "Dance Enthusiasts"
+    When I check the recipients of the group message from "alice123"
+    Then the recipients should include "alice123"
+    And the recipients should include "bob456"
+

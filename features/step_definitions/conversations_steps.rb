@@ -144,3 +144,78 @@ When("I try to create a conversation with {string}") do |username|
   page.driver.submit :post, conversations_path, { friend_id: friend.id }
 end
 
+When("I try to send a message to the conversation between {string} and {string}") do |username1, username2|
+  user1 = User.find_by(username: username1)
+  user2 = User.find_by(username: username2)
+  
+  conversation = Conversation.find_by(
+    user1: [user1, user2].min_by(&:id),
+    user2: [user1, user2].max_by(&:id)
+  )
+  
+  page.driver.submit :post, conversation_messages_path(conversation), {
+    message: { content: "Unauthorized message" }
+  }
+end
+
+When("I try to send an empty message") do
+  @conversation ||= Conversation.last
+  current_user = @logged_in_user || User.find_by(username: "alice123")
+  
+  page.driver.submit :post, conversation_messages_path(@conversation), {
+    message: { content: "" }
+  }
+end
+
+Then("I should see an error message about the message") do
+  has_error_text = page.has_content?("Message must have content or at least one event")
+  has_alert = page.has_css?('.alert')
+  expect(has_error_text || has_alert).to be true
+end
+
+Then("I should be redirected to the Conversations page") do
+  expect(current_path).to eq(conversations_path)
+end
+
+Given("{string} has sent a message {string} in the conversation") do |username, message_text|
+  user = User.find_by(username: username)
+  @conversation ||= Conversation.last
+  Message.create!(conversation: @conversation, sender: user, content: message_text, read: false)
+end
+
+Then("the message should be marked as read") do
+  @conversation ||= Conversation.last
+  current_user = @logged_in_user || User.find_by(username: "alice123")
+  unread_messages = @conversation.messages.where.not(sender: current_user).where(read: false)
+  expect(unread_messages.count).to eq(0)
+end
+
+When("I check the recipient of the message from {string}") do |username|
+  user = User.find_by(username: username)
+  @conversation ||= Conversation.last
+  @message = @conversation.messages.find_by(sender: user)
+  @recipient = @message.recipient
+end
+
+Then("the recipient should be {string}") do |username|
+  expected_recipient = User.find_by(username: username)
+  expect(@recipient).to eq(expected_recipient)
+end
+
+When("I mark the message as read") do
+  @message ||= Message.last
+  @message.mark_as_read!
+end
+
+When("I try to view the conversation between {string} and {string}") do |username1, username2|
+  user1 = User.find_by(username: username1)
+  user2 = User.find_by(username: username2)
+  
+  conversation = Conversation.find_by(
+    user1: [user1, user2].min_by(&:id),
+    user2: [user1, user2].max_by(&:id)
+  )
+  
+  visit conversation_path(conversation)
+end
+

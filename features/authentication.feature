@@ -55,3 +55,9 @@ Feature: Authentication
     When I click "Logout" or "Log out"
     Then I should be redirected to the root page
     And I should see "Logged out"
+
+  Scenario: Accessing protected page without login redirects to login
+    Given I am logged out
+    When I try to access the Conversations page
+    Then I should see "Please log in first"
+    And I should be redirected to the Login page

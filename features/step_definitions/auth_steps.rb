@@ -127,6 +127,10 @@ Then("I should be redirected to the root page") do
   expect(current_path).to eq(root_path)
 end
 
+When("I try to access the Conversations page") do
+  visit conversations_path
+end
+
 Given(/an existing user with username "([^"]+)" and password "([^"]+)"/) do |username, password|
   if defined?(User)
     begin

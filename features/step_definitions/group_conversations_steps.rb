@@ -82,3 +82,47 @@ When("I try to visit the group conversation page for {string}") do |group_name|
   visit group_group_conversation_path(group)
 end
 
+When("I try to send a message to the group conversation for {string}") do |group_name|
+  group = Group.find_by(name: group_name)
+  page.driver.submit :post, group_group_conversation_group_messages_path(group), {
+    group_message: { content: "Unauthorized message" }
+  }
+end
+
+When("I try to send an empty group message") do
+  @group ||= Group.last
+  page.driver.submit :post, group_group_conversation_group_messages_path(@group), {
+    group_message: { content: "" }
+  }
+end
+
+Then("I should see an error message about the group message") do
+  has_error_text = page.has_content?("Message must have content or at least one event")
+  has_alert = page.has_css?('.alert')
+  expect(has_error_text || has_alert).to be true
+end
+
+Then("I should be redirected to the Groups page") do
+  expect(current_path).to eq(groups_path)
+end
+
+Given("{string} has sent a group message {string} in {string}") do |username, message_text, group_name|
+  user = User.find_by(username: username)
+  group = Group.find_by(name: group_name)
+  group_conversation = group.group_conversation || GroupConversation.create!(group: group, name: group.name)
+  GroupMessage.create!(group_conversation: group_conversation, sender: user, content: message_text)
+end
+
+When("I check the recipients of the group message from {string}") do |username|
+  user = User.find_by(username: username)
+  @group ||= Group.last
+  group_conversation = @group.group_conversation || GroupConversation.last
+  @group_message = group_conversation.group_messages.find_by(sender: user)
+  @recipients = @group_message.recipients
+end
+
+Then("the recipients should include {string}") do |username|
+  user = User.find_by(username: username)
+  expect(@recipients).to include(user)
+end
+

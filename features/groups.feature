@@ -70,3 +70,71 @@ Feature: Groups
     When I try to add "charlie789" to the group
     Then I should see "You can only add friends to groups"
 
+  Scenario: Creating group with invalid data fails
+    Given I am on the Groups page
+    When I click "Create New Group"
+    And I fill in "Name" with ""
+    And I click "Create Group"
+    Then I should see an error message
+    And I should remain on the new group page
+
+  Scenario: Updating group with invalid data fails
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And I am on the group page for "Dance Enthusiasts"
+    When I click "Edit Group"
+    And I change "Name" to ""
+    And I click "Update Group"
+    Then I should see an error message
+    And I should remain on the edit group page
+
+  Scenario: Adding member fails when save fails
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And I am on the group page for "Dance Enthusiasts"
+    And I stub GroupMember to fail on save
+    When I add "bob456" to the group
+    Then I should see "Unable to add member"
+
+  Scenario: Removing non-existent member fails
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And I am on the group page for "Dance Enthusiasts"
+    When I try to remove a non-existent member from the group
+    Then I should see "Unable to remove member"
+
+  Scenario: Non-admin cannot update group
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And I am logged in as "bob456"
+    And "bob456" is a member of "Dance Enthusiasts"
+    When I try to update the group "Dance Enthusiasts"
+    Then I should see "You don't have permission to perform this action"
+    And I should be on the group page for "Dance Enthusiasts"
+
+  Scenario: Non-admin cannot destroy group
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And I am logged in as "bob456"
+    And "bob456" is a member of "Dance Enthusiasts"
+    When I try to destroy the group "Dance Enthusiasts"
+    Then I should see "You don't have permission to perform this action"
+    And I should be on the group page for "Dance Enthusiasts"
+
+  Scenario: Non-admin cannot add member
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And an existing user with username "charlie789" and password "password123"
+    And "alice123" and "charlie789" are friends
+    And I am logged in as "bob456"
+    And "bob456" is a member of "Dance Enthusiasts"
+    And I am on the group page for "Dance Enthusiasts"
+    When I try to add "charlie789" to the group
+    Then I should see "You don't have permission to perform this action"
+    And I should be on the group page for "Dance Enthusiasts"
+
+  Scenario: Non-admin cannot remove member
+    Given a group "Dance Enthusiasts" exists created by "alice123"
+    And an existing user with username "charlie789" and password "password123"
+    And "charlie789" is a member of "Dance Enthusiasts"
+    And I am logged in as "bob456"
+    And "bob456" is a member of "Dance Enthusiasts"
+    And I am on the group page for "Dance Enthusiasts"
+    When I try to remove "charlie789" from the group
+    Then I should see "You don't have permission to perform this action"
+    And I should be on the group page for "Dance Enthusiasts"
+

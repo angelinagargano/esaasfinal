@@ -42,8 +42,9 @@ end
 
 When("I change {string} to {string}") do |field, value|
   if field == "Description"
-    # Try multiple ways to find the Description field (for group forms)
     fill_in 'group[description]', with: value rescue fill_in 'Description', with: value rescue find('textarea[name="group[description]"]').set(value)
+  elsif field == "Name"
+    fill_in 'group[name]', with: value rescue fill_in 'Name', with: value rescue find('input[name="group[name]"]').set(value)
   else
     fill_in field, with: value
   end
@@ -104,5 +105,46 @@ When("I try to add {string} to the group") do |username|
   friend = User.find_by(username: username)
   @group ||= Group.last
   page.driver.submit :post, add_member_group_path(@group), { friend_id: friend.id }
+end
+
+Then("I should remain on the new group page") do
+  has_form = page.has_field?('group[name]') || page.has_css?('form')
+  expect(has_form).to be true
+  expect(current_path).to eq(groups_path)
+end
+
+Then("I should remain on the edit group page") do
+  @group ||= Group.last
+  has_form = page.has_field?('group[name]') || page.has_css?('form')
+  expect(has_form).to be true
+  expect(current_path).to eq(group_path(@group))
+end
+
+Given("I stub GroupMember to fail on save") do
+  allow_any_instance_of(GroupMember).to receive(:save).and_return(false)
+end
+
+When("I try to remove a non-existent member from the group") do
+  @group ||= Group.last
+  non_existent_user_id = 99999
+  page.driver.submit :delete, remove_member_group_path(@group, user_id: non_existent_user_id), {}
+end
+
+When("I try to update the group {string}") do |group_name|
+  group = Group.find_by(name: group_name)
+  page.driver.submit :patch, group_path(group), {
+    group: { name: "", description: "Invalid update" }
+  }
+end
+
+When("I try to destroy the group {string}") do |group_name|
+  group = Group.find_by(name: group_name)
+  page.driver.submit :delete, group_path(group), {}
+end
+
+When("I try to remove {string} from the group") do |username|
+  user = User.find_by(username: username)
+  @group ||= Group.last
+  page.driver.submit :delete, remove_member_group_path(@group, user_id: user.id), {}
 end
 

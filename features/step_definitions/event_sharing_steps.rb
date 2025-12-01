@@ -60,3 +60,12 @@ When("I share the event to {string}") do |username|
   click_button "Share" rescue click_button "Share via Message" rescue click_button "Share Event"
 end
 
+When("I try to share the event without selecting a friend") do
+  event = Event.find_by(name: "Test Event")
+  
+  page.driver.submit :post, share_to_message_performance_path(event), {
+    friend_id: "",
+    message: "Check this out!"
+  }
+end
+
