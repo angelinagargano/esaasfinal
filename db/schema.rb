@@ -30,12 +30,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_160315) do
     t.string "time"
     t.string "style"
     t.string "location"
-    t.string "borough"
     t.string "price"
     t.text "description"
     t.string "tickets"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "borough"
   end
 
   create_table "friendships", force: :cascade do |t|
@@ -137,6 +137,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_30_160315) do
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["sender_id", "read"], name: "index_messages_on_sender_id_and_read"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "movies", force: :cascade do |t|
+    t.string "title"
+    t.string "rating"
+    t.text "description"
+    t.datetime "release_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
