@@ -54,3 +54,34 @@
   <%= submit_tag 'Clear Preferences', class: 'btn btn-secondary mt-2', id: 'clear_preferences' %>
 <% end %>
  
+<script>
+  // Function to handle "No Preference" logic for a category
+  function setupNoPreferenceLogic(checkboxClass, noPreferenceId) {
+    const checkboxes = document.querySelectorAll('.' + checkboxClass);
+    const noPreferenceCheckbox = document.getElementById(noPreferenceId);
+    
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        if (this.id === noPreferenceId && this.checked) {
+          // "No Preference" was checked - uncheck all others
+          checkboxes.forEach(cb => {
+            if (cb.id !== noPreferenceId) {
+              cb.checked = false;
+            }
+          });
+        } else if (this.checked && this.id !== noPreferenceId) {
+          // Another option was checked - uncheck "No Preference"
+          if (noPreferenceCheckbox) {
+            noPreferenceCheckbox.checked = false;
+          }
+        }
+      });
+    });
+  }
+  
+  // Set up for each category
+  setupNoPreferenceLogic('budget-checkbox', 'budget_no-preference');
+  setupNoPreferenceLogic('performance-type-checkbox', 'performance_type_no-preference');
+  setupNoPreferenceLogic('borough-checkbox', 'borough_no-preference');
+  setupNoPreferenceLogic('location-checkbox', 'location_no-preference');
+</script>
