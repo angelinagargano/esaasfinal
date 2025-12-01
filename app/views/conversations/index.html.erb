@@ -18,7 +18,7 @@
             <div class="conversation" data-conversation="<%= conversation.id %>">
               <%= link_to conversation_path(conversation), class: "list-group-item list-group-item-action #{'active' if params[:id].to_i == conversation.id}" do %>
                 <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1"><%= other_user.username %></h5>
+                  <h5 class="mb-1 text-muted"><%= other_user.username %></h5>
                   <% if unread > 0 %>
                     <span class="badge bg-primary rounded-pill"><%= unread %></span>
                   <% end %>
