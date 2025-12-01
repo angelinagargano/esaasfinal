@@ -68,10 +68,10 @@ class PerformancesController < ApplicationController
             start_date = Date.parse(params[:date_filter_start])
             end_date = Date.parse(params[:date_filter_end])
             event_date >= start_date && event_date <= end_date
-          # If only start date is provided, filter for exact date
+          # If only start date is provided, filter for events from that date onwards
           elsif params[:date_filter_start].present?
             start_date = Date.parse(params[:date_filter_start])
-            event_date == start_date
+            event_date >= start_date
           # If only end date is provided, filter for events up to that date
           elsif params[:date_filter_end].present?
             end_date = Date.parse(params[:date_filter_end])
@@ -124,9 +124,7 @@ class PerformancesController < ApplicationController
     # Load friends attending this event
     if logged_in?
       # Get all accepted friends (outgoing and incoming)
-      accepted_outgoing = current_user.friendships.where(status: true).includes(:friend).map(&:friend)
-      accepted_incoming = current_user.inverse_friendships.where(status: true).includes(:user).map(&:user)
-      friends = (accepted_outgoing + accepted_incoming).uniq
+      friends = current_user.all_friends
       
       # Get friends who are going to this event
       @friends_going = friends.select { |friend| friend.going_events_list.include?(@event) }
@@ -165,6 +163,41 @@ class PerformancesController < ApplicationController
     GoingEvent.find_or_create_by(user: current_user, event: @event)
 
     redirect_to details_performance_path(@event, show_calendar_button: true), notice: "You're going!"
+  end
+
+  def share_to_message
+    @event = Event.find(params[:id])
+    friend_id = params[:friend_id]
+    
+    if friend_id.present?
+      # Share to direct message
+      friend = User.find(friend_id)
+      
+      # Verify they are friends
+      unless current_user.all_friends.include?(friend)
+        flash[:alert] = "You can only share events with friends."
+        redirect_back(fallback_location: details_performance_path(@event)) and return
+      end
+      
+      # Find or create conversation
+      conversation = Conversation.find_or_create_by(
+        user1: [current_user, friend].min_by(&:id),
+        user2: [current_user, friend].max_by(&:id)
+      )
+      
+      # Create message with event
+      message = conversation.messages.create!(
+        sender: current_user,
+        content: params[:message] || "Check out this event!"
+      )
+      message.message_events.create!(event: @event)
+      
+      flash[:notice] = "Event shared in message!"
+      redirect_to conversation_path(conversation)
+    else
+      flash[:alert] = "Please select a friend to share with."
+      redirect_back(fallback_location: details_performance_path(@event))
+    end
   end
 
   private

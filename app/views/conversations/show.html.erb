@@ -1,0 +1,66 @@
+<div class="conversation" data-conversation="<%= @conversation.id %>">
+  <div class="conversation-header mb-3">
+    <h2>Conversation with <%= @other_user.username %></h2>
+    <%= link_to "Back to Messages", conversations_path, class: "btn btn-sm btn-secondary" %>
+    <%= link_to "Delete Conversation", conversation_path(@conversation), method: :delete, 
+        class: "btn btn-sm btn-danger", data: { confirm: "Are you sure?" } %>
+  </div>
+
+  <div class="messages-container messages" data-messages style="max-height: 500px; overflow-y: auto; border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; background-color: #f9f9f9;">
+  <% @messages.each do |message| %>
+    <div class="message mb-3 <%= 'text-end' if message.sender == current_user %>">
+      <div class="card <%= 'bg-primary text-white' if message.sender == current_user %>" style="max-width: 70%; <%= 'margin-left: auto;' if message.sender == current_user %>">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <strong><%= message.sender.username %></strong>
+            <small><%= message.created_at.strftime("%I:%M %p") %></small>
+          </div>
+          
+          <% if message.content.present? %>
+            <p class="mb-2"><%= message.content %></p>
+          <% end %>
+          
+            <% if message.has_events? %>
+              <div class="shared-events mt-2">
+                <% message.events.each do |event| %>
+                  <div class="card mt-2 message-event event-attachment" data-event="<%= event.id %>" style="background-color: <%= message.sender == current_user ? 'rgba(255,255,255,0.2)' : '#fff' %>">
+                    <div class="card-body">
+                      <h6 class="card-title"><%= event.name %></h6>
+                      <p class="card-text small">
+                        <%= event.date %> at <%= event.time %><br>
+                        <%= event.venue %>, <%= event.location %>
+                      </p>
+                      <%= link_to "View Event", details_performance_path(event), 
+                          class: "btn btn-sm btn-light" %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= form_with model: [@conversation, @new_message], url: conversation_messages_path(@conversation), local: true do |f| %>
+  <div class="mb-2">
+    <%= f.text_area :content, class: "form-control", rows: 3, placeholder: "Type your message..." %>
+  </div>
+  
+  <div class="mb-2">
+    <label class="form-label">Share Events (optional)</label>
+    <select name="event_ids[]" multiple class="form-select" size="5">
+      <% current_user.liked_events.limit(20).each do |event| %>
+        <option value="<%= event.id %>">
+          <%= event.name %> - <%= event.date %>
+        </option>
+      <% end %>
+    </select>
+    <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple events</small>
+  </div>
+  
+    <%= f.submit "Send Message", class: "btn btn-primary" %>
+  <% end %>
+</div>
+

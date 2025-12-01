@@ -1,0 +1,27 @@
+<h1>Create New Group</h1>
+
+<%= form_with model: @group, local: true do |f| %>
+  <% if @group.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @group.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="mb-3">
+    <%= f.label :name, "Name", class: "form-label" %>
+    <%= f.text_field :name, class: "form-control", required: true, minlength: 3, maxlength: 50 %>
+  </div>
+  
+  <div class="mb-3">
+    <%= f.label :description, "Description", class: "form-label" %>
+    <%= f.text_area :description, class: "form-control", rows: 4, maxlength: 500 %>
+  </div>
+  
+  <%= f.submit "Create Group", class: "btn btn-primary" %>
+  <%= link_to "Cancel", groups_path, class: "btn btn-secondary" %>
+<% end %>
+

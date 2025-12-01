@@ -32,9 +32,7 @@ class UsersController < ApplicationController
     @liked_events = @user.liked_events.order(:date) || []
     @going_events = @user.going_events_list.order(:date) 
     # Friends: include both outgoing and incoming accepted friendships
-    @accepted_outgoing = @user.friendships.where(status: true).includes(:friend).map(&:friend)
-    @accepted_incoming = @user.inverse_friendships.where(status: true).includes(:user).map(&:user)
-    @friends = (@accepted_outgoing + @accepted_incoming).uniq
+    @friends = @user.all_friends
 
     # Pending requests
     @outgoing_pending = @user.friendships.where(status: false).includes(:friend).map(&:friend)

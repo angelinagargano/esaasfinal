@@ -1,0 +1,48 @@
+<h1><%= @group.name %></h1>
+
+<% if @group.description.present? %>
+  <p class="lead group-description" data-description="<%= @group.description %>"><%= @group.description %></p>
+<% end %>
+
+<p class="text-muted">Created by: <%= @group.creator.username %></p>
+
+<div class="mb-3">
+<% if @group.admin?(current_user) %>
+    <%= link_to "Edit Group", edit_group_path(@group), class: "btn btn-secondary" %>
+    <%= link_to "Delete Group", group_path(@group), method: :delete, 
+        class: "btn btn-danger", data: { confirm: "Are you sure?" } %>
+  <% end %>
+  <%= link_to "Messages", group_group_conversation_path(@group), class: "btn btn-info" %>
+  </div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h3>Members</h3>
+    <ul class="list-group members-list group-members" data-members>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <%= @group.creator.username %>
+        <span class="badge bg-primary">Creator</span>
+      </li>
+      <% @members.each do |member| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%= member.username %>
+          <% if @group.admin?(current_user) && member != current_user %>
+            <%= link_to "Remove", remove_member_group_path(@group, user_id: member.id), 
+                method: :delete, class: "btn btn-sm btn-outline-danger" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+    
+    <% if @group.admin?(current_user) && @available_friends.any? %>
+      <div class="mt-3 available-friends add-member-section" data-add-member>
+        <h4>Add Friend to Group</h4>
+        <% @available_friends.each do |friend| %>
+          <%= link_to "Add #{friend.username}", add_member_group_path(@group, friend_id: friend.id), 
+              method: :post, class: "btn btn-sm btn-success mb-2" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

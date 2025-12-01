@@ -27,6 +27,53 @@
   </p>
 <% end %>
 
+<% if logged_in? %>
+  <div class="mt-4">
+    <h3>Share Event</h3>
+    
+    <!-- Share via Message -->
+    <div class="mb-3">
+      <h4>Share via Message</h4>
+      <%= form_with url: share_to_message_performance_path(@event), method: :post, local: true do |f| %>
+        <%# Get all accepted friends %>
+        <% friends = current_user.all_friends %>
+        
+        <% if friends.any? %>
+          <div class="mb-2">
+            <%= select_tag :friend_id, options_from_collection_for_select(friends, :id, :username), 
+                { prompt: "Select a friend", class: "form-select" } %>
+          </div>
+          
+          <div class="mb-2">
+            <%= text_area_tag :message, "Check out this event!", class: "form-control", rows: 2, placeholder: "Add a message (optional)" %>
+          </div>
+          
+          <%= f.submit "Share via Message", class: "btn btn-primary" %>
+        <% else %>
+          <p class="text-muted">You need friends to share events. <%= link_to "Find friends", find_friends_search_path %></p>
+        <% end %>
+      <% end %>
+    </div>
+    
+    <!-- Share with Groups -->
+    <div class="mb-3">
+      <h4>Share with Groups</h4>
+      <% user_groups = current_user.groups.includes(:members) %>
+      <% if user_groups.any? %>
+        <% user_groups.each do |group| %>
+          <%= form_with url: group_group_conversation_group_messages_path(group), method: :post, local: true do |f| %>
+            <%= hidden_field_tag "group_message[content]", "Check out this event!" %>
+            <%= hidden_field_tag "event_ids[]", @event.id %>
+            <%= f.submit "Share with #{group.name}", class: "btn btn-sm btn-secondary mb-2" %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p class="text-muted">You're not in any groups. <%= link_to "Create a group", new_group_path %></p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
 <script>
   document.addEventListener("click", function(e) {
     if (e.target.id === "add-to-calendar-btn") {

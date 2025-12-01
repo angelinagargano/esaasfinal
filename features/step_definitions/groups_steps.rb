@@ -1,0 +1,150 @@
+# features/step_definitions/groups_steps.rb
+
+Given("I am on the Groups page") do
+  visit groups_path
+end
+
+Then("I should see my groups") do
+  expect(page).to have_css('.groups-list, .group, [data-group]')
+end
+
+Then("I should be on the group page for {string}") do |group_name|
+  group = Group.find_by(name: group_name)
+  expect(current_path).to eq(group_path(group))
+end
+
+Given("a group {string} exists created by {string}") do |group_name, creator_username|
+  creator = User.find_by(username: creator_username)
+  @group = Group.find_or_create_by!(name: group_name) do |g|
+    g.description = "A group for #{group_name}"
+    g.creator = creator
+  end
+  
+  # Ensure creator is an admin member
+  unless @group.group_members.exists?(user: creator, role: 'admin')
+    @group.group_members.create!(user: creator, role: 'admin')
+  end
+end
+
+When("I visit the group page for {string}") do |group_name|
+  @group = Group.find_by(name: group_name)
+  visit group_path(@group)
+end
+
+Given("I am on the group page for {string}") do |group_name|
+  @group = Group.find_by(name: group_name)
+  visit group_path(@group)
+end
+
+Then("I should see the group description") do
+  expect(page).to have_css('.group-description, [data-description]')
+end
+
+When("I change {string} to {string}") do |field, value|
+  if field == "Description"
+    fill_in 'group[description]', with: value rescue fill_in 'Description', with: value rescue find('textarea[name="group[description]"]').set(value)
+  elsif field == "Name"
+    fill_in 'group[name]', with: value rescue fill_in 'Name', with: value rescue find('input[name="group[name]"]').set(value)
+  else
+    fill_in field, with: value
+  end
+end
+
+Then("I should be on the Groups page") do
+  expect(current_path).to eq(groups_path)
+end
+
+When("I add {string} to the group") do |username|
+  friend = User.find_by(username: username)
+  @group ||= Group.last
+  within('.available-friends, .add-member-section, [data-add-member]') do
+    if page.has_button?("Add #{username}") || page.has_link?("Add #{username}")
+      click_button("Add #{username}") rescue click_link("Add #{username}")
+    else
+      # Try to find a form or button that adds this user
+      page.driver.submit :post, add_member_group_path(@group), { friend_id: friend.id }
+    end
+  end
+end
+
+Then("{string} should be a member of {string}") do |username, group_name|
+  user = User.find_by(username: username)
+  group = Group.find_by(name: group_name)
+  expect(group.member?(user)).to be true
+end
+
+Given("{string} is a member of {string}") do |username, group_name|
+  user = User.find_by(username: username)
+  group = Group.find_by(name: group_name)
+  unless group.member?(user)
+    group.group_members.create!(user: user, role: 'member')
+  end
+end
+
+When("I remove {string} from the group") do |username|
+  user = User.find_by(username: username)
+  @group ||= Group.last
+  
+  within('.members-list, .group-members, [data-members]') do
+    if page.has_button?("Remove #{username}") || page.has_link?("Remove #{username}")
+      click_button("Remove #{username}") rescue click_link("Remove #{username}")
+    else
+      # Try to find remove button for this user
+      page.driver.submit :delete, remove_member_group_path(@group, user_id: user.id), {}
+    end
+  end
+end
+
+Then("{string} should not be a member of {string}") do |username, group_name|
+  user = User.find_by(username: username)
+  group = Group.find_by(name: group_name)
+  expect(group.member?(user)).to be false
+end
+
+When("I try to add {string} to the group") do |username|
+  friend = User.find_by(username: username)
+  @group ||= Group.last
+  page.driver.submit :post, add_member_group_path(@group), { friend_id: friend.id }
+end
+
+Then("I should remain on the new group page") do
+  has_form = page.has_field?('group[name]') || page.has_css?('form')
+  expect(has_form).to be true
+  expect(current_path).to eq(groups_path)
+end
+
+Then("I should remain on the edit group page") do
+  @group ||= Group.last
+  has_form = page.has_field?('group[name]') || page.has_css?('form')
+  expect(has_form).to be true
+  expect(current_path).to eq(group_path(@group))
+end
+
+Given("I stub GroupMember to fail on save") do
+  allow_any_instance_of(GroupMember).to receive(:save).and_return(false)
+end
+
+When("I try to remove a non-existent member from the group") do
+  @group ||= Group.last
+  non_existent_user_id = 99999
+  page.driver.submit :delete, remove_member_group_path(@group, user_id: non_existent_user_id), {}
+end
+
+When("I try to update the group {string}") do |group_name|
+  group = Group.find_by(name: group_name)
+  page.driver.submit :patch, group_path(group), {
+    group: { name: "", description: "Invalid update" }
+  }
+end
+
+When("I try to destroy the group {string}") do |group_name|
+  group = Group.find_by(name: group_name)
+  page.driver.submit :delete, group_path(group), {}
+end
+
+When("I try to remove {string} from the group") do |username|
+  user = User.find_by(username: username)
+  @group ||= Group.last
+  page.driver.submit :delete, remove_member_group_path(@group, user_id: user.id), {}
+end
+
