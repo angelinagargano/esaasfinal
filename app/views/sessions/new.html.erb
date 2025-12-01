@@ -2,12 +2,6 @@
 
 <%= form_with(url: login_path, local: true) do |f| %>
 
-  <% if flash[:notice] %>
-    <div class="alert alert-info">
-      <%= flash[:notice] %>
-    </div>
-  <% end %>
-
   <div class="mb-2">
     <%= f.label :username_or_email, 'Username or Email' %><br>
     <%= f.text_field :username_or_email, class: 'form-control' %>
