@@ -4,6 +4,62 @@
   <%= link_to "Set Preferences", preferences_path, class: "btn btn-warning" %>
 </div>
 
+<!-- Recommendations Section -->
+<% if logged_in? && @recommended_events.any? %>
+  <div class="recommendations-section mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h3 class="mb-1">Recommended For You</h3>
+        <p class="text-muted mb-0">Based on events you've liked and plan to attend</p>
+      </div>
+      <%= link_to "Refresh Recommendations", performances_path(refresh_recommendations: true), class: "btn btn-outline-warning" %>
+    </div>
+    <div class="row">
+      <% @recommended_events.first(3).each do |event| %>
+        <div class="col-md-4 mb-4" id="rec-event-<%= event.id %>">
+          <div class="card shadow-sm h-100 border-warning" data-event-id="<%= event.id %>">
+            <div class="card-header bg-warning text-dark">
+              <small><strong>Recommended</strong></small>
+            </div>
+            
+            <!-- Card Body -->
+            <div class="card-body">
+              <!-- Title + Like/Dislike buttons -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0"><%= event.name %></h5>
+                <div class="d-flex gap-1">
+                  <% if current_user.liked_events.include?(event) %>
+                    <%= button_to unlike_performance_path(event), method: :delete, remote: true, class: "btn btn-heart liked", title: "Unlike", id: "like-btn-#{event.id}" do %>
+                      ♥
+                    <% end %>
+                  <% else %>
+                    <%= button_to like_performance_path(event), method: :post, remote: true, class: "btn btn-heart", title: "Like", id: "like-btn-#{event.id}" do %>
+                      ♡
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+              <!-- Event Details -->
+              <p class="card-text"><strong>Date:</strong> <%= event.date %></p>
+              <p class="card-text"><strong>Time:</strong> <%= event.time %></p>
+              <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
+              <p class="card-text"><strong>Borough:</strong> <%= event.borough %></p>
+              <p class="card-text"><strong>Venue:</strong> <%= event.venue %></p>
+              <p class="card-text"><strong>Price:</strong> <%= event.price %></p>
+            </div>
+
+            <!-- Card Footer -->
+            <div class="card-footer bg-transparent border-top-0 text-center">
+              <%= link_to "More Details", details_performance_path(event), class: "btn btn-success w-100" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <hr class="my-4">
+  </div>
+<% end %>
+
 <%= form_tag performances_path, method: :get, id: 'filter_form', local: true do %>
   <div class="mb-3">
     <label class="form-label me-2">Filter by Date:</label>
@@ -18,24 +74,6 @@
                          class: "form-control d-inline w-auto",
                          placeholder: "End date (optional)" %>
     </div>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label me-2" for="borough_filter">Filter by Borough:</label>
-    <%= select_tag :borough_filter,
-                   options_for_select([["All Boroughs", ""]] + @boroughs.map { |b| [b, b] },
-                                      params[:borough_filter]),
-                   id: "borough_filter",
-                   class: "form-select d-inline w-auto" %>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label me-2" for="style_filter">Filter by Style:</label>
-    <%= select_tag :style_filter,
-                   options_for_select([["All Styles", ""]] + @all_styles.map { |s| [s, s] },
-                                      params[:style_filter]),
-                   id: "style_filter",
-                   class: "form-select d-inline w-auto" %>
   </div>
 
   <div class="mb-3">
@@ -82,8 +120,9 @@
               <!-- Event Details -->
               <p class="card-text"><strong>Date:</strong> <%= event.date %></p>
               <p class="card-text"><strong>Time:</strong> <%= event.time %></p>
-              <p class="card-text"><strong>Venue:</strong> <%= event.venue %></p>
               <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
+              <p class="card-text"><strong>Borough:</strong> <%= event.borough %></p>
+              <p class="card-text"><strong>Venue:</strong> <%= event.venue %></p>
               <p class="card-text"><strong>Price:</strong> <%= event.price %></p>
             </div>
 
@@ -135,4 +174,3 @@
     startDateInput.max = endDateInput.value;
   }
 </script>
-
