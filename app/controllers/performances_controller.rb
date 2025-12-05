@@ -8,6 +8,13 @@ class PerformancesController < ApplicationController
     # Start with all events
     @events = Event.all
 
+    # Generate recommendations if user is logged in
+    if logged_in?
+      @recommended_events = generate_recommendations
+    else
+      @recommended_events = []
+    end
+
     # Apply saved preferences from session 
     prefs = session[:preferences] || {}
 
@@ -209,5 +216,33 @@ class PerformancesController < ApplicationController
   def numeric_price(price_value)
     return 0 if price_value.nil?
     price_value.to_s.gsub(/[^0-9\.]/, '').to_f
+  end
+
+  def generate_recommendations
+    # Get user's liked and going events
+    liked_events = current_user.liked_events
+    going_events = current_user.going_events_list
+    user_interested_events = (liked_events + going_events).uniq
+
+    return [] if user_interested_events.empty?
+
+    # Collect styles, boroughs, and locations from user's interested events
+    preferred_styles = user_interested_events.map(&:style).compact.uniq
+    preferred_boroughs = user_interested_events.map(&:borough).compact.uniq
+    preferred_locations = user_interested_events.map(&:location).compact.uniq
+
+    # Find events that match user preferences but aren't already liked or going
+    all_recommendations = Event.where.not(id: user_interested_events.map(&:id))
+                          .where('style IN (?) OR borough IN (?) OR location IN (?)', 
+                                preferred_styles, preferred_boroughs, preferred_locations)
+                          .to_a
+
+    # If refresh_recommendations param is present, randomize the order
+    if params[:refresh_recommendations].present?
+      all_recommendations.shuffle.first(6)
+    else
+      # Otherwise show the first 6
+      all_recommendations.first(6)
+    end
   end
 end
