@@ -33,16 +33,6 @@ class PerformancesController < ApplicationController
       @events = @events.where(location: prefs['location'])
     end
 
-    # Filter by borough_filter parameter
-    if params[:borough_filter].present?
-      @events = @events.where(borough: params[:borough_filter])
-    end
-
-    # Filter by style_filter parameter
-    if params[:style_filter].present?
-      @events = @events.where(style: params[:style_filter])
-    end
-
     # Filter by budget
     if prefs['budget'].present? && !prefs['budget'].include?('No Preference')
       @events = @events.select do |e|
