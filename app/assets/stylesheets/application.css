@@ -52,6 +52,12 @@ body {
   transform: translateY(-2px);
 }
 
+.nav-link.active {
+  font-weight: bold;
+  color: #000 !important;
+}
+
+
 /* Event Cards - White with Shadow */
 .card {
   background: #ffffff !important;

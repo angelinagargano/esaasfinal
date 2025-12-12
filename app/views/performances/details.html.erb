@@ -126,10 +126,10 @@
   <%= @event.description %>
 </p>
 
-<div class="mt-4 d-flex gap-3">
+<div class="mt-4 d-flex">
+  <%= link_to 'Back to Home', performances_path, class: 'btn btn-secondary mr-3'  %>
   <% if @event.tickets.present? %>
     <%= link_to 'Purchase Tickets', @event.tickets, class: 'btn btn-primary', target: '_blank', rel: 'noopener', allow_other_host: true %>
   <% end %>
-  <%= link_to 'Back to Home', performances_path, class: 'btn btn-secondary' %>
 </div>
 </div>
