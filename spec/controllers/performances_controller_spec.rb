@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe PerformancesController, type: :controller do
-  let!(:event1) { Event.create!(style: 'Ballet', borough: 'Manhattan', location: 'Lincoln Center', price: '$20', date: '2025-12-01') }
-  let!(:event4) { Event.create!(style: 'Modern', borough: 'Brooklyn', location: 'Kings Theater', price: '$30', date: '2025-12-03') }
-  let!(:event2) { Event.create!(style: 'Hip Hop', borough: 'Brooklyn', location: 'Barclays Center', price: '$60', date: '2025-12-05') }
-  let!(:event3) { Event.create!(style: 'Jazz', borough: 'Queens', location: 'Flushing Town Hall', price: '$120', date: '2025-12-10') }
+  let!(:event1) { Event.create!(style: 'Ballet', borough: 'Manhattan', location: 'Lincoln Center', price: '$20', date: '2025-12-01', name: 'Ballet Show', venue: 'Venue 1', time: '19:00') }
+  let!(:event4) { Event.create!(style: 'Modern', borough: 'Brooklyn', location: 'Kings Theater', price: '$30', date: '2025-12-03', name: 'Modern Dance', venue: 'Venue 4', time: '19:00') }
+  let!(:event2) { Event.create!(style: 'Hip Hop', borough: 'Brooklyn', location: 'Barclays Center', price: '$60', date: '2025-12-05', name: 'Hip Hop Night', venue: 'Venue 2', time: '19:00') }
+  let!(:event3) { Event.create!(style: 'Jazz', borough: 'Queens', location: 'Flushing Town Hall', price: '$120', date: '2025-12-10', name: 'Jazz Festival', venue: 'Venue 3', time: '19:00') }
+  let!(:event5) { Event.create!(style: 'Hip Hop', borough: 'Manhattan', location: 'Apollo Theater', price: '$45', date: '2025-12-15', name: 'Hip Hop Showcase', venue: 'Venue 5', time: '20:00') }
+  let!(:event6) { Event.create!(style: 'Ballet', borough: 'Brooklyn', location: 'BAM', price: '$55', date: '2025-12-20', name: 'Brooklyn Ballet', venue: 'Venue 6', time: '18:00') }
 
   describe 'GET #index' do
     it 'filters by borough' do
@@ -111,7 +113,9 @@ RSpec.describe PerformancesController, type: :controller do
           borough: 'Bronx',
           location: 'Bronx Theater',
           price: '$45',
-          date: 'not-a-valid-date'
+          date: 'not-a-valid-date',
+          venue: 'Bronx Venue',
+          time: '19:00'
         )
       end
 
@@ -127,7 +131,7 @@ RSpec.describe PerformancesController, type: :controller do
 
       it 'handles invalid date when filtering by end date only' do
         # Create a valid event that would match the filter
-        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-01')
+        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-01', venue: 'Test Venue', time: '19:00')
         get :index, params: { date_filter_end: '2025-12-05' }
         # The invalid date event should be excluded due to rescue returning false
         expect(assigns(:events)).not_to include(event_with_invalid_date)
@@ -136,7 +140,7 @@ RSpec.describe PerformancesController, type: :controller do
 
       it 'handles invalid date when filtering by start date only' do
         # Create a valid event that would match the filter
-        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-05')
+        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-05', venue: 'Test Venue', time: '19:00')
         get :index, params: { date_filter_start: '2025-12-01' }
         # The invalid date event should be excluded due to rescue returning false
         expect(assigns(:events)).not_to include(event_with_invalid_date)
@@ -145,11 +149,118 @@ RSpec.describe PerformancesController, type: :controller do
 
       it 'handles invalid date in date range filter' do
         # Create a valid event that would match the filter
-        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-03')
+        valid_event = Event.create!(name: 'Valid Event', style: 'Ballet', borough: 'Manhattan', location: 'Test', price: '$20', date: '2025-12-03', venue: 'Test Venue', time: '19:00')
         get :index, params: { date_filter_start: '2025-12-01', date_filter_end: '2025-12-05' }
         # The invalid date event should be excluded due to rescue returning false
         expect(assigns(:events)).not_to include(event_with_invalid_date)
         expect(assigns(:events)).to include(valid_event)
+      end
+    end
+
+    # Recommendations tests
+    context 'recommendations' do
+      let(:user) { User.create!(email: 'test@example.com', name: 'Test User', username: 'testuser', password: 'password123', password_confirmation: 'password123') }
+
+      context 'when user is logged in' do
+        before do
+          session[:user_id] = user.id
+        end
+
+        context 'with liked events' do
+          before do
+            user.liked_events << event1  # Ballet in Manhattan
+            user.liked_events << event2  # Hip Hop in Brooklyn
+          end
+
+          it 'generates recommendations based on liked events' do
+            get :index
+            expect(assigns(:recommended_events)).not_to be_empty
+          end
+
+          it 'does not include already liked events in recommendations' do
+            get :index
+            recommended_ids = assigns(:recommended_events).map(&:id)
+            expect(recommended_ids).not_to include(event1.id)
+            expect(recommended_ids).not_to include(event2.id)
+          end
+
+          it 'recommends events with matching styles' do
+            get :index
+            recommended_styles = assigns(:recommended_events).map(&:style)
+            expect(recommended_styles & ['Ballet', 'Hip Hop']).not_to be_empty
+          end
+
+          it 'recommends events with matching boroughs' do
+            get :index
+            recommended_boroughs = assigns(:recommended_events).map(&:borough)
+            expect(recommended_boroughs & ['Manhattan', 'Brooklyn']).not_to be_empty
+          end
+
+          it 'limits recommendations to 6 events' do
+            get :index
+            expect(assigns(:recommended_events).count).to be <= 6
+          end
+        end
+
+        context 'with going events' do
+          before do
+            GoingEvent.create!(user: user, event: event1)
+          end
+
+          it 'generates recommendations based on going events' do
+            get :index
+            expect(assigns(:recommended_events)).not_to be_empty
+          end
+
+          it 'does not include events user is already going to' do
+            get :index
+            recommended_ids = assigns(:recommended_events).map(&:id)
+            expect(recommended_ids).not_to include(event1.id)
+          end
+        end
+
+        context 'with both liked and going events' do
+          before do
+            user.liked_events << event1
+            GoingEvent.create!(user: user, event: event2)
+          end
+
+          it 'generates recommendations based on both liked and going events' do
+            get :index
+            expect(assigns(:recommended_events)).not_to be_empty
+          end
+
+          it 'excludes both liked and going events from recommendations' do
+            get :index
+            recommended_ids = assigns(:recommended_events).map(&:id)
+            expect(recommended_ids).not_to include(event1.id, event2.id)
+          end
+        end
+
+        context 'with no liked or going events' do
+          it 'returns empty recommendations' do
+            get :index
+            expect(assigns(:recommended_events)).to be_empty
+          end
+        end
+
+        context 'with refresh_recommendations parameter' do
+          before do
+            user.liked_events << event1
+          end
+
+          it 'includes recommendations when refresh parameter is present' do
+            get :index, params: { refresh_recommendations: true }
+            expect(assigns(:recommended_events)).not_to be_empty
+          end
+        end
+      end
+
+      context 'when user is not logged in' do
+        it 'returns empty recommendations' do
+          get :index
+          expect(assigns(:recommended_events)).to eq([])
+        end
       end
     end
   end
@@ -177,7 +288,7 @@ RSpec.describe PerformancesController, type: :controller do
 
   describe 'GET #details' do
     let(:user) { User.create!(email: 'test@example.com', name: 'Test', username: 'testuser', password: 'password123', password_confirmation: 'password123') }
-    let(:event) { Event.create!(style: 'Ballet', borough: 'Manhattan', location: 'Lincoln Center', price: '$20', date: '2025-12-01') }
+    let(:event) { Event.create!(style: 'Ballet', borough: 'Manhattan', location: 'Lincoln Center', price: '$20', date: '2025-12-01', name: 'Test Event', venue: 'Test Venue', time: '19:00') }
 
     before { allow(controller).to receive(:current_user).and_return(user) }
 
@@ -275,6 +386,59 @@ RSpec.describe PerformancesController, type: :controller do
       post :share_to_message, params: { id: event.id }
       expect(flash[:alert]).to eq("Please select a friend to share with.")
       expect(response).to redirect_to(details_performance_path(event))
+    end
+  end
+
+  describe '#generate_recommendations' do
+    let(:user) { User.create!(email: 'test@example.com', name: 'Test User', username: 'testuser', password: 'password123', password_confirmation: 'password123') }
+
+    before do
+      session[:user_id] = user.id
+    end
+
+    it 'returns recommendations based on style matches' do
+      user.liked_events << event1  # Ballet in Manhattan
+      get :index
+      
+      recommendations = assigns(:recommended_events)
+      styles = recommendations.map(&:style)
+      expect(styles).to include('Ballet')
+    end
+
+    it 'returns recommendations based on borough matches' do
+      user.liked_events << event1  # Ballet in Manhattan
+      get :index
+      
+      recommendations = assigns(:recommended_events)
+      boroughs = recommendations.map(&:borough)
+      expect(boroughs).to include('Manhattan')
+    end
+
+    it 'returns recommendations based on location matches' do
+      user.liked_events << event1  # Lincoln Center location
+      get :index
+      
+      recommendations = assigns(:recommended_events)
+      expect(recommendations).not_to be_empty
+    end
+
+    it 'handles events with no matching recommendations' do
+      # Create a unique event that won't match anything
+      unique_event = Event.create!(
+        name: 'Unique Event',
+        style: 'Unique Style',
+        borough: 'Unique Borough',
+        location: 'Unique Location',
+        date: '2025-03-01',
+        time: '19:00',
+        price: '$100',
+        venue: 'Unique Venue'
+      )
+      user.liked_events << unique_event
+      
+      get :index
+      # Should return empty since no other events match
+      expect(assigns(:recommended_events)).to be_empty
     end
   end
 end

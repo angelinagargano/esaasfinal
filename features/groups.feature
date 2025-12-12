@@ -137,4 +137,3 @@ Feature: Groups
     When I try to remove "charlie789" from the group
     Then I should see "You don't have permission to perform this action"
     And I should be on the group page for "Dance Enthusiasts"
-
