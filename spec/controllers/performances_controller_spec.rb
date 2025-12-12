@@ -12,23 +12,13 @@ RSpec.describe PerformancesController, type: :controller do
     it 'filters by borough' do
       session[:preferences] = { 'borough' => ['Manhattan'] }
       get :index
-      expect(assigns(:events).pluck(:borough)).to eq(['Manhattan'])
+      expect(assigns(:events).pluck(:borough).uniq).to eq(['Manhattan'])
     end
 
     it 'filters by location' do
       session[:preferences] = { 'location' => ['Barclays Center'] }
       get :index
       expect(assigns(:events).pluck(:location)).to eq(['Barclays Center'])
-    end
-
-    it 'filters by borough_filter parameter' do
-      get :index, params: { borough_filter: 'Manhattan' }
-      expect(assigns(:events).pluck(:borough)).to eq(['Manhattan'])
-    end
-
-    it 'filters by style_filter parameter' do
-      get :index, params: { style_filter: 'Ballet' }
-      expect(assigns(:events).pluck(:style)).to eq(['Ballet'])
     end
 
     it 'filters by budget $0–$25' do

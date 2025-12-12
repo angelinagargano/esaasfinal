@@ -9,11 +9,11 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "POST #create" do
-    it "renders new with errors if user not saved" do
-      post :create, params: { user: { email: "", name: "", username: "", password: "", password_confirmation: "" } }
-
-      expect(response).to have_http_status(:ok)
-      expect(flash[:alert]).to include("can't be blank")
+    it 'renders new with errors if user not saved' do
+      post :create, params: { user: { email: '', name: '', username: '', password: '' } }
+      expect(response).to render_template(:new)
+      expect(assigns(:user).errors).not_to be_empty
+      expect(assigns(:user).errors[:email]).to include("can't be blank")
     end
 
     it "creates user and redirects to preferences on success" do
@@ -78,11 +78,14 @@ RSpec.describe UsersController, type: :controller do
 
     before { allow(controller).to receive(:current_user).and_return(user) }
 
-    it "renders edit with errors if update fails" do
-      patch :update, params: { id: user.id, user: { email: "" } }
-
-      expect(response).to have_http_status(:ok)
-      expect(flash[:alert]).to include("can't be blank")
+    it 'renders edit with errors if update fails' do
+      user = User.create!(email: 'test@example.com', name: 'Test', username: 'testuser', password: 'password123', password_confirmation: 'password123')
+      allow(controller).to receive(:current_user).and_return(user)
+      
+      patch :update, params: { id: user.id, user: { email: '' } }
+      expect(response).to render_template(:edit)
+      expect(assigns(:user).errors).not_to be_empty
+      expect(assigns(:user).errors[:email]).to include("can't be blank")
     end
 
     it "updates user successfully" do
