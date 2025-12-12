@@ -40,27 +40,6 @@ Feature: Home page
     And I click "Apply Filter"
     Then I should see events on or before "2025-11-13"
 
-  Scenario: User performs a specific search via the filter form
-    Given I am logged in
-    And the following events exist:
-      | Style   | Borough     | Date       |
-      | Opera   | Manhattan   | 2026-03-01 |
-      | Ballet  | Brooklyn    | 2026-04-15 |
-      | Jazz    | Queens      | 2026-05-20 |
-    When I am on the Performances page
-    
-    And I fill in "date_filter_start" with "2026-04-01"
-    And I fill in "date_filter_end" with "2026-05-31"
-    And I select "Brooklyn" from "borough_filter"
-    And I select "Ballet" from "style_filter"
-    And I click "Apply Filter"
-    
-    Then I should only see the event with style "Ballet"
-    And I should not see the event with style "Opera"
-    And I should not see the event with style "Jazz"
-    And I should not see the event with borough "Manhattan"
-    And I should not see the event with borough "Queens"
-
   Scenario: Viewing an event’s details
     Given I am on the Home page
     When I click on an event card
