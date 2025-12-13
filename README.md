@@ -76,6 +76,12 @@ Visit `http://localhost:3000` to access the application.
   - Performance Type (Hip-hop, Ballet, Contemporary, Swing, Dance Theater)
   - Borough (Manhattan, Brooklyn, Queens, Bronx, Staten Island)
   - Location (specific neighborhoods)
+- Based on events that you like you will recieve recommendations of possible events to go to at the top of your event feed
+
+### Social 
+- Add friends to your profile so they can see what events your going to and you can see what events they are going to
+- send messages to friends about events you want to go to together
+- create groups with friends to connect and plan an event to go to
 
 ## Testing
 
@@ -90,6 +96,14 @@ Located in `spec/features/`:
 - `preferences_spec.rb` - User preference settings
 - `like_goto_spec.rb` - Like and going-to functionality
 - `user_profile_spec.rb` - User profile and account management
+
+Located in `spec/controllers/`:
+- `application_controller_spec.rb` - User signup and login
+- `conversations_controller_spec.rb` - creating and destroying converations
+- `friendships_controller_spec.rb` - all the friending dunctionality 
+- `group_conversations_controller_spec.rb` - creating and destroying groups
+- 'group_messages_controller_spec.rb' - sending messages in group
+- `messages_controller_spec.rb` - sending messages to friends 
 
 ### Cucumber Tests
 
@@ -106,6 +120,12 @@ Located in `features/`:
 - `like_goto.feature` - Liking events and marking attendance
 - `performances_new.feature` - Creating new performance events
 - `user_profile.feature` - User profile management and saved events
+-  `conversations.feature` - starting conversations, viewing them and sending message with event
+-  `event_sahring.feature` - sharing event with friend
+-  `friendship.feature` - adding friends, sending and accepting/rejecting friend requests
+-  `group_conversations.feature` - starting conversation with groups
+-  `groups.feature` - creating groups based on friends and people going to event
+-  'recommendation.feature' - seeing personalized reccomendations  
 
 #### User Scenarios
 
@@ -146,23 +166,41 @@ I want to view my liked events, going-to events, and account information
 so that I can find my saved events and edit my details easily.
 ```
 
+**Adding Friends**
+```
+As a  user,
+I want to be able to send my friends a friend request. See what events they are going to when planning to go to an event myself. And create groups with different friends going to the same event.
+```
+**Messaging**
+```
+As a  user,
+I want to be able to send messages and events to my friends if they are not going to that event. I also want to be able to create group chats with groups of friends going to the same event.
+```
+**Recommendation**
+```
+As a  user,
+I want to be able to see some personalized recommendations for events I could go to. I want to see events that are near and similar to events I am already going to.
+```
 #### Step Definitions
 Located in `features/step_definitions/`:
-- `auth_steps.rb` - Authentication steps
-- `home_feed_steps.rb` - Homepage and feed steps
-- `event_details_steps.rb` - Event detail page steps
-- `initial_preferences_steps.rb` - Initial preference steps
-- `borough_preferences_steps.rb` - Borough preference steps
-- `performances_new_steps.rb` - Performance creation steps
-- `like_goto_steps.rb` - Like and going-to steps
-- `user_profile_steps.rb` - User profile steps
+- `auth_steps.rb`
+- `home_feed_steps.rb` 
+- `event_details_steps.rb`
+- `initial_preferences_steps.rb` 
+- `borough_preferences_steps.rb` 
+- `performances_new_steps.rb`
+- `like_goto_steps.rb` 
+- `user_profile_steps.rb` 
+- 'conversations_steps.rb'
+- 'event_sharing_steps.rb'
+- 'friendship_steps.rb'
+- 'group_conversation_steps.rb'
+- 'groups_steps.rb'
+- 'recommendations_steps.rb'
 
 ## Future Enhancements
 
-- Social features and friend connections
-- Personalized recommendation algorithm based on user preferences and history
-- Web scraping for additional event data sources
-- Minor UI edits to make the experience more seamless (liking events, signing up, saving events)
+- making users able to send even through imessage or other messaging platforms 
 
 ## Technology Stack
 
