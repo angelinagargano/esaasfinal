@@ -12,7 +12,7 @@
             <div class="card-body">
               <h5 class="card-title"><%= link_to group.name, group_path(group) %></h5>
               <p class="card-text"><%= group.description %></p>
-              <p class="text-muted">Members: <%= group.members.count%></p>
+              <p class="text-messages">Members: <%= group.members.count%></p>
               <%= link_to "View Group", group_path(group), class: "btn btn-sm btn-primary" %>
               <%= link_to "Messages", group_group_conversation_path(group), class: "btn btn-sm btn-info" %>
             </div>
@@ -31,8 +31,8 @@
             <div class="card-body">
               <h5 class="card-title"><%= link_to group.name, group_path(group) %></h5>
               <p class="card-text"><%= group.description %></p>
-              <p class="text-muted">Created by: <%= group.creator.username %></p>
-              <p class="text-muted">Members: <%= group.members.count%></p>
+              <p class="text-messages">Created by: <%= group.creator.username %></p>
+              <p class="text-messages">Members: <%= group.members.count%></p>
               <%= link_to "View Group", group_path(group), class: "btn btn-sm btn-primary" %>
               <%= link_to "Messages", group_group_conversation_path(group), class: "btn btn-sm btn-info" %>
             </div>
