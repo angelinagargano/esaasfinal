@@ -182,15 +182,35 @@ class PerformancesController < ApplicationController
         user2: [current_user, friend].max_by(&:id)
       )
       
-      # Create message with event
-      message = conversation.messages.create!(
-        sender: current_user,
-        content: params[:message] || "Check out this event!"
-      )
-      message.message_events.create!(event: @event)
+      # Check if this event was already shared by current user in this conversation
+      existing_message = conversation.messages
+                                     .joins(:message_events)
+                                     .where(sender: current_user)
+                                     .where(message_events: { event_id: @event.id })
+                                     .order(created_at: :desc)
+                                     .first
       
-      flash[:notice] = "Event shared in message!"
-      redirect_to conversation_path(conversation)
+      if existing_message
+        # Update the existing message instead of creating a new one
+        existing_message.update!(
+          content: params[:message].presence || existing_message.content,
+          created_at: Time.current
+        )
+        conversation.update_last_message_at!
+        
+        flash[:notice] = "Event share updated!"
+        redirect_to conversation_path(conversation)
+      else
+        # Create message with event (first time sharing)
+        message = conversation.messages.create!(
+          sender: current_user,
+          content: params[:message] || "Check out this event!"
+        )
+        message.message_events.create!(event: @event)
+        
+        flash[:notice] = "Event shared in message!"
+        redirect_to conversation_path(conversation)
+      end
     else
       flash[:alert] = "Please select a friend to share with."
       redirect_back(fallback_location: details_performance_path(@event))

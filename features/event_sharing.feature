@@ -12,8 +12,7 @@ Feature: Sharing Events
   Scenario: Sharing an event to a friend
     Given I am on the Event Details page for "Test Event"
     When I select "bob456" as the friend
-    And I fill in "Message" with "Check this out!"
-    And I click "Share via Message"
+    And I click "Send"
     Then I should see "Event shared in message!"
     And I should be on the conversation page with "bob456"
     And I should see "Test Event" in the conversation
@@ -28,4 +27,41 @@ Feature: Sharing Events
     Given I am on the Event Details page for "Test Event"
     When I try to share the event without selecting a friend
     Then I should see "Please select a friend to share with"
+
+  Scenario: Sharing the same event again updates existing share instead of creating duplicate
+    Given I am on the Event Details page for "Test Event"
+    When I select "bob456" as the friend
+    And I click "Send"
+    Then I should see "Event shared in message!"
+    And I should see 1 message with "Test Event" in the conversation
+    When I go to the Event Details page for "Test Event"
+    And I select "bob456" as the friend
+    And I click "Send"
+    Then I should see "Event share updated!"
+    And I should see 1 message with "Test Event" in the conversation
+    And the message should contain "Check out this event!"
+
+  Scenario: Re-shared event moves to bottom of conversation
+    Given a conversation exists between "alice123" and "bob456"
+    And I am on the conversation page with "bob456"
+    When I send a message "Hello!" without events
+    Then I should see "Hello!" in the conversation
+    When I go to the Event Details page for "Test Event"
+    And I select "bob456" as the friend
+    And I click "Send"
+    Then I should see "Event shared in message!"
+    When I go to the conversation page with "bob456"
+    And I send a message "What do you think?" without events
+    Then the event "Test Event" should appear before "What do you think?" in the conversation
+    When I go to the Event Details page for "Test Event"
+    And I select "bob456" as the friend
+    And I click "Send"
+    Then I should see "Event share updated!"
+    And the event "Test Event" should appear after "What do you think?" in the conversation
+
+  Scenario: Multiple shares of same event only shows one event card
+    Given I am on the Event Details page for "Test Event"
+    When I share "Test Event" to "bob456" 3 times
+    Then I should see 1 message with "Test Event" in the conversation
+    And I should see 1 event card for "Test Event"
 

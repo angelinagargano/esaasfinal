@@ -474,3 +474,367 @@ h2.text-center {
     font-size: 1.5rem;
   }
 }
+
+/* ========================================
+   External Share Buttons Styling
+   ======================================== */
+
+.share-buttons {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.share-buttons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.share-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  transition: all 0.25s ease !important;
+  text-decoration: none !important;
+  border: none !important;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.share-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.share-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.share-label {
+  white-space: nowrap;
+}
+
+/* Platform-specific colors */
+.share-whatsapp {
+  background: #25D366 !important;
+  color: white !important;
+}
+
+.share-whatsapp:hover {
+  background: #1DA851 !important;
+  color: white !important;
+}
+
+.share-sms {
+  background: #34C759 !important;
+  color: white !important;
+}
+
+.share-sms:hover {
+  background: #2DB14E !important;
+  color: white !important;
+}
+
+.share-telegram {
+  background: #0088cc !important;
+  color: white !important;
+}
+
+.share-telegram:hover {
+  background: #0077b5 !important;
+  color: white !important;
+}
+
+.share-messenger {
+  background: linear-gradient(45deg, #0078FF, #00C6FF) !important;
+  color: white !important;
+}
+
+.share-messenger:hover {
+  background: linear-gradient(45deg, #006AE0, #00B8E0) !important;
+  color: white !important;
+}
+
+.share-instagram {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) !important;
+  color: white !important;
+}
+
+.share-instagram:hover {
+  background: linear-gradient(45deg, #e08323, #d6582c, #cc1733, #bc1356, #ac0878) !important;
+  color: white !important;
+}
+
+.share-twitter {
+  background: #000000 !important;
+  color: white !important;
+}
+
+.share-twitter:hover {
+  background: #333333 !important;
+  color: white !important;
+}
+
+.share-facebook {
+  background: #1877F2 !important;
+  color: white !important;
+}
+
+.share-facebook:hover {
+  background: #166FE5 !important;
+  color: white !important;
+}
+
+.share-email {
+  background: #EA4335 !important;
+  color: white !important;
+}
+
+.share-email:hover {
+  background: #D93025 !important;
+  color: white !important;
+}
+
+.share-copy {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.share-copy:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+}
+
+.share-copy.share-copied {
+  background: #2cff7a !important;
+  color: #003312 !important;
+  border-color: #2cff7a !important;
+}
+
+/* In-App Share Section (Primary - Friends & Groups) */
+.share-inapp-section {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.share-friend-form {
+  width: 100%;
+}
+
+.share-friend-select-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.share-friend-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.share-send-btn {
+  flex-shrink: 0;
+  padding: 0.5rem 1.25rem !important;
+}
+
+.share-groups-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0.5rem;
+}
+
+.share-group-btn {
+  padding: 0.4rem 0.9rem !important;
+  font-size: 0.85rem !important;
+  border-radius: 20px !important;
+  background: rgba(139, 92, 246, 0.2) !important;
+  border: 1px solid rgba(139, 92, 246, 0.4) !important;
+  color: #fff !important;
+  transition: all 0.2s ease !important;
+}
+
+.share-group-btn:hover {
+  background: rgba(139, 92, 246, 0.4) !important;
+  border-color: rgba(139, 92, 246, 0.6) !important;
+  transform: translateY(-1px);
+}
+
+/* Mobile responsive for in-app share */
+@media (max-width: 576px) {
+  .share-friend-select-row {
+    flex-direction: column;
+  }
+  
+  .share-friend-select {
+    width: 100%;
+  }
+  
+  .share-send-btn {
+    width: 100%;
+  }
+}
+
+/* ========================================
+   Instagram Share Modal
+   ======================================== */
+
+.share-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.share-modal-content {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.share-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.share-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.share-modal-content h3 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.copy-status {
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-weight: 500;
+}
+
+.copy-status.copy-success {
+  background: rgba(44, 255, 122, 0.2);
+  color: #2cff7a;
+  border: 1px solid rgba(44, 255, 122, 0.3);
+}
+
+.copy-status.copy-error {
+  background: rgba(255, 77, 77, 0.2);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 77, 77, 0.3);
+}
+
+.instagram-options {
+  text-align: left;
+}
+
+.instagram-option {
+  padding: 1rem 0;
+}
+
+.instagram-option h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: #fff;
+}
+
+.instagram-option p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.instagram-action-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem !important;
+}
+
+.instagram-options hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0.5rem 0;
+}
+
+/* Mobile Responsive for Share Buttons */
+@media (max-width: 576px) {
+  .share-buttons-grid {
+    flex-direction: column;
+  }
+  
+  .share-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .share-modal-content {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 992px) {
+  .share-btn {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 140px;
+    justify-content: center;
+  }
+}
