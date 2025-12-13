@@ -15,32 +15,53 @@
  */
 
 /* Creative Dark Theme Styles */
-body {
+/* body {
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   background-attachment: fixed;
   min-height: 100vh;
   color: #ffffff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} */
+
+/* Purple gradient body */
+body {
+  background: linear-gradient(90deg, #b016a1, #8b5cf6);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #ffffff;
+  font-family: 'Poppins', system-ui, sans-serif;
 }
+
+
 
 /* Navigation Styling */
 /* First navbar black background */
-.navbar.bg-primary {
-  background-color: #000 !important; /* true black */
+/* .navbar.bg-primary {
+  background-color: #000 !important;
   box-shadow: none !important;
   border-bottom: none !important;
+} */
+
+.navbar.bg-primary {
+  background: linear-gradient(90deg, #b016a1, #8b5cf6) !important;
 }
+
 
 .group-members .list-group-item {
   color: #000 !important;
 }
 
 
-.navbar.bg-light {
+/* .navbar.bg-light {
   background: rgba(30, 30, 30, 0.95) !important;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(74, 144, 226, 0.2);
+} */
+
+.navbar.bg-light {
+  background: rgba(0,0,0,0.85) !important;
 }
+
 
 .navbar-brand, .nav-link {
   color: #ffffff !important;
@@ -48,9 +69,28 @@ body {
 }
 
 .nav-link:hover {
-  color: #4a90e2 !important;
+  color: #c91db8 !important;
   transform: translateY(-2px);
 }
+
+
+.nav-item.active-nav {
+  background: #8b5cf6;
+  border-radius: 10px;
+}
+
+.nav-item.active-nav .nav-link {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+
+/* Optional: smooth hover */
+.nav-item .nav-link {
+  padding: 0.75rem 1rem;
+}
+
+
 
 /* Event Cards - White with Shadow */
 .card {
@@ -63,10 +103,14 @@ body {
   color: #333333;
 }
 
+
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 35px rgba(74, 144, 226, 0.3), 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 0 25px rgba(255, 47, 146, 0.4),
+    0 0 50px rgba(139, 92, 246, 0.2);
 }
+
 
 .card-body {
   padding: 1.5rem;
@@ -74,12 +118,12 @@ body {
 
 .card-title {
   color: #1a1a2e;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.2rem;
 }
 
 .card-text {
-  color: #555555;
+  color: #1a1a2e;
   margin-bottom: 0.5rem;
 }
 
@@ -90,24 +134,24 @@ body {
 
 /* Blue Accent Buttons */
 .btn-primary {
-  background: #4a90e2 !important;
+  background: #8b5cf6 !important;
   border: none !important;
   border-radius: 8px !important;
   color: #ffffff !important;
   font-weight: 500;
   padding: 0.6rem 1.5rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  box-shadow: 0 6px 25px #c91db8;
 }
 
 .btn-primary:hover {
-  background: #5ba3f5 !important;
+  background: #5f20f3 !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
+  box-shadow: 0 6px 20px #e430d2;
   color: #ffffff !important;
 }
 
-.btn-success {
+/* .btn-success {
   background: #4a90e2 !important;
   border: none !important;
   border-radius: 8px !important;
@@ -115,14 +159,26 @@ body {
   font-weight: 500;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+} */
+
+.btn-success {
+  background: #2cff7a !important;
+  color: #003312 !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3)
 }
 
+
 .btn-success:hover {
-  background: #5ba3f5 !important;
+  background: #47ff94 !important; /* brighter neon green */
+  color: #003312 !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
-  color: #ffffff !important;
+  box-shadow: 0 6 20px rgba(44, 255, 122, 0.4);
 }
+
 
 .btn-danger {
   background: #e74c3c !important;
@@ -251,15 +307,20 @@ h2.text-center {
 
 /* Alert Messages */
 .alert {
-  border-radius: 10px;
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: none !important;
+  color: #ffffff;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
 }
 
+#notice.alert,
 .alert-info {
-  background: rgba(74, 144, 226, 0.2);
-  color: #4a90e2;
-  border-left: 4px solid #4a90e2;
+  background: #2cff7a;
+  color: #002b2b;
+  font-weight: 600;
 }
 
 .alert-success {
@@ -267,6 +328,32 @@ h2.text-center {
   color: #2ecc71;
   border-left: 4px solid #2ecc71;
 }
+
+#alert.alert,
+.alert-warning {
+  background: linear-gradient(90deg, #ffcc00, #ff9f1c);
+  color: #3a2a00;
+  font-weight: 600;
+}
+
+#error.alert,
+#warning.alert,
+.alert-danger {
+  background: linear-gradient(90deg, #ff4d4d, #ff006e);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.alert a {
+  color: #ffffff;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.alert a:hover {
+  color: #000000;
+}
+
 
 /* Profile Page Styling */
 .event-card {
@@ -277,7 +364,7 @@ h2.text-center {
 
 /* Details Page */
 .event-details {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05) !important;
   padding: 2rem;
   border-radius: 15px;
   backdrop-filter: blur(10px);
@@ -309,6 +396,10 @@ h2.text-center {
   font-size: 1.05rem;
 }
 
+.event-details .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
 .event-details li:last-child {
   border-bottom: none;
 }
@@ -323,6 +414,41 @@ h2.text-center {
   border-left: 4px solid #4a90e2;
 }
 
+.event-details a {
+  color: #2cff7a; /* neon aqua */
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.event-details a:hover {
+  color: #47ff94;
+}
+
+/* Auth pages (login / signup) */
+.auth-page a {
+  color: #ff2f92; /* neon pink */
+  font-weight: 600;
+  text-decoration: underline;
+  transition: all 0.25s ease;
+}
+
+.auth-page a:hover {
+  color: #ffffff;
+}
+.signup-page a {
+  color: #ff2f92; /* neon pink */
+  font-weight: 600;
+  text-decoration: underline;
+  transition: all 0.25s ease;
+}
+
+.signup-page a:hover {
+  color: #ffffff;
+}
+
+
+
 /* Creative Accents */
 @keyframes pulse {
   0%, 100% {
@@ -334,9 +460,9 @@ h2.text-center {
 }
 
 .card:hover .card-title {
-  color: #2a5298;
-  transition: color 0.3s ease;
+  color: #c91db8;
 }
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

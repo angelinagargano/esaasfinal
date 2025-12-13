@@ -4,6 +4,7 @@
   <head>
     <title>RHYTMHMIC</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag 'application', 'media' => 'all' %>
     <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
@@ -11,12 +12,13 @@
   <body class="dark-theme">
     <%# These classes come from the Bootstrap CSS framework. %>
     <nav class="navbar navbar-expand-lg bg-primary text-white mb-3">
-      <%= image_tag "logo.jpg", 
-        alt: "Logo", 
-        class: "mr-2", 
+      <%= link_to performances_path do %>
+      <%= image_tag "logo.jpg",
+        alt: "Logo",
+        class: "mr-2",
         style: "height:80px; width:auto;" %>
-
-      <h1 class="title mb-0">RHYTHMIC</h1>
+    <% end %>
+    <h1 class="title mb-0">RHYTHMIC</h1>
     </nav>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 sticky-top">
       <div class="container-fluid">
@@ -28,17 +30,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
+            <li class="nav-item <%= 'active-nav' if current_page?(performances_path) %>">
               <%= link_to "Performances", performances_path, class: "nav-link" %>
             </li>
             <% if logged_in? %>
-              <li class="nav-item">
+              <li class="nav-item <%= 'active-nav' if current_page?(liked_events_performances_path) %>">
                 <%= link_to "Liked Events", liked_events_performances_path, class: "nav-link" %>
               </li>
-              <li class="nav-item">
+              <li class="nav-item <%= 'active-nav' if current_page?(find_friends_search_path) %>">
                 <%= link_to "Find A Friend", find_friends_search_path, class: "nav-link" %>
               </li>
-              <li class="nav-item">
+              <li class="nav-item <%= 'active-nav' if current_page?(user_profile_path(current_user)) %>">
                 <%= link_to "My Profile", user_profile_path(current_user), class: "nav-link" %>
             
           </ul>
