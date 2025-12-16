@@ -83,11 +83,17 @@ Visit `http://localhost:3000` to access the application.
 - send messages to friends about events you want to go to together
 - create groups with friends to connect and plan an event to go to
 
+### Messaging & Sharing
+- Direct messages with friends: start from a profile, view conversations with unread badges, send text, and attach liked events (shown as event cards in the thread).
+- Group chat: each group gets one conversation; members can send text plus event attachments.
+- In-app event share: from Event Details, pick a friend to drop the event into your DM (updates existing share instead of duplicating) or click a group button to post it to that group conversation.
+- External share: Event Details also offers quick links for WhatsApp, iMessage/SMS, Telegram, Messenger, Instagram, Twitter/X, Facebook, Email, Copy Link, and native share (where supported).
+
 ## Testing
 
 ### RSpec Tests
 
-Rspec line coverage: 100.0% (191 / 191)
+Rspec line coverage: 99.18% (607 / 612)
 
 Located in `spec/features/`:
 - `authentication_spec.rb` - User signup and login
@@ -96,6 +102,9 @@ Located in `spec/features/`:
 - `preferences_spec.rb` - User preference settings
 - `like_goto_spec.rb` - Like and going-to functionality
 - `user_profile_spec.rb` - User profile and account management
+- `conversations_spec.rb` - Direct messaging flows and unread handling
+- `group_conversations_spec.rb` - Group chat creation and viewing
+- `event_sharing_spec.rb` - Sharing events in-app to DMs/groups and avoiding duplicates
 
 Located in `spec/controllers/`:
 - `application_controller_spec.rb` - User signup and login
@@ -104,10 +113,11 @@ Located in `spec/controllers/`:
 - `group_conversations_controller_spec.rb` - creating and destroying groups
 - 'group_messages_controller_spec.rb' - sending messages in group
 - `messages_controller_spec.rb` - sending messages to friends 
+- `performances_controller_spec.rb` - in-app event sharing entrypoint
 
 ### Cucumber Tests
 
-Cucumber line coverage: 94.76% (181 / 191)
+Cucumber line coverage: 99.84% (611 / 612)
 
 
 #### Feature Files
@@ -120,11 +130,11 @@ Located in `features/`:
 - `like_goto.feature` - Liking events and marking attendance
 - `performances_new.feature` - Creating new performance events
 - `user_profile.feature` - User profile management and saved events
--  `conversations.feature` - starting conversations, viewing them and sending message with event
--  `event_sahring.feature` - sharing event with friend
--  `friendship.feature` - adding friends, sending and accepting/rejecting friend requests
--  `group_conversations.feature` - starting conversation with groups
--  `groups.feature` - creating groups based on friends and people going to event
+- `conversations.feature` - starting conversations, viewing them and sending message with event
+- `event_sharing.feature` - sharing an event to a friend, preventing duplicates, updating shares
+- `friendship.feature` - adding friends, sending and accepting/rejecting friend requests
+- `group_conversations.feature` - starting conversation with groups
+- `groups.feature` - creating groups based on friends and people going to event
 -  'recommendation.feature' - seeing personalized reccomendations  
 
 #### User Scenarios
@@ -191,12 +201,12 @@ Located in `features/step_definitions/`:
 - `performances_new_steps.rb`
 - `like_goto_steps.rb` 
 - `user_profile_steps.rb` 
-- 'conversations_steps.rb'
-- 'event_sharing_steps.rb'
-- 'friendship_steps.rb'
-- 'group_conversation_steps.rb'
-- 'groups_steps.rb'
-- 'recommendations_steps.rb'
+- `conversations_steps.rb` 
+- `event_sharing_steps.rb` 
+- `friendship_steps.rb`
+- `group_conversation_steps.rb` 
+- `groups_steps.rb`
+- `recommendations_steps.rb`
 
 ## Future Enhancements
 
